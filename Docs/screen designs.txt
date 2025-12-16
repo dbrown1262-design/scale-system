@@ -1,0 +1,55 @@
+TrimmerName
+TrimDate
+CropNo
+Strain
+Grams
+TrimType
+
+modify MainMenu.py to create the following sections and call the scripts according to the following:
+
+Processing Section:
+  TrimmerDailyWeigh.py
+  TrimmerSummary.py
+
+Maintenance Section:
+  EditTrimmerList.py
+  EditTrimRates.py
+  EditDailyTrim.py
+
+
+i have a scaleplants table that records the weight of each plant.  the table contains a CropNo, Strain, WetWeight and DryWeight.  I need a script to provide a summary for one selected crop with the Strain, WetWeight, WetCount, DryWeight, Drycount for each Strain with a total at the bottom.  The WetCount and DryCount should be calculated by adding 1 for each value that is greater than 0. Weights are in grams and should be converted to pounds.  the program should call SupSupa.GetCropNo to get the list of crops.
+
+
+i need a new script (WeighHarvest) in the Harvest folder that weighs the plants at harvest.  The screen should have a combo box to select Wet or Dry plant, an entry box for PlantId, an entry box for the plant weight in grams and a scrolledtext box for the weigh log.
+the script should import SubScale.py, SubReadQRCode.py and SubSupa.py from the Harvest folder.
+the entry box for plant weight should be populated from the scale, using the SubScale.GetWeight function and manual input should be disabled
+the plantno box should be populated from the qr code reader using the SubReadQRCode.CheckQr function, or the user may enter the PlantNo and press enter.
+When a valid weight is present in the plant weight box and a PlantNo is received from the QR reader or the user, the system should read the plant data from scaleplants using the SubSupa.GetOnePlant(PlantNo) function.  if the type is Wet and WetWeight is > 0 or type is dry and DryWeight > 0 pop up a duplicate plant error message and give the user the option to continue or cancel.  if type is Dry, update the table using SubSupa.UpdateDryWeight, if Wet, use SubSupa.UpdateWetWeight.  After the update, clear the PlantNo box and add a line to the log srolled text box and add a row to the scalelog table using SubSupa InsertScaleLog function.  The box log entry should be a string: "timestamp Strain PlantNo PlantType Weight"
+
+i need a new script (PrintPlantTags) in the Harvest folder.  labels are 2.25 inches wide and .75 inches high. The script should display a Crop combo box using SubSupa.LoadCrops.  When a crop is selected, it should create a Strain combo box using SubSupa.LoadStrains.  When the Print Tags button is pressed, use LoadPlantTags to get a list of tags.  For each row, print a label (multipage pdf).  Label layout is:  Top Line- Strain Line 2- PlantNo and and a PlantNo QR code
+
+i need a script (WeighBucked) in the harvest folder to record the weight of each tote of bucked flower.  Bucked flower are stored in totes.  Each tote is identified by harvest date, Strain, and tote number.  Tote numbers start with 1 for each date/strain group.  
+all user defined functions and variables should be in camel case
+The user first selects a CropNo/harvest date from a combobox.  The SubSupa.LoadCrops is used to populate the box
+The screen should include a combo box to select the tote to be weighed, and a button to create a new tote.   
+The tote box should be populated each time the CropNo/Harvest date changes, using the SubSupa.LoadTotes function.
+The new tote button should use the SubSupa.GetNewToteNo function and insert a row using the SubSupa.InsertNewTote, and the tote box should be updated with the SubSupa.LoadTotes function.
+The screen should include an entry box for the weight.  the entry box for tote weight should be populated from the scale, using the SubScale.GetWeight function and manual input should be disabled  the function should be called every 500 ms and the weight box should be updated every time the weight changes
+the screen should include a button to save the tote weight if a CropNo and ToteNo have been selected.  the script should get the weight of the tote using the SubSupa.GetOneTote function.  If the weight is > 0, pop up a message "Tote has already been weighed.  Update this tote?".  if user selects no, cancel the update else use the SubSupa.UpdateToteWeight to update the tote weight
+the script should also include a print label button for the selected CropNo, Strain, ToteNo.  The 2 inch by 3 inch label should include the Strain, Harvest Date and Weight.  the label is printed on a thermal printer
+
+
+
+I need a script in the Harvest folder to assign a BatchId (text field) to each strain in the harvest using the batchtable in supabase.  Each strain can have multiple BatchIds- one for Flower, Smalls (pre rolls) and Hash.  
+
+batchtable:
+  CropNo
+  Strain
+  BatchType (Flower, Smalls, Hash)
+  BatchId
+
+The script should display a Crop combo box using SubSupa.LoadCrops.  When a crop is selected, it should create a Strain combo box using SubSupa.LoadStrains and a list of all BatchIds for that CropNo. It should the display a combo box (with Select, Flower, Smalls, Hash). When the user has selected a CropNo, Strain and Batch Type and entered the BatchId into an entry box, they can press the Add button.
+
+The add button should first check to see if the CropNo, Strain, BatchType is already in the table using the SubSupa.LoadOneBatch function.  If so, it should pop up message asking if the old BatchId should be replaced.  If the user clicks no, the operation is cancelled.  If the user clicks yes the script updates the table with the new BatchId using the SubSupa.UpdateBatchId function.  If the row does not exist, the script should insert it using the SubSupa.InsertBatchId function
+
+The script should use camel case with first letter capitalized for all user defined variable and function names

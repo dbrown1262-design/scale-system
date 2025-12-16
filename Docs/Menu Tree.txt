@@ -1,0 +1,21 @@
+Section	Description			Script			Folder
+Harvest Menu			
+	Weigh Plants		WeighHarvest		Harvest
+	Plant Summary		PlantWeightsSummary	Harvest
+	Weigh Bucked Totes	WeighBucked		Harvest
+			
+Trimmer Menu			
+	Enter Daily Trim	TrimmerDailyWeigh	Trimmers
+	Weigh Trim		WeighTrim		Trimmers
+	Weekly Trimmer Summary	TrimmerSummary		Trimmers
+
+Packaging Menu
+	
+			
+Admin Menu			
+	Print Plant Tags	PrintPlantTags		Harvest
+	Assign Batch IDs	AssignBatchId		Harvest
+	Edit Daily Trim		EditDailyTrim		Trimmers
+	Edit Trimmer List	EditTrimmerList		Trimmers
+	Edit Trim Rates		EditTrimRates		Trimmers
+	Edit Package Types	EditPackageTypes	Packaging

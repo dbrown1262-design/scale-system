@@ -1,0 +1,140 @@
+Need to add WeighTrim to Trimmers
+
+Table ScaleTrim:
+		CropNo, Strain, BagNo, Weight, TrimDate
+
+At end of day:	Select CropNo, Strain, Bagno, click on Save Trim Weight
+
+Packaging:
+
+Packages Table:
+		CropNo, Strain, TrimType (Flower/Smalls/Trim), PackageType, UnitWeight, TotUnits, TotWeight, PackDate
+
+packagetypes:	TypeName(eighths, prerolls, etc), UnitWeight, NumUnits, TotWeight
+
+Jars		select CropNo, Strain, Type (Flower), BatchId, 
+		enter # of jars, date
+
+PreRolls	Select CropNo, Strain, Type (Smalls), 
+		BatchId, enter # of prerolls, date
+
+Hash		Select CropNo, Strain, Type (Smalls/Flower/Trim), 
+		Get Start weight, 
+		Get Hash Weight
+
+Hash Table:	HashBatchId, Strain, Type, RunNumber, TrimWeight, HashWeight, ProcessDate
+		Add New BatchId, RunNumber = 1, weights = 0, select date
+
+Each Run:	Select HashBatchId, look for row with weights = 0
+		  If no available rows, get max RunNumber, insert new row with RunNumber + 1
+		Put batch on scale, click Save Start Weight
+		At end, put hash on scale, click Save Hash Weight
+
+Rosin Table:	RosinBatchId, HashBatchId, RunNumber, HashWeight, RosinWeight, ProcessDate
+		Add New BatchId, RunNumber = 1, weights = 0, select date
+
+Each Run:	Select RosinBatchId, HashBatchId, RunNumber, , look for row with weights = 0
+		  If no available rows, get max RunNumber, insert new row with RunNumber + 1
+		Put Hash on scale, click Save Start Weight
+		At end, put Rosin on scale, click Save Hash Weight
+
+
+I need a script (WeighTrim.py) in the Trimmers folder (similar to the TrimmerDailyWeigh.py script) to weigh the trim at the end of the day or when they finish a strain.  The user selects the CropNo using SubSupa.LoadCrops.  The script then loads the strain combo box using SubSupa.LoadStrains.  When a strain is selected, load BagNo combobox using SubSupa.LoadTrimBagNos.  The weight entry box should be populated SubScale.GetWeight function, which should be called every 500 ns and the entry box updated any time the weight changes.  When the user clicks on the Save Weight button, verify that selections for CropNo, Strain and BagNo are not = "Select" and the weight > 0, then insert a row in the scaletrim table using SubSupa.InsertTrimBag
+	
+
+
+i need a script in the Packaging folder to edit the packagetypes table.  table contains id (index), TypeName(eighths, prerolls, etc), UnitWeight (float), NumUnits(int), TotWeight(float).
+script should create a treeview of all package types using SubSupa.LoadPackageTypes. For a selected row, the script should display entry boxes for TypeName, UnitWeight, NumUnits and TotWeight and allow the user to edit the fields and save the changes.  The script also should allow the user to enter the fields and add a row to the table
+
+
+
+
+I need a script AddPackage.py in the Packaging folder to enter packaging activity.  
+The Tables used are:
+batchtable: 	CropNo, Strain, BatchId, BatchType
+packagetypes:	PackageType(eighths, prerolls, etc), UnitWeight (grams)
+packages:	BatchId, PackageType, UnitWeight, TotUnits, TotWeight, PackDate
+
+The user selects the CropNo using SubSupa.LoadCrops.  The script then loads the strain combo box using SubSupa.LoadStrains.
+
+When a strain is selected,  load a Batch combo box using SubSupa.LoadBatches.
+
+When a batch is selected,  display Package type in a disabled entry box: If BatchType = Flower, PackageType is "Jars", if BatchType = Smalls, Package type is PreRoll. also display entry box for number of units
+and display a treeview of the packages rows for the selected batch and package type.  Treeview columns are Batch Id, Strain, Package Type, Quantity, Weight from the SubSupa.GetPackages function.
+when the user enters a quantity and clicks on Save, the script should get the unit weight using SubSupa.GetPackageWeight function, multiply the unit weight by the quantity to get the total weight and insert a row in the packages table using SubSupa.InsertPackage
+
+
+
+
+
+
+I need a new script EnterRosinRun.py in the Processing folder.  All user defined variable and function names should be in camel case with first letter capitalized.  Each rosin batch consists of one or more rosin runs.  The script will record batch information in the rosinbatch table and  start and end weights for each rosin run in the rosin runs table:
+
+rosinbatch Table: 	BatchId, Type, Status (In Process, Finished)
+rosinruns Table:	BatchId, RunNo, HashBatchId, StartWeight, EndWeight
+
+The screen has three sections.  The first section creates a new batch.  The second records start or end weights for a run.  The third contains a treeview table of runs for the current batch
+
+screen contents:
+
+Section 1	NewBatchIdEntry		NewBatchButton
+
+Section 2	BatchIdCombo		RunNoCombo 		SourceCombo
+		WeighTypeEntry		WeightEntry		SaveButton	
+
+Section 3	TreeView columns: RunNo, Source, StartWeight, EndWeight
+
+User Input Processing:
+
+onpress NewBatchButton
+	verify NewBatchIdEntry and BatchTypeCombo
+	insert row in hashbatch table using SubSupa.NewRosinBatch(NewBatchId, "Rosin")
+
+Process Batch Start/End Weight:
+
+Initialize:
+	Set BatchIdCombo list using SubSupa.GetRosinBatches("Rosin")
+	Set lists for RunNoCombo, CropNoCombo, StrainCombo to "Select"
+	enable, Clear and disable WeighTypeEntry
+	the WeightEntry box should display the current weight from the Ohaus scale update every 500ms
+		similar to code in WeighBucked.py in the Harvest folder
+
+onchange BatchIdCombo- 
+	Set RunNoCombo list using SubSupa.GetRosinRunNos(BatchId)
+	Set lists for SourceCombo to "Select"
+	enable, Clear and disable WeighTypeEntry
+
+onchange RunNoCombo
+	return if RunNo = "Select"
+	if RunNo = "New"
+		Get NewRunNo using SubSupa.GetNewRosinRunNo(BatchId)
+		insert row in hashruns using SubSupa.InsertRosinRun(BatchId, NewRunNo)
+		set variables: Source="", StartWeight=0, EndWeight=0 
+	else
+		Get Source, StartWeight, EndWeight using SubSupa.GetRosinRunRec(BatchId, RunNo)
+	if StartWeight = 0
+		Set SourceCombo list using SubSupa.LoadSourceCombo
+		enable, set WeightTypeEntry = "Start", disable
+	else
+		enable, set WeightTypeEntry = "End", disable
+	load treeview rows using SubSupa.GetRosinRuns(BatchId)
+
+onchange RunNoCombo
+
+onpress SaveButton
+	Get TypeComboVal, BatchIdComboVal, RunNoComboVal, WeighTypeEntryVal, WeightEntryVal
+	If WeighTypeEntryVal = "Start" 
+		update hashruns table using SubSupa.SaveRosinStartWeight(BatchIdComboVal, 
+			RunNoComboVal, CropNoComboVal, SourceComboVal, WeightEntryVal)
+	else
+		update hashruns table using SubSupa.SaveHashEndWeight(BatchIdComboVal, 
+			RunNoComboVal, WeightEntryVal)
+
+
+def PrintLabel(BatchId, LabelType, BatchDate, Strain1, Strain2, Strain3, Strain4, Weight):
+def PrintLabel(BatchId, LabelType, BatchDate, Strain1, Strain2, Strain3, Strain4, Weight):
+                         rosin                 hashbatches
+
+
+
+

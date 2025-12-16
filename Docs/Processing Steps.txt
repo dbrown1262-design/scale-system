@@ -1,0 +1,20 @@
+Processing Steps:
+
+Planting:
+	Print Plant Tags
+
+Harvesting:
+	Weigh Plants (Wet)
+	Assign Batch IDs
+
+Bucking:
+	Weigh Plants (Dry)
+	Weigh Bucked Totes
+
+Trimming:
+	Enter Daily Trim
+
+Processing:
+	Enter Package
+	Enter Sales???
+
