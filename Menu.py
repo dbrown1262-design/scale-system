@@ -1,23 +1,27 @@
 """Scale Menu
 
-Creates a simple Tk menu with three sections (Harvest, Trimmer, Admin) and buttons
-that launch the corresponding scripts in the `Harvest` and `Trimmers` folders.
+This module creates a simple Tkinter menu with three sections (Harvest, Trimmer, Admin)
+and buttons that launch the corresponding scripts in the `Harvest` and `Trimmers` folders.
 
-This implementation launches each script as a separate Python process using the
-current interpreter (sys.executable). If a script file is missing, a warning
-is shown.
+Implementation details:
+- Scripts are launched as separate processes using the same Python interpreter (`sys.executable`)
+  and `subprocess.Popen`. This ensures that the launched scripts run independently of the menu.
+- The working directory for the launched scripts is set to the root directory of this module.
+- If a script is missing, a warning dialog is shown and the status label is updated.
+- If launching a script fails, an error dialog is shown and the status label is updated with the error.
+- A busy overlay is displayed while launching a script to indicate to the user that the application is working.
+- After launching a script, the menu window is destroyed.
 """
 import time
 import os
 import sys
-import subprocess
-from tracemalloc import start
+
 import customtkinter as ctk
 from tkinter import messagebox
 
 ROOT_DIR = os.path.dirname(__file__)
 DEFAULT_FONT = ("Arial", 14)
-        # Change cursor to waiting (watch is the hourglass/waiting cursor on Windows)
+
 
 def show_busy_overlay(parent):
     overlay = ctk.CTkFrame(parent, fg_color="transparent",cursor="watch")
@@ -72,7 +76,7 @@ SCRIPTS = {
 }
 
 
-def old_open_script(rel_path: str, status_label: ctk.CTkLabel, parent: ctk.CTk):
+def open_script(rel_path: str, status_label: ctk.CTkLabel, parent: ctk.CTk):
     """Launch the given script path (relative to ROOT_DIR) in a new process."""
     full = os.path.join(ROOT_DIR, rel_path)
     if not os.path.exists(full):
@@ -157,7 +161,7 @@ class MenuApp(ctk.CTk):
             
             for idx, (label, rel) in enumerate(items):
                 btn = ctk.CTkButton(button_frame, text=label, width=260, font=DEFAULT_FONT, 
-                                   command=lambda r=rel: old_open_script(r, self.status, self))
+                                   command=lambda r=rel: open_script(r, self.status, self))
                 btn.grid(row=idx, column=0, pady=6, padx=6)
 
 
