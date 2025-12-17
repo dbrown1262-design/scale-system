@@ -57,6 +57,20 @@ def LoadPlantTags(CropNo, Strain):
     else:
         return None
 
+def CountPlants(CropNo, Strain):
+    result = (
+        sb.schema("scale")
+        .table("scaleplants")
+        .select("PlantNo", count="exact")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)   
+        .execute()
+    )
+    if result.data:
+        count = result.count if hasattr(result, 'count') else 0
+        return count
+    else:
+        return 0
 
 def UpdateDryWeight(PlantNo, DryWeight):
     print("Updating DryWeight")
@@ -207,6 +221,9 @@ print("New ToteNo:", ToteNo)
 result = InsertNewTote(1, "Test Strain", ToteNo)
 print("InsertNewTote result:", result)  
 """
+
+#count = CountPlants(1, "Test Strain")
+#print("CountPlants result:", count)
 
 #testcrop = LoadCrops()
 #print(testcrop)

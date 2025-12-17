@@ -44,3 +44,17 @@ def CheckQr():
         print("Qqr2 = ", Qr2)
     return (Qr2)
 
+def CheckMetricQr():
+    ptext = "none"
+    if QrReader.in_waiting > 0:
+        raw = QrReader.readline()
+        print("raw =", raw)
+
+        # Decode from bytes to text and strip whitespace
+        ptext = raw.decode().strip()
+        print("ptext =", ptext)
+    return (ptext)
+
+while (ptext := CheckMetricQr()) == "none":
+    print("Waiting for QR code...")
+    time.sleep(1)

@@ -18,7 +18,7 @@ To define the standardized procedure for receiving plant data, printing plant id
 - scaleplants table
 - 4BARCODE label printer
 - 2.25" × 0.75" label stock
-- 8-inch plastic wrap-around plant tags
+- Pre-numbered plant tags from Metric
 
 3. Responsibilities
 
@@ -35,7 +35,9 @@ To define the standardized procedure for receiving plant data, printing plant id
    - Import the CSV file exported from Bamboo into the scaleplants table.
 3. Confirm all rows were imported successfully and that each plant has a strain, plant ID, and associated crop number.
 
-#### 4.2 Print Plant Tags (Admin Menu)
+#### 4.2 Print Strain Name Labels (Admin Menu)
+
+The new tagging system uses pre-numbered tags purchased from Metric. The Print Plant Tags application prints strain name labels to affix to the back of each Metric tag.
 
 Before printing, verify system and printer configuration:
 
@@ -50,36 +52,47 @@ Before printing, verify system and printer configuration:
 1. In the admin menu, select:
    - Crop: 1
    - Strain: Test Strain
-2. Click Print Tags.
-3. Confirm that one test label prints correctly.
+2. The application will query the database and display the number of plants for that strain.
+3. Adjust the "Number of Labels" if needed.
+4. Click Print Tags.
+5. Confirm that labels print correctly with the strain name centered on each label.
 
-**Print Production Tags**
+**Print Production Labels**
 
 1. Select the correct Crop Number.
 2. For each strain in the crop:
    - Select the strain.
+   - The system automatically queries scaleplants table and displays the plant count.
+   - Verify or adjust the "Number of Labels" field as needed.
    - Click Print Tags.
-   - Verify that tags for all plants in the strain have been printed.
+   - Verify that the correct number of strain name labels have been printed.
 
 #### 4.3 Label Plants
 
-Locate the 8-inch plastic wrap-around plant tags.
+**Prepare Tags**
 
-Affix one printed label to each plastic tag.
+1. Locate the pre-numbered plant tags from Metric.
+2. Affix one printed strain name label to the back of each Metric tag.
 
-Apply the tag to each plant:
+**Apply Tags to Plants**
 
-Wrap the tag around the stem above the first branch.
+1. Apply one numbered Metric tag to each plant:
+   - Attach the tag to the plant stem above the first branch.
+   - Ensure the tag is secure and will not fall off during harvest.
+   - Verify the Metric number on the front is visible.
+   - Verify the strain name label on the back is secure.
 
-Ensure the tag is secure and will not fall off during harvest.
+**Verification**
 
 Confirm that every plant is labeled before proceeding to harvest.
 
+---
+
 ### 5. Quality & Compliance Checks
 
-- All plants in the crop must have a readable, affixed tag prior to harvest.
+- All plants in the crop must have a readable, affixed Metric tag with strain name label prior to harvest.
 - Tag count should match the number of plants imported from Bamboo.
-- Damaged or unreadable tags must be reprinted immediately.
+- Damaged or unreadable strain labels must be reprinted immediately.
 
 ### 6. Records
 
