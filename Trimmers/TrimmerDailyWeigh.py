@@ -19,10 +19,18 @@ from datetime import date, datetime, time, timedelta
 
 # Import SubSupa (DB) and SubScale (physical scale). SubScale is optional.
 import SubSupa
-import SubScale
 import os
 import sys
 import subprocess
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+import Common.SubScale as SubScale
+
+# Connect to hardware after imports
+SubScale.ConnectScales()
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -372,12 +380,12 @@ class WeighApp(ctk.CTk):
         """Single poll iteration; reschedules itself via after()."""
         WStr = '0'
         try:
-            if SubScale is not None:
-                W = SubScale.GetWeight()
-                WStr = str(W)
-        except Exception:
+            W = SubScale.GetScoutWeight()
+            WStr = str(W)
+        except Exception as e:
             # If reading fails, leave as '0'
-            WStr = '0'
+            WStr = 'Error'
+            print(f"Scale read failed: {e}")
 
         if WStr != getattr(self, 'PrevScaleWeight', None):
             self.PrevScaleWeight = WStr

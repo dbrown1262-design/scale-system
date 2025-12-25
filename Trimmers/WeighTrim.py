@@ -14,11 +14,24 @@ from datetime import datetime
 import customtkinter as ctk
 from tkinter import messagebox
 
-import SubSupa
-import SubScale
 import os
 import sys
 import subprocess
+import SubSupa
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
+import Common.SubScale as SubScale
+import Common.SubReadQRCode as SubReadQRCode
+
+# Connect to hardware after imports (before GUI creation)
+SubScale.ConnectScales()
+SubReadQRCode.ConnectScanner()
+
+ScoutConnected, RangerConnected = SubScale.GetScaleStatus()
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -57,9 +70,9 @@ class WeighTrimApp(ctk.CTk):
         self.CmbStrain = ctk.CTkComboBox(container, values=["Select"], width=320, font=DEFAULT_FONT, command=self.OnStrainChanged)
         self.CmbStrain.grid(row=2, column=1, columnspan=2, sticky="w", pady=6)
 
-        ctk.CTkLabel(container, text="Bag No", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(0,10))
-        self.CmbBag = ctk.CTkComboBox(container, values=["Select"], width=160, font=DEFAULT_FONT)
-        self.CmbBag.grid(row=3, column=1, sticky="w", pady=6)
+        ctk.CTkLabel(container, text="Metric Tag", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(0,10))
+        self.EntMetricTag = ctk.CTkEntry(container, width=260, font=DEFAULT_FONT)
+        self.EntMetricTag.grid(row=3, column=1, sticky="w", pady=6)
 
         ctk.CTkLabel(container, text="Weight (g)", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(0,10))
         self.EntWeight = ctk.CTkEntry(container, width=160, font=DEFAULT_FONT, state="disabled")
@@ -110,8 +123,7 @@ class WeighTrimApp(ctk.CTk):
         try:
             self.CmbStrain.configure(values=["Select"])
             self.CmbStrain.set("Select")
-            self.CmbBag.configure(values=["Select"])
-            self.CmbBag.set("Select")
+            self.EntMetricTag.delete(0, 'end')
         except Exception:
             pass
 
@@ -135,32 +147,20 @@ class WeighTrimApp(ctk.CTk):
 
     def OnStrainChanged(self, value):
         try:
-            crop_display = (self.CmbCrop.get() or "").strip()
-            if not crop_display or crop_display.lower().startswith("select"):
-                return
-            crop_no = int(crop_display.split('-')[0])
             strain = (value or "").strip()
-            print("Selected strain:", strain)
             if not strain or strain.lower().startswith("select"):
-                self.CmbBag.configure(values=["Select"])
-                self.CmbBag.set("Select")
+                self.SetStatus("Please select a strain")
                 return
+            self.SetStatus(f"Selected {strain}. Scan metric tag or enter manually.")
         except Exception:
-            self.SetStatus("Cannot parse crop/strain")
+            self.SetStatus("Cannot parse strain")
             return
-        try:
-            bags = SubSupa.LoadTrimBagNos(crop_no, strain) or ["Select"]
-            self.CmbBag.configure(values=bags)
-            self.CmbBag.set(bags[0] if bags else "Select")
-            self.SetStatus(f"Loaded {len(bags)-1} bag numbers for {strain}")
-        except Exception as e:
-            self.SetStatus(f"LoadTrimBagNos failed: {e}")
 
     def OnClear(self):
         try:
             self.CmbCrop.set("Select")
             self.CmbStrain.set("Select")
-            self.CmbBag.set("Select")
+            self.EntMetricTag.delete(0, 'end')
             self.EntWeight.configure(state='normal')
             self.EntWeight.delete(0, 'end')
             self.EntWeight.configure(state='disabled')
@@ -171,7 +171,7 @@ class WeighTrimApp(ctk.CTk):
     def OnSave(self):
         crop_display = (self.CmbCrop.get() or "").strip()
         strain = (self.CmbStrain.get() or "").strip()
-        bag = (self.CmbBag.get() or "").strip()
+        metric_tag = (self.EntMetricTag.get() or "").strip()
         wstr = (self.EntWeight.get() or "").strip()
 
         if not crop_display or crop_display.lower().startswith("select"):
@@ -180,8 +180,8 @@ class WeighTrimApp(ctk.CTk):
         if not strain or strain.lower().startswith("select"):
             messagebox.showwarning("Select Strain", "Please select a strain")
             return
-        if not bag or bag.lower().startswith("select"):
-            messagebox.showwarning("Select Bag", "Please select a bag number")
+        if not metric_tag:
+            messagebox.showwarning("Enter Metric Tag", "Please scan or enter a metric tag number")
             return
         try:
             weight = float(wstr)
@@ -197,19 +197,41 @@ class WeighTrimApp(ctk.CTk):
             self.SetStatus("Cannot parse Crop number")
             return
 
+        # Check if tag exists in database
         try:
-            # InsertTrimBag expects TrimDate; pass ISO timestamp and use bag number
-            SubSupa.InsertTrimBag(crop_no, strain, int(bag), datetime.now().isoformat())
-            self.SetStatus(f"Inserted bag {bag} for {strain} ({weight} g)")
+            check_result = SubSupa.CheckTrimBag(crop_no, strain, metric_tag)
+            
+            if check_result == "Error":
+                messagebox.showerror("Tag Mismatch", f"Metric tag {metric_tag} belongs to a different strain/crop. Cannot use this tag.")
+                return
+            elif check_result == "InUse":
+                resp = messagebox.askyesno("Tag In Use", f"Metric tag {metric_tag} already has data. Update weight to {weight} g?")
+                if not resp:
+                    self.SetStatus("Update cancelled")
+                    return
+                # Update existing bag
+                try:
+                    SubSupa.UpdateTrimBag(int(metric_tag), weight)
+                    self.SetStatus(f"Updated tag {metric_tag} weight to {weight} g")
+                except Exception as e:
+                    self.SetStatus(f"UpdateTrimBag failed: {e}")
+                    return
+            else:  # "OkToAdd"
+                # Insert new bag
+                try:
+                    SubSupa.InsertTrimBag(crop_no, strain, int(metric_tag), datetime.now().isoformat())
+                    # Now update with weight
+                    SubSupa.UpdateTrimBag(int(metric_tag), weight)
+                    self.SetStatus(f"Saved tag {metric_tag} for {strain} ({weight} g)")
+                except Exception as e:
+                    self.SetStatus(f"InsertTrimBag failed: {e}")
+                    return
         except Exception as e:
-            self.SetStatus(f"InsertTrimBag failed: {e}")
+            self.SetStatus(f"CheckTrimBag failed: {e}")
             return
 
-        # refresh bag list
-        try:
-            self.OnStrainChanged(self.CmbStrain.get())
-        except Exception:
-            pass
+        # Clear metric tag for next bag
+        self.EntMetricTag.delete(0, 'end')
 
     # ---------- Scale polling ----------
     def StartScalePoll(self, IntervalMs: int = 500):
@@ -223,8 +245,12 @@ class WeighTrimApp(ctk.CTk):
     def _poll_scale(self, IntervalMs: int = 500):
         WStr = '0'
         try:
-            if SubScale is not None:
-                W = SubScale.GetWeight()
+            ScoutConnected, RangerConnected
+            if RangerConnected:
+                W = SubScale.GetRangerWeight()
+                WStr = str(W)
+            elif ScoutConnected:
+                W = SubScale.GetScoutWeight()
                 WStr = str(W)
         except Exception:
             WStr = '0'
@@ -238,6 +264,19 @@ class WeighTrimApp(ctk.CTk):
                 self.EntWeight.configure(state='disabled')
             except Exception:
                 pass
+
+        # Check QR reader for metric tag
+        try:
+            if hasattr(SubReadQRCode, 'QrReader'):
+                qr_code = SubReadQRCode.CheckMetricQr()
+                if qr_code and qr_code != "none":
+                    # Update metric tag entry
+                    self.EntMetricTag.delete(0, 'end')
+                    self.EntMetricTag.insert(0, qr_code)
+                    self.SetStatus(f"Scanned metric tag: {qr_code}")
+        except Exception as e:
+            # Silently ignore QR reader errors
+            pass
 
         try:
             self.ScalePollId = self.after(IntervalMs, lambda: self._poll_scale(IntervalMs))

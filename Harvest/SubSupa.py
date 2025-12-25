@@ -130,14 +130,25 @@ def GetNewToteNo(CropNo, Strain):
         return NewToteNo
     else:
         return 1
-def GetOneTote(CropNo, Strain, ToteNo):
+    
+def CheckTag(TagNo):
+    result = (
+        sb.schema("scale")
+        .table("metrictags")
+        .select("TagNo")
+        .eq("TagNo", TagNo)
+        .execute()
+    )
+    if result.data:
+        return True
+    else:
+        return False
+def GetOneTag(TagNo):
     result = (
         sb.schema("scale")
         .table("scalebuck")
         .select("Weight")
-        .eq("CropNo", CropNo)
-        .eq("Strain", Strain)
-        .eq("ToteNo", ToteNo)
+        .eq("TagNo", TagNo)
         .execute()
     )
     if result.data:
@@ -146,19 +157,19 @@ def GetOneTote(CropNo, Strain, ToteNo):
     else:
         return None
 
-def InsertNewTote(CropNo, Strain, ToteNo):
+def InsertNewTag(CropNo, Strain, TagNo):
     data = {
         "CropNo": CropNo,
         "Strain": Strain,
-        "ToteNo": ToteNo,
+        "TagNo": TagNo,
         "BuckDate": datetime.now().isoformat()  
     }
     result = sb.schema("scale").table("scalebuck").insert(data).execute()
     return result
 
-def UpdateToteWeight(CropNo, Strain, ToteNo, Weight):
+def UpdateTagWeight(TagNo, Weight):
     upd = {"Weight": Weight}
-    res = sb.schema("scale").table("scalebuck").update(upd, returning="representation").eq("CropNo", CropNo).eq("Strain", Strain).eq("ToteNo", ToteNo).execute()
+    res = sb.schema("scale").table("scalebuck").update(upd, returning="representation").eq("TagNo", TagNo).execute()
 
 """batchtable functions"""
 
@@ -211,6 +222,61 @@ def UpdateBatchRow(CropNo, Strain, BatchType, OldBatchId, NewBatchId):
            .execute())
     return res.data
 
+
+"""Metric tags table functions"""
+
+def CheckTag(TagNo):
+    """Check if a tag number exists in the metrictags table (was issued by Metric)."""
+    result = (
+        sb.schema("scale")
+        .table("metrictags")
+        .select("TagNo")
+        .eq("TagNo", TagNo)
+        .execute()
+    )
+    return result.data is not None and len(result.data) > 0
+
+def GetOneTag(CropNo, Strain, TagNo):
+    """Get weight data for a specific metric tag if it has been used."""
+    result = (
+        sb.schema("scale")
+        .table("scalebuck")
+        .select("Weight")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("TagNo", TagNo)
+        .execute()
+    )
+    if result.data and len(result.data) > 0:
+        return result.data[0].get("Weight")
+    else:
+        return None
+
+def InsertNewTag(CropNo, Strain, TagNo, Weight):
+    """Insert a new metric tag with weight data."""
+    data = {
+        "CropNo": CropNo,
+        "Strain": Strain,
+        "TagNo": TagNo,
+        "Weight": Weight,
+        "BuckDate": datetime.now().isoformat()
+    }
+    result = sb.schema("scale").table("scalebuck").insert(data).execute()
+    return result
+
+def UpdateTagWeight(CropNo, Strain, TagNo, Weight):
+    """Update the weight for an existing metric tag."""
+    upd = {"Weight": Weight}
+    res = (
+        sb.schema("scale")
+        .table("scalebuck")
+        .update(upd, returning="representation")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("ToteNo", TagNo)
+        .execute()
+    )
+    return res.data
 
 
 """ 

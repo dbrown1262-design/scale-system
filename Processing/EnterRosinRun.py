@@ -1,12 +1,20 @@
 import customtkinter as ctk
 from tkinter import ttk, messagebox
 import SubSupa
-import SubScale
 import SubPrintLabels
 import ctypes
 import os
 import sys
 import subprocess
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+import Common.SubScale as SubScale
+
+# Connect to hardware after imports
+SubScale.ConnectScales()
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -171,10 +179,11 @@ class EnterRosinRunApp(ctk.CTk):
         wstr = '0'
         try:
             if SubScale is not None:
-                w = SubScale.GetWeight()
+                w = SubScale.GetScoutWeight()
                 wstr = str(w)
-        except Exception:
-            wstr = '0'
+        except Exception as e:
+            print(f"Scale read failed: {e}")
+            wstr = 'Error'
 
         if wstr != self._PrevWeight:
             self._PrevWeight = wstr

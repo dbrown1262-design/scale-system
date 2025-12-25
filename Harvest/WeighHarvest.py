@@ -129,8 +129,10 @@ class WeighHarvestApp(ctk.CTk):
 
     def PollWeight(self, interval_ms: int):
         wstr = '0'
-        wstr = SubScale.GetWeight()
-
+        try:
+            wstr = SubScale.GetRangerWeight()
+        except Exception:
+            wstr = 'Error'
         if wstr != self._PrevWeight:
             self._PrevWeight = wstr
             try:

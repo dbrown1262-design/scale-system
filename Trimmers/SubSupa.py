@@ -277,39 +277,45 @@ def UpdateDailytrim(match_key: dict, new_values: dict):
 #
 #################################################################################################
 
-def LoadTrimBagNos(crop_no: int, strain: str):
+def CheckTrimBag(CropNo: int, Strain: str, TagNo: str):
     """Load existing ToteNos for crop and strain."""
     res = (
         sb.schema("scale")
         .table("scaletrim")
-        .select("BagNo")
-        .eq("CropNo", crop_no)
-        .eq("Strain", strain)
-        .order("BagNo", desc=True)
+        .select("TagNo")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("TagNo", TagNo)
+        .order("TagNo", desc=True)
         .execute()
     )
-    BagList = ["Select"]
-    bag_no = 0
+    ReturnVal = "OkToAdd"
     for row in res.data or []:
-        bag_no = row.get("BagNo")
-        if bag_no and bag_no not in BagList:
-            BagList.append(bag_no)
-    NewBagNo = str(int(bag_no) + 1) if bag_no else "1"
-    NewBagNo = NewBagNo + " (New)"
-    BagList.append(NewBagNo)
-    return BagList
+        tag_no = row.get("TagNo")
+        crop_no = row.get("CropNo")
+        strain = row.get("Strain")  
+        if CropNo == crop_no and Strain == strain and TagNo == tag_no:
+            ReturnVal = "InUse"
+        else:
+            ReturnVal = "Error"
 
-def InsertTrimBag(crop_no: int, strain: str, bag_no: int, TrimDate):
-    """Insert a new ToteNo for crop and strain."""
+
+def InsertTrimBag(CropNo: int, Strain: str, TagNo: int, TrimDate):
+    """Insert a new TagNo for crop and strain."""
     data = {
-        "CropNo": int(crop_no),
-        "Strain": strain,
-        "BagNo": int(bag_no),
+        "CropNo": int(CropNo),
+        "Strain": Strain,
+        "TagNo": int(TagNo),
         "TrimDate": TrimDate
     }
     res = sb.schema("scale").table("scaletrim").insert(data).execute()
     return res.data[0]
 
+def UpdateTrimBag(TagNo: int, Weight: float):
+    """Update weight for a given TagNo."""
+    upd = {"Weight": Weight}
+    res = sb.schema("scale").table("scaletrim").update(upd, returning="representation").eq("TagNo", TagNo).execute()
+    return res.data[0]
 #testcrop = LoadCrops()
 #print(testcrop)
 

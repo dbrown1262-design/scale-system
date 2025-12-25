@@ -3,16 +3,47 @@
 import serial
 import serial.tools.list_ports
 import time
+from tkinter import messagebox
+import sys
+
 ScaleBuffer = ""
 LastWeight = None
+Scale = None
+ScaleConnected = False
 
-scaleport = " "
-ports = list(serial.tools.list_ports.comports())
-for p in ports:
-    if p.vid == 1027 and (p.pid == 24577 or p.pid == 24597):
-        scaleport = p.device
-        print("Connected to Scale " + scaleport)
-        Scale = serial.Serial(port=scaleport, baudrate=9600, timeout=2)
+def ConnectScales():
+    """Connect to Ohaus scale with retry logic. Call this after app initialization."""
+    global Scale, ScaleConnected
+    
+    while not ScaleConnected:
+        try:
+            ports = list(serial.tools.list_ports.comports())
+            for p in ports:
+                if p.vid == 1027 and (p.pid == 24577 or p.pid == 24597):
+                    scaleport = p.device
+                    print("Connecting to Scale on " + scaleport)
+                    Scale = serial.Serial(port=scaleport, baudrate=9600, timeout=2)
+                    ScaleConnected = True
+                    print("Connected to Scale " + scaleport)
+                    break
+            
+            if not ScaleConnected:
+                raise Exception("No Ohaus scale detected")
+                
+        except Exception as e:
+            print(f"Failed to connect to scale: {e}")
+            retry = messagebox.askretrycancel(
+                "Scale Not Available",
+                f"Could not connect to scale.\n\n"
+                f"Please check:\n"
+                f"1. Scale is turned on and connected via USB\n"
+                f"2. Scale is not being used by another application\n"
+                f"3. USB cable is properly connected\n\n"
+                f"Error: {e}\n\n"
+                f"Click Retry to try again, or Cancel to exit."
+            )
+            if not retry:
+                sys.exit(1)
 
 ###########################################################
 # this code works for Ohaus Scout SPX2201 scale

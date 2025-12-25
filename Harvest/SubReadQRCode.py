@@ -1,33 +1,56 @@
 #!/usr/bin/python3
 
-#import win32print
 from supabase import create_client, Client
 import time
-
 import serial
 import serial.tools.list_ports
-supabase_url = "https://figubkupxgxcrxtvsoji.supabase.co"
-supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpZ3Via3VweGd4Y3J4dHZzb2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNjk4NTksImV4cCI6MjAzNTg0NTg1OX0.049XyTPGjxGqliuBWnk1HWEBypP_J76h73qfLwCQxpw"
-supabase = create_client(supabase_url, supabase_key)
+import json
+from pathlib import Path
+from tkinter import messagebox
+import sys
 
-# Connect to Supabase
-scaleschema = "scale"
-supabase = supabase.schema(scaleschema)
+# Folder where THIS file lives (i.e., the Harvest folder)
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-scaleport = " "
-ports = list(serial.tools.list_ports.comports())
-for p in ports:
-    ps = str(p)
-    if ps.find("CH340") > 0:
-        ps1 = ps.split(" ")
-        scaleport = ps1[0]
-        print("Raw scaleport:", repr(scaleport))
-        QrReader = serial.Serial(port=scaleport, baudrate=115200, timeout=1)
-#        QrReader = serial.Serial(port="COM6", baudrate=9600, timeout=1)
+# Full path to config.json in Common folder
+CONFIG_PATH = BASE_DIR / "Common" / "config.json"
+
+def load_scanner_port():
+    with open(CONFIG_PATH, "r") as f:
+        cfg = json.load(f)
+    return cfg["scanner_com_port"]
+
+scanner_port = load_scanner_port()
+
+# QR reader will be initialized by ConnectScanner()
+QrReader = None
+
+def ConnectScanner():
+    """Connect to QR scanner with retry logic. Call this after app initialization."""
+    global QrReader
+    
+    while QrReader is None:
+        try:
+            QrReader = serial.Serial(scanner_port, 115200, timeout=1)
+            print("Scanner ready on", scanner_port)
+        except Exception as e:
+            print(f"Failed to open scanner on {scanner_port}: {e}")
+            retry = messagebox.askretrycancel(
+                "Scanner Not Available",
+                f"Could not connect to QR scanner on {scanner_port}.\n\n"
+                f"Please check:\n"
+                f"1. Scanner is turned on\n"
+                f"2. Scanner is paired via Bluetooth\n"
+                f"3. Scanner is not being used by another application\n\n"
+                f"Error: {e}\n\n"
+                f"Click Retry to try again, or Cancel to exit."
+            )
+            if not retry:
+                sys.exit(1)
 
 def CheckQr():
     Qr1 = "none"; Qr2 = "none"
-    if QrReader.in_waiting > 0:
+    if QrReader and QrReader.in_waiting > 0:
         raw = QrReader.readline()
         print("raw =", raw)
 
@@ -46,7 +69,7 @@ def CheckQr():
 
 def CheckMetricQr():
     ptext = "none"
-    if QrReader.in_waiting > 0:
+    if QrReader and QrReader.in_waiting > 0:
         raw = QrReader.readline()
         print("raw =", raw)
 
@@ -54,7 +77,3 @@ def CheckMetricQr():
         ptext = raw.decode().strip()
         print("ptext =", ptext)
     return (ptext)
-
-while (ptext := CheckMetricQr()) == "none":
-    print("Waiting for QR code...")
-    time.sleep(1)

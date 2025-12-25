@@ -15,7 +15,7 @@ Implementation details:
 import time
 import os
 import sys
-
+import subprocess
 import customtkinter as ctk
 from tkinter import messagebox
 
@@ -59,7 +59,7 @@ SCRIPTS = {
     ],
     "Trimmer": [
         ("Enter Daily Trim", os.path.join("Trimmers", "TrimmerDailyWeigh.py")),
-        ("Weigh Trim", os.path.join("Trimmers", "WeighTrim.py")),
+        ("Weigh Trim Bags", os.path.join("Trimmers", "WeighTrim.py")),
         ("Weekly Trimmer Summary", os.path.join("Trimmers", "TrimmerSummary.py")),
     ],
     "Processing": [
@@ -72,7 +72,7 @@ SCRIPTS = {
         ("Edit Daily Trim", os.path.join("Trimmers", "EditDailyTrim.py")),
         ("Edit Trimmer List", os.path.join("Trimmers", "EditTrimmerList.py")),
         ("Edit Trim Rates", os.path.join("Trimmers", "EditTrimRates.py")),
-    ],
+        ("Scanner Setup", os.path.join("Common", "ScannerSetup.py")),],
 }
 
 
