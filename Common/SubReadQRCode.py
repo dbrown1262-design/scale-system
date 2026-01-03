@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 #import win32print
+import argparse
 from supabase import create_client, Client
 import time
 import serial
@@ -15,6 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent
 # Full path to config.json in the same folder
 CONFIG_PATH = BASE_DIR / "config.json"
 
+
 def load_scanner_port():
     with open(CONFIG_PATH, "r") as f:
         cfg = json.load(f)
@@ -24,10 +26,19 @@ scanner_port = load_scanner_port()
 
 # QR reader will be initialized by ConnectScanner()
 QrReader = None
-
+TestMode = False
 def ConnectScanner():
     """Connect to QR scanner with retry logic. Call this after app initialization."""
     global QrReader
+    
+    p = argparse.ArgumentParser()
+    p.add_argument("--test", action="store_true")
+    args = p.parse_args()
+    global TestMode
+    TestMode = args.test
+    if TestMode:
+        print("Running in Test Mode - no scanner connection")
+        return
     
     while QrReader is None:
         try:
@@ -51,6 +62,9 @@ def ConnectScanner():
 
 
 def CheckQr():
+    if TestMode:
+        return "TEST-QRCODE-12345"
+    
     Qr1 = "none"; Qr2 = "none"
     if QrReader and QrReader.in_waiting > 0:
         raw = QrReader.readline()
@@ -70,6 +84,9 @@ def CheckQr():
     return (Qr2)
 
 def CheckMetricQr():
+    if TestMode:
+        return "TEST-QRCODE-12345"
+    
     ptext = "none"
     if QrReader and QrReader.in_waiting > 0:
         raw = QrReader.readline()
@@ -80,6 +97,9 @@ def CheckMetricQr():
         print("ptext =", ptext)
     return (ptext)
 
+ConnectScanner()
+qr = CheckMetricQr()
+print("QR Code read:", qr)
 #while (ptext := CheckMetricQr()) == "none":
 #    print("Waiting for QR code...")
 #    time.sleep(1)

@@ -27,6 +27,13 @@ def LoadStrains(crop_no: int):
     strains = sorted({row["Strain"] for row in res.data if row.get("Strain")}) if res.data else []
     return ["Select"] + strains
 
+def GetHarvestDate(crop_no: int):
+    """Get HarvestDate for a given CropNo"""
+    res = sb.table("scalecrops").select("HarvestDate").eq("CropNo", crop_no).execute()
+    if res.data and len(res.data) > 0:
+        return res.data[0].get("HarvestDate")
+    return None
+
 def LoadPackageTypes():
     # Return all package type rows with expected columns
     res = (
@@ -82,14 +89,29 @@ def UpdateBatchId(CropNo, Strain, BatchId):
 #
 #################################################################################################
 
-def GetPackages(BatchId, PackageType):
+def GetPackages(CropNo, Strain):
     # Execute the query and return the data list (include UnitWeight)
     result = (
         sb.schema("scale")
         .table("packages")
-        .select("BatchId, PackageType, TotUnits, TotWeight, batchtable(Strain, BatchType)")
-        .eq("BatchId", BatchId)
+        .select("CropNo", "Strain", "CaseNo", "MetrcID", "PackageType", "TotUnits", "TotWeight", "PackDate")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .order("PackageType, CaseNo")
+        .execute()
+    )
+    return result.data or []
+
+def GetOnePackage(CropNo, Strain, PackageType, CaseNo):
+    # Execute the query and return the data list (include UnitWeight)
+    result = (
+        sb.schema("scale")
+        .table("packages")
+        .select("CropNo", "Strain", "CaseNo", "MetrcID", "PackageType", "TotUnits", "TotWeight", "PackDate")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
         .eq("PackageType", PackageType)
+        .eq("CaseNo", CaseNo)
         .execute()
     )
     return result.data or []
@@ -104,12 +126,31 @@ def GetPackageWeight(PackageType: str):
         return res.data[0].get("UnitWeight")
     return None
 
-def InsertPackage(BatchId: str, PackageType: str, UnitWeight: float, TotUnits: int, TotWeight: float, PackDate: str = None):
+#w = GetPackageWeight("Jars")
+#print("Package weight for Jars:", w)
+def GetNewCaseNo(CropNo, Strain, PackageType):
+    res = (sb.schema("scale")
+        .table("packages")
+        .select("CaseNo")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("PackageType", PackageType)
+        .order("CaseNo", desc=True)
+        .limit(1)
+        .execute())
+    if res.data and res.data[0].get("CaseNo") is not None:
+        return str(res.data[0]["CaseNo"] + 1)
+    return "1"
+
+def InsertPackage( CropNo, Strain, CaseNo, MetrcID, PackageType, TotUnits, TotWeight, PackDate: str = None):
     # Accept PackDate as ISO string; if missing, use current timestamp
     if PackDate is None:
         PackDate = datetime.now().isoformat()
     data = {
-        "BatchId": BatchId,
+        "CropNo": CropNo,
+        "Strain": Strain,
+        "CaseNo": CaseNo,
+        "MetrcID": MetrcID,
         "PackageType": PackageType,
         "TotUnits": TotUnits,
         "TotWeight": TotWeight,
@@ -117,6 +158,25 @@ def InsertPackage(BatchId: str, PackageType: str, UnitWeight: float, TotUnits: i
     }
     res = sb.schema("scale").table("packages").insert(data).execute()
     return res.data
+
+def LoadCases(CropNo, Strain, PackageType):
+    cases = ["Select", "New Case"]
+    metrc = None
+    res = (sb.schema("scale")
+        .table("packages")
+        .select("CaseNo", "MetrcID")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("PackageType", PackageType)
+        .order("CaseNo")
+        .execute())
+    for row in res.data or []:
+        CaseNo = row.get("CaseNo")
+        metrc = row.get("MetrcID")
+        cases.append(str(CaseNo))
+    return cases, metrc
+
+
 
 def LoadBatches(CropNo, Strain):
     batches = ["Select"]
@@ -134,7 +194,8 @@ def LoadBatches(CropNo, Strain):
         batches.append(entry)
     return batches
 
-
+#cases = LoadCases(1, "Test Strain", "Jars")
+#print("Cases loaded:", cases)
 
 #################################################################################################
 #
