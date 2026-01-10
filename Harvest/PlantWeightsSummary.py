@@ -15,7 +15,7 @@ def restart_menu():
     subprocess.Popen([sys.executable, menu_path], cwd=BASE_DIR)
 
 GRAMS_TO_LBS = 0.00220462262185
-DEFAULT_FONT = ("Arial", 15)
+DEFAULT_FONT = ("Arial", 12)
 
 class PlantWeightsSummary(ctk.CTk):
     """Summary of plant wet/dry weights per strain for a selected crop.
@@ -54,28 +54,17 @@ class PlantWeightsSummary(ctk.CTk):
                        background="#2b2b2b",
                        foreground="#dce4ee",
                        fieldbackground="#2b2b2b",
-                       font=("Arial", 15),
+                       font=("Arial", 12),
                        rowheight=30)
         style.configure("Treeview.Heading",
                        background="#1f538d",
                        foreground="#ffffff",
-                       font=("Arial", 15, "bold"))
+                       font=("Arial", 12, "bold"))
         style.map("Treeview",
                  background=[("selected", "#144870")])
-        self.option_add("*TCombobox*Listbox.font", ("Arial", 15))
-        self.option_add("*Big.TCombobox*Listbox.font", ("Arial", 15))
-
-        ctk.CTkLabel(top, text="Crop:", font=DEFAULT_FONT).pack(side="left", padx=(0,6))
-        crops = SubSupa.LoadCrops()
-        self.crop_combo = ctk.CTkComboBox(top, values=crops, width=360, font=DEFAULT_FONT, command=self.on_crop_select)
-        if crops:
-            self.crop_combo.set(crops[0])
-        self.crop_combo.pack(side="left")
-
-        ctk.CTkButton(top, text="Load Summary", command=self.on_crop_select).pack(side="left", padx=8)
-
+        
         # Treeview with averages
-        cols = ("Strain", "WetWeight (lbs)", "WetCount", "Avg Wet (lbs)", "DryWeight (lbs)", "DryCount", "Avg Dry (lbs)")
+        cols = ("Strain", "WetWeight", "WetCount", "Avg Wet", "DryWeight", "DryCount", "Avg Dry")
         self.tree = ttk.Treeview(self, columns=cols, show="headings")
         for c in cols:
             self.tree.heading(c, text=c)

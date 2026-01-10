@@ -39,28 +39,24 @@ def LoadPackageTypes():
     res = (
         sb.schema("scale")
         .table("packagetypes")
-        .select("id,PackageType,UnitWeight,NumUnits,TotWeight")
+        .select("id,PackageType,UnitWeight")
         .order("PackageType")
         .execute()
     )
     return res.data or []
 
-def InsertPackageType(PackageType: str, UnitWeight: float, NumUnits: int, TotWeight: float):
+def InsertPackageType(PackageType: str, UnitWeight: float):
     data = {
         "PackageType": PackageType,
         "UnitWeight": UnitWeight,
-        "NumUnits": NumUnits,
-        "TotWeight": TotWeight,
     }
     res = sb.schema("scale").table("packagetypes").insert(data).execute()
     return res.data
 
-def UpdatePackageType(row_id: int, PackageType: str, UnitWeight: float, NumUnits: int, TotWeight: float):
+def UpdatePackageType(row_id: int, PackageType: str, UnitWeight: float):
     data = {
         "PackageType": PackageType,
         "UnitWeight": UnitWeight,
-        "NumUnits": NumUnits,
-        "TotWeight": TotWeight,
     }
     res = sb.schema("scale").table("packagetypes").update(data).eq("id", row_id).execute()
     return res.data

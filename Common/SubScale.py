@@ -17,40 +17,41 @@ def ConnectScales():
     """Connect to Ohaus scales with retry logic. Call this after app initialization."""
     global ScaleRanger, ScaleScout, ScoutConnected, RangerConnected
     
-    while not (ScoutConnected or RangerConnected):
-        try:
-            ports = list(serial.tools.list_ports.comports())
-            for p in ports:
-                if p.vid == 1027 and p.pid == 24577:
-                    scaleport = p.device
-                    print("Connecting to Ranger Scale on " + scaleport)
-                    ScaleRanger = serial.Serial(port=scaleport, baudrate=9600, timeout=2)
-                    RangerConnected = True
-                    print("Connected to Ranger Scale " + scaleport)
-                if p.vid == 1027 and p.pid == 24597:
-                    scaleport = p.device
-                    print("Connecting to Scout Scale on " + scaleport)
-                    ScaleScout = serial.Serial(port=scaleport, baudrate=9600, timeout=2)
-                    ScoutConnected = True
-                    print("Connected to Scout Scale " + scaleport)
+#    while not (ScoutConnected or RangerConnected):
+    try:
+        ports = list(serial.tools.list_ports.comports())
+        for p in ports:
+#            print(f"Found device: VID={p.vid}, PID={p.pid}, Device={p.device}")
+            if p.vid == 1027 and p.pid == 24577:
+                scaleport = p.device
+                print("Connecting to Ranger Scale on " + scaleport)
+                ScaleRanger = serial.Serial(port=scaleport, baudrate=9600, timeout=2)
+                RangerConnected = True
+                print("Connected to Ranger Scale " + scaleport)
+            if p.vid == 1027 and p.pid == 24597:
+                scaleport = p.device
+                print("Connecting to Scout Scale on " + scaleport)
+                ScaleScout = serial.Serial(port=scaleport, baudrate=9600, timeout=2)
+                ScoutConnected = True
+                print("Connected to Scout Scale " + scaleport)
+        
+        if not (ScoutConnected or RangerConnected):
+            raise Exception("No Ohaus scale detected")
             
-            if not (ScoutConnected or RangerConnected):
-                raise Exception("No Ohaus scale detected")
-                
-        except Exception as e:
-            print(f"Failed to connect to scale: {e}")
-            retry = messagebox.askretrycancel(
-                "Scale Not Available",
-                f"Could not connect to scale.\n\n"
-                f"Please check:\n"
-                f"1. Scale is turned on and connected via USB\n"
-                f"2. Scale is not being used by another application\n"
-                f"3. USB cable is properly connected\n\n"
-                f"Error: {e}\n\n"
-                f"Click Retry to try again, or Cancel to exit."
-            )
-            if not retry:
-                sys.exit(1)
+    except Exception as e:
+        print(f"Failed to connect to scale: {e}")
+        retry = messagebox.askretrycancel(
+            "Scale Not Available",
+            f"Could not connect to scale.\n\n"
+            f"Please check:\n"
+            f"1. Scale is turned on and connected via USB\n"
+            f"2. Scale is not being used by another application\n"
+            f"3. USB cable is properly connected\n\n"
+            f"Error: {e}\n\n"
+            f"Click Retry to try again, or Cancel to exit."
+        )
+#            if not retry:
+#                sys.exit(1)
 
 def GetScaleStatus():
     global ScoutConnected, RangerConnected
@@ -103,7 +104,7 @@ def GetRangerWeight():
 
 
 
-
+ConnectScales()
 #time.sleep(5)  # wait for scale to initialize
 #w = GetScoutWeight()
 #print("Weight is ", w)

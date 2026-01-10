@@ -277,35 +277,37 @@ def UpdateDailytrim(match_key: dict, new_values: dict):
 #
 #################################################################################################
 
-def CheckTrimBag(CropNo: int, Strain: str, TagNo: str):
+def CheckTrimBag(CropNo: int, Strain: str, MetrcId: str):
     """Load existing ToteNos for crop and strain."""
     res = (
         sb.schema("scale")
         .table("scaletrim")
-        .select("TagNo")
+        .select("MetrcId")
         .eq("CropNo", CropNo)
         .eq("Strain", Strain)
-        .eq("TagNo", TagNo)
-        .order("TagNo", desc=True)
+        .eq("MetrcId", MetrcId)
+        .order("MetrcId", desc=True)
         .execute()
     )
     ReturnVal = "OkToAdd"
     for row in res.data or []:
-        tag_no = row.get("TagNo")
+        id = row.get("MetrcId")
         crop_no = row.get("CropNo")
         strain = row.get("Strain")  
-        if CropNo == crop_no and Strain == strain and TagNo == tag_no:
+        if CropNo == crop_no and Strain == strain and MetrcId == id:
             ReturnVal = "InUse"
         else:
             ReturnVal = "Error"
 
 
-def InsertTrimBag(CropNo: int, Strain: str, TagNo: int, TrimDate):
+def InsertTrimBag(CropNo: int, Strain: str, Type: str, MetrcId: str, Weight, TrimDate):
     """Insert a new TagNo for crop and strain."""
     data = {
         "CropNo": int(CropNo),
         "Strain": Strain,
-        "TagNo": int(TagNo),
+        "Type": Type,
+        "MetrcId": MetrcId,
+        "Weight": int(Weight),
         "TrimDate": TrimDate
     }
     res = sb.schema("scale").table("scaletrim").insert(data).execute()
@@ -316,6 +318,15 @@ def UpdateTrimBag(TagNo: int, Weight: float):
     upd = {"Weight": Weight}
     res = sb.schema("scale").table("scaletrim").update(upd, returning="representation").eq("TagNo", TagNo).execute()
     return res.data[0]
+
+def GetHarvestDate(crop_no: int):
+    """Get HarvestDate for a given CropNo"""
+    res = sb.table("scalecrops").select("HarvestDate").eq("CropNo", crop_no).execute()
+    if res.data and len(res.data) > 0:
+        return res.data[0].get("HarvestDate")
+    return None
+
+
 #testcrop = LoadCrops()
 #print(testcrop)
 

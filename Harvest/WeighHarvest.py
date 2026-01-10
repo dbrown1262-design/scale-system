@@ -2,12 +2,18 @@ import customtkinter as ctk
 from tkinter import ttk, messagebox
 from tkinter.scrolledtext import ScrolledText
 from datetime import datetime
-import SubScale
-import SubReadQRCode
+from pathlib import Path
 import SubSupa
 import os
 import sys
 import subprocess
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+import Common.SubScale as SubScale
+import Common.SubReadQRCode as SubReadQRCode
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,11 +29,39 @@ def restart_menu():
 APP_TITLE = "Weigh Harvest"
 DEFAULT_FONT = ("Arial", 15)
 
+def launch_sop():
+    # WeighHarvest.py is in scale/Harvest/
+    this_file = Path(__file__).resolve()
+    scale_root = this_file.parents[1]  # .../scale
+    sop_md = scale_root / "sop" / "Harvest" / "WeighHarvest.md"
+    viewer_py = scale_root / "common" / "SopViewer.py"
+
+    # Launch separate process (non-blocking)
+    subprocess.Popen(
+        [sys.executable, str(viewer_py), str(sop_md)],
+        cwd=str(scale_root),
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform.startswith("win") else 0
+    )
+
 
 class WeighHarvestApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        
+
+        menu_bar = ctk.CTkFrame(self, height=32)
+        menu_bar.pack(fill="x", side="top")
+
+        help_btn = ctk.CTkButton(
+            menu_bar,
+            text="Help",
+            width=60,
+            fg_color="transparent",
+            text_color="white",
+            hover_color="#333333",
+            command=launch_sop
+        )
+        help_btn.pack(side="left", padx=6, pady=4)
+
         # Set dark mode theme
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("dark-blue")
@@ -46,7 +80,13 @@ class WeighHarvestApp(ctk.CTk):
         self.QrStatusLabel = ctk.CTkLabel(container, text="QR: Checking...", font=("Arial", 12), 
                                           text_color="#ff8800", corner_radius=6, 
                                           fg_color="#2b2b2b", padx=10, pady=5)
-        self.QrStatusLabel.grid(row=0, column=3, sticky="e", pady=(0, 12))
+        self.QrStatusLabel.grid(row=0, column=3, sticky="e", pady=(0, 12), padx=(0, 8))
+        
+        # Scale status indicator
+        self.ScaleStatusLabel = ctk.CTkLabel(container, text="Scale: Checking...", font=("Arial", 12), 
+                                             text_color="#ff8800", corner_radius=6, 
+                                             fg_color="#2b2b2b", padx=10, pady=5)
+        self.ScaleStatusLabel.grid(row=0, column=4, sticky="e", pady=(0, 12))
 
         # Type combo (Wet / Dry)
         ctk.CTkLabel(container, text="Plant Type", font=DEFAULT_FONT).grid(row=1, column=0, sticky="e", padx=(6,6))
@@ -56,7 +96,7 @@ class WeighHarvestApp(ctk.CTk):
 
         # Plant No entry (populated from QR or typed and Enter)
         ctk.CTkLabel(container, text="Plant ID", font=DEFAULT_FONT).grid(row=1, column=2, sticky="e", padx=(6,6))
-        self.PlantEntry = ctk.CTkEntry(container, width=160, font=DEFAULT_FONT)
+        self.PlantEntry = ctk.CTkEntry(container, width=220, font=DEFAULT_FONT)
         self.PlantEntry.grid(row=1, column=3, sticky="w", pady=8)
         # Bind Enter key to process plant
         self.PlantEntry.bind('<Return>', lambda e: self.OnPlantEnter())
@@ -96,6 +136,7 @@ class WeighHarvestApp(ctk.CTk):
         self._PollId = None
         self._QrPollId = None
         self._PrevWeight = None
+        self._PrevRangerStatus = None
         self._QrStatusCheckCounter = 0  # Counter for periodic QR status checks
 
         # Check QR reader status initially
@@ -142,6 +183,20 @@ class WeighHarvestApp(ctk.CTk):
                 self.WeightEntry.configure(state='disabled')
             except Exception:
                 pass
+        
+        # Check scale status and update if changed
+        try:
+            scout_connected, ranger_connected = SubScale.GetScaleStatus()
+            if ranger_connected != self._PrevRangerStatus:
+                self._PrevRangerStatus = ranger_connected
+                if ranger_connected:
+                    self.ScaleStatusLabel.configure(text="Scale: Connected", text_color="#00aa00")
+                else:
+                    self.ScaleStatusLabel.configure(text="Scale: Not Found", text_color="#ff4444")
+        except Exception:
+            if self._PrevRangerStatus is not False:
+                self._PrevRangerStatus = False
+                self.ScaleStatusLabel.configure(text="Scale: Error", text_color="#ff4444")
 
         try:
             self._PollId = self.after(interval_ms, lambda: self.PollWeight(interval_ms))

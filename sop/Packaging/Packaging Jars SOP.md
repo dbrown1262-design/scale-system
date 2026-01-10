@@ -77,17 +77,19 @@ To define the standardized procedure for packaging trimmed flower into 3.5 gram 
     - Affix the **internal identification label** to the case.
 2. For all **subsequent cases** from the same Processing Package UID:
     - Affix the **internal identification label only**.
-3. To print internal lables, go to Add Package from the Packaging menu:
+3. To print internal labels, go to Add Package from the Packaging menu:
     - Select Crop and Strain
     - The system will list the packages for this Crop/Strain
     - Select Package Type (Jars)
-    - Select Case No (New)
+    - Select Case No:
+        - Select "New" to create a new case (the system will automatically assign the next case number)
+        - Or select an existing case number to add to that case
     - If there are one or more cases for this Crop/Strain/Jars, the system will automatically insert the MetrcID.  If this is the first case, scan the Processing Package UID label.  The ID will show in the MetrcID box.
     - Enter the number of jars in the case
     - Click on Save
     - The system will update the list of packages; the new package should show in the list
     - Click on the row containing the new package
-    - Click on Print Lable
+    - Click on Print Label
     - The system will generate the internal label
 
 

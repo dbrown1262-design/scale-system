@@ -53,14 +53,14 @@ class EditPackageTypesApp(ctk.CTk):
 
         # Treeview
         ctk.CTkLabel(frame, text="Package Types", font=("Arial", 15, "bold")).grid(row=0, column=0, sticky="w", pady=(0, 6))
-        cols = ("TypeName", "UnitWeight", "NumUnits", "TotWeight")
+        cols = ("TypeName", "UnitWeight")
         self.tree = ttk.Treeview(frame, columns=cols, show="headings", height=12)
         for c in cols:
             self.tree.heading(c, text=c)
             if c == "TypeName":
-                self.tree.column(c, width=240, anchor="w")
+                self.tree.column(c, width=400, anchor="w")
             else:
-                self.tree.column(c, width=120, anchor="center")
+                self.tree.column(c, width=200, anchor="center")
         self.tree.grid(row=1, column=0, columnspan=4, sticky="nsew", pady=(6,12))
         self.tree.bind('<<TreeviewSelect>>', lambda e: self.on_tree_select())
 
@@ -73,17 +73,9 @@ class EditPackageTypesApp(ctk.CTk):
         self.ent_unit = ctk.CTkEntry(frame, width=120, font=DEFAULT_FONT)
         self.ent_unit.grid(row=2, column=3, sticky="w", padx=6, pady=6)
 
-        ctk.CTkLabel(frame, text="Num Units:", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(0, 6))
-        self.ent_num = ctk.CTkEntry(frame, width=120, font=DEFAULT_FONT)
-        self.ent_num.grid(row=3, column=1, sticky="w", padx=6, pady=6)
-
-        ctk.CTkLabel(frame, text="Tot Weight:", font=DEFAULT_FONT).grid(row=3, column=2, sticky="e", padx=(0, 6))
-        self.ent_tot = ctk.CTkEntry(frame, width=120, font=DEFAULT_FONT)
-        self.ent_tot.grid(row=3, column=3, sticky="w", padx=6, pady=6)
-
         # Buttons
         btn_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        btn_frame.grid(row=4, column=0, columnspan=4, pady=(12,0))
+        btn_frame.grid(row=3, column=0, columnspan=4, pady=(12,0))
         self.btn_add = ctk.CTkButton(btn_frame, text="Add Row", font=DEFAULT_FONT, command=self.add_row)
         self.btn_update = ctk.CTkButton(btn_frame, text="Update Selected", font=DEFAULT_FONT, command=self.update_row)
         self.btn_refresh = ctk.CTkButton(btn_frame, text="Refresh", font=DEFAULT_FONT, command=self.load_rows)
@@ -97,7 +89,7 @@ class EditPackageTypesApp(ctk.CTk):
 
         # status
         self.status = ctk.CTkLabel(frame, text="", font=("Arial", 15))
-        self.status.grid(row=5, column=0, columnspan=4, sticky="w", pady=(8,0))
+        self.status.grid(row=4, column=0, columnspan=4, sticky="w", pady=(8,0))
 
         # make tree expand
         frame.rowconfigure(1, weight=1)
@@ -128,9 +120,7 @@ class EditPackageTypesApp(ctk.CTk):
             rid = r.get('id') if isinstance(r, dict) else getattr(r, 'id', None)
             t = r.get('PackageType') if isinstance(r, dict) else getattr(r, 'PackageType', '')
             uw = r.get('UnitWeight') if isinstance(r, dict) else getattr(r, 'UnitWeight', 0)
-            nu = r.get('NumUnits') if isinstance(r, dict) else getattr(r, 'NumUnits', 0)
-            tw = r.get('TotWeight') if isinstance(r, dict) else getattr(r, 'TotWeight', 0)
-            vals = (t or '', str(uw or ''), str(nu or ''), str(tw or ''))
+            vals = (t or '', str(uw or ''))
             # use id as iid when possible
             try:
                 self.tree.insert('', 'end', iid=str(rid) if rid is not None else None, values=vals)
@@ -156,12 +146,8 @@ class EditPackageTypesApp(ctk.CTk):
         try:
             self.ent_type.delete(0, 'end')
             self.ent_unit.delete(0, 'end')
-            self.ent_num.delete(0, 'end')
-            self.ent_tot.delete(0, 'end')
             self.ent_type.insert(0, vals[0])
             self.ent_unit.insert(0, vals[1])
-            self.ent_num.insert(0, vals[2])
-            self.ent_tot.insert(0, vals[3])
             self.set_status(f"Selected row {iid}")
         except Exception:
             pass
@@ -171,8 +157,6 @@ class EditPackageTypesApp(ctk.CTk):
             self.selected_id = None
             self.ent_type.delete(0, 'end')
             self.ent_unit.delete(0, 'end')
-            self.ent_num.delete(0, 'end')
-            self.ent_tot.delete(0, 'end')
             self.set_status("")
         except Exception:
             pass
@@ -180,8 +164,6 @@ class EditPackageTypesApp(ctk.CTk):
     def add_row(self):
         t = (self.ent_type.get() or "").strip()
         uw = (self.ent_unit.get() or "").strip()
-        nu = (self.ent_num.get() or "").strip()
-        tw = (self.ent_tot.get() or "").strip()
 
         if not t:
             messagebox.showwarning("Type Name", "Please enter a Type Name")
@@ -191,19 +173,9 @@ class EditPackageTypesApp(ctk.CTk):
         except Exception:
             messagebox.showwarning("Unit Weight", "Unit Weight must be a number")
             return
-        try:
-            nui = int(nu) if nu else 0
-        except Exception:
-            messagebox.showwarning("Num Units", "Num Units must be an integer")
-            return
-        try:
-            twf = float(tw) if tw else 0.0
-        except Exception:
-            messagebox.showwarning("Tot Weight", "Tot Weight must be a number")
-            return
 
         try:
-            SubSupa.InsertPackageType(t, uwf, nui, twf)
+            SubSupa.InsertPackageType(t, uwf)
             self.set_status(f"Inserted {t}")
         except Exception as e:
             self.set_status(f"InsertPackageType failed: {e}")
@@ -217,8 +189,6 @@ class EditPackageTypesApp(ctk.CTk):
             return
         t = (self.ent_type.get() or "").strip()
         uw = (self.ent_unit.get() or "").strip()
-        nu = (self.ent_num.get() or "").strip()
-        tw = (self.ent_tot.get() or "").strip()
 
         if not t:
             messagebox.showwarning("Type Name", "Please enter a Type Name")
@@ -228,19 +198,9 @@ class EditPackageTypesApp(ctk.CTk):
         except Exception:
             messagebox.showwarning("Unit Weight", "Unit Weight must be a number")
             return
-        try:
-            nui = int(nu) if nu else 0
-        except Exception:
-            messagebox.showwarning("Num Units", "Num Units must be an integer")
-            return
-        try:
-            twf = float(tw) if tw else 0.0
-        except Exception:
-            messagebox.showwarning("Tot Weight", "Tot Weight must be a number")
-            return
 
         try:
-            SubSupa.UpdatePackageType(self.selected_id, t, uwf, nui, twf)
+            SubSupa.UpdatePackageType(self.selected_id, t, uwf)
             self.set_status(f"Updated id {self.selected_id}")
         except Exception as e:
             self.set_status(f"UpdatePackageType failed: {e}")

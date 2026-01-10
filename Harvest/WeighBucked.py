@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from pathlib import Path
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 import tempfile
@@ -9,11 +10,14 @@ import subprocess
 
 from SubPrintLabels import PrintOneLabel
 import SubSupa
-import SubScale
-import SubReadQRCode
 
-# Connect to hardware after imports (before GUI creation)
-SubScale.ConnectScales()
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+import Common.SubScale as SubScale
+import Common.SubReadQRCode as SubReadQRCode
+
 SubReadQRCode.ConnectScanner()
 
 # BASE_DIR is the folder that contains menu.py
@@ -28,10 +32,38 @@ APP_TITLE = "Weigh Bucked Totes"
 DEFAULT_FONT = ("Arial", 15)
 POLL_INTERVAL_MS = 500
 
+def launch_sop():
+    # WeighBucked.py is in scale/Harvest/
+    this_file = Path(__file__).resolve()
+    scale_root = this_file.parents[1]  # .../scale
+    sop_md = scale_root / "sop" / "Harvest" / "WeighBucked.md"
+    viewer_py = scale_root / "common" / "SopViewer.py"
+
+    # Launch separate process (non-blocking)
+    subprocess.Popen(
+        [sys.executable, str(viewer_py), str(sop_md)],
+        cwd=str(scale_root),
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform.startswith("win") else 0
+    )
+
 
 class WeighBuckedApp(ctk.CTk):
     def __init__(self):
         super().__init__()
+
+        menu_bar = ctk.CTkFrame(self, height=32)
+        menu_bar.pack(fill="x", side="top")
+
+        help_btn = ctk.CTkButton(
+            menu_bar,
+            text="Help",
+            width=60,
+            fg_color="transparent",
+            text_color="white",
+            hover_color="#333333",
+            command=launch_sop
+        )
+        help_btn.pack(side="left", padx=6, pady=4)
         
         # Set dark mode theme
         ctk.set_appearance_mode("dark")
@@ -43,29 +75,45 @@ class WeighBuckedApp(ctk.CTk):
         frame = ctk.CTkFrame(self)
         frame.pack(fill="both", expand=True, padx=12, pady=12)
 
+        # Header row with status indicators
+        header_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        header_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=(0, 12))
+        
+        # QR Reader status indicator
+        self.QrStatusLabel = ctk.CTkLabel(header_frame, text="QR: Checking...", font=("Arial", 12), 
+                                          text_color="#ff8800", corner_radius=6, 
+                                          fg_color="#2b2b2b", padx=10, pady=5)
+        self.QrStatusLabel.pack(side="right", padx=(8, 0))
+        
+        # Scale status indicator
+        self.ScaleStatusLabel = ctk.CTkLabel(header_frame, text="Scale: Checking...", font=("Arial", 12), 
+                                             text_color="#ff8800", corner_radius=6, 
+                                             fg_color="#2b2b2b", padx=10, pady=5)
+        self.ScaleStatusLabel.pack(side="right", padx=(0, 0))
+
         # Crop selector
-        ctk.CTkLabel(frame, text="Crop", font=DEFAULT_FONT).grid(row=0, column=0, sticky="e", padx=(6,6))
+        ctk.CTkLabel(frame, text="Crop", font=DEFAULT_FONT).grid(row=1, column=0, sticky="e", padx=(6,6))
         self.CropCombo = ctk.CTkComboBox(frame, values=[], width=200, font=DEFAULT_FONT, command=self.onCropSelected)
-        self.CropCombo.grid(row=0, column=1, sticky="w", pady=6)
+        self.CropCombo.grid(row=1, column=1, sticky="w", pady=6)
 
         # Strain selector
-        ctk.CTkLabel(frame, text="Strain", font=DEFAULT_FONT).grid(row=1, column=0, sticky="e", padx=(6,6))
+        ctk.CTkLabel(frame, text="Strain", font=DEFAULT_FONT).grid(row=2, column=0, sticky="e", padx=(6,6))
         self.StrainCombo = ctk.CTkComboBox(frame, values=["Select"], width=200, font=DEFAULT_FONT, command=self.onStrainSelected)
-        self.StrainCombo.grid(row=1, column=1, sticky="w", pady=6)
+        self.StrainCombo.grid(row=2, column=1, sticky="w", pady=6)
 
         # Metric Tag Number entry box (populated from QR reader)
-        ctk.CTkLabel(frame, text="Metric Tag", font=DEFAULT_FONT).grid(row=2, column=0, sticky="e", padx=(6,6))
+        ctk.CTkLabel(frame, text="Metric Tag", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(6,6))
         self.MetricTagEntry = ctk.CTkEntry(frame, width=220, font=DEFAULT_FONT)
-        self.MetricTagEntry.grid(row=2, column=1, sticky="w", pady=6)
+        self.MetricTagEntry.grid(row=3, column=1, sticky="w", pady=6)
 
         # Weight display (read-only)
-        ctk.CTkLabel(frame, text="Tote Weight (g)", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(6,6))
+        ctk.CTkLabel(frame, text="Tote Weight (g)", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(6,6))
         self.WeightEntry = ctk.CTkEntry(frame, width=200, font=DEFAULT_FONT, state="disabled")
-        self.WeightEntry.grid(row=3, column=1, sticky="w", pady=6)
+        self.WeightEntry.grid(row=4, column=1, sticky="w", pady=6)
 
         # Buttons row: Save, Print Label, and Close
         button_row = ctk.CTkFrame(frame, fg_color="transparent")
-        button_row.grid(row=4, column=0, columnspan=3, sticky="ew", pady=(12,0))
+        button_row.grid(row=5, column=0, columnspan=3, sticky="ew", pady=(12,0))
         
         self.BtnSave = ctk.CTkButton(button_row, text="Save Tote Weight", font=DEFAULT_FONT, command=self.saveToteWeight)
         self.BtnSave.pack(side="left", padx=(0,8))
@@ -77,11 +125,16 @@ class WeighBuckedApp(ctk.CTk):
 
         # Status
         self.StatusLabel = ctk.CTkLabel(frame, text="", font=("Arial", 12), text_color="#00aa00")
-        self.StatusLabel.grid(row=5, column=0, columnspan=3, sticky="w", pady=(8,0))
+        self.StatusLabel.grid(row=6, column=0, columnspan=3, sticky="w", pady=(8,0))
 
         # Polling state
         self._PollId = None
         self._PrevWeight = None
+        self._PrevRangerStatus = None
+        self._QrStatusCheckCounter = 0  # Counter for periodic QR status checks
+
+        # Check QR reader status initially
+        self.checkQrStatus()
 
         # Load crops
         self.loadCrops()
@@ -94,6 +147,18 @@ class WeighBuckedApp(ctk.CTk):
             self.protocol("WM_DELETE_WINDOW", self.onClose)
         except Exception:
             pass
+
+    # ---- QR Reader Status ----
+    def checkQrStatus(self):
+        """Check if QR reader is connected and update status label."""
+        try:
+            # Check if QrReader exists in SubReadQRCode module
+            if hasattr(SubReadQRCode, 'QrReader') and SubReadQRCode.QrReader:
+                self.QrStatusLabel.configure(text="QR: Connected", text_color="#00aa00")
+            else:
+                self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
+        except Exception:
+            self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
 
     def setStatus(self, text: str):
         try:
@@ -176,6 +241,20 @@ class WeighBuckedApp(ctk.CTk):
                 self.WeightEntry.configure(state='disabled')
             except Exception:
                 pass
+        
+        # Check scale status and update if changed
+        try:
+            scout_connected, ranger_connected = SubScale.GetScaleStatus()
+            if ranger_connected != self._PrevRangerStatus:
+                self._PrevRangerStatus = ranger_connected
+                if ranger_connected:
+                    self.ScaleStatusLabel.configure(text="Scale: Connected", text_color="#00aa00")
+                else:
+                    self.ScaleStatusLabel.configure(text="Scale: Not Found", text_color="#ff4444")
+        except Exception:
+            if self._PrevRangerStatus is not False:
+                self._PrevRangerStatus = False
+                self.ScaleStatusLabel.configure(text="Scale: Error", text_color="#ff4444")
 
         # Check QR reader for metric tag
         try:
@@ -196,6 +275,12 @@ class WeighBuckedApp(ctk.CTk):
                         self.setStatus(f"CheckTag error: {e}")
         except Exception as e:
             self.setStatus(f"QR Reader error: {e}")
+        
+        # Periodically check QR reader status (every 20 polls = ~10 seconds at 500ms intervals)
+        self._QrStatusCheckCounter = getattr(self, '_QrStatusCheckCounter', 0) + 1
+        if self._QrStatusCheckCounter >= 20:
+            self._QrStatusCheckCounter = 0
+            self.checkQrStatus()
 
         try:
             self._PollId = self.after(POLL_INTERVAL_MS, lambda: self.pollWeight())

@@ -19,3 +19,5 @@ env/
 build/
 dist/
 *.egg-info/
+
+Common/config.json

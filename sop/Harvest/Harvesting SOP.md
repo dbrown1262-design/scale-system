@@ -1,118 +1,6 @@
 # Harvesting SOP
 
-## Section 1 — Tagging Plants
-
-## 1. Purpose
-
-To define the standardized procedure for receiving plant data, printing plant identification tags, and properly tagging plants prior to harvest. This ensures compliance, traceability, and accurate crop tracking throughout the harvest workflow.
-
-## 2. Inputs
-
-- Bamboo plant export (CSV)
-- Supabase Web App
-- scalecrops table
-- scaleplants table
-- 4BARCODE label printer
-- 2.25" × 0.75" label stock
-- Pre-numbered plant tags from Metric
-
-## 3. Responsibilities
-
-- **Harvest Technician:** Perform tag printing and plant tagging.
-- **Administrator (Admin Menu):** Verify crop setup, ensure correct printer settings, and approve tag printing.
-
-## 4. Procedure
-
-### 4.1 Import Plants From Bamboo Into Supabase
-
-1. Open the Supabase web application.
-2. Import new plant data from Bamboo:
-	- Add a new Harvest Number and Harvest Date to the scalecrops table.
-	- Import the CSV file exported from Bamboo into the scaleplants table.
-3. Confirm all rows were imported successfully and that each plant has a strain, plant ID, and associated crop number.
-
-### 4.2 Print Strain Name Labels (Admin Menu)
-
-The new tagging system uses pre-numbered tags purchased from Metric. The Print Plant Tags application prints strain name labels to affix to the back of each Metric tag.
-
-Before printing, verify system and printer configuration:
-
-**Printer Setup**
-
-1. Ensure the 4BARCODE printer is set as the default printer on the workstation.
-2. Confirm label Stock Size = 2.25 in × 0.75 in.
-3. Load the correct label roll into the printer.
-
-**Printer Test (Recommended)**
-
-1. In the admin menu, select:
-	- Crop: 1
-	- Strain: Test Strain
-2. The application will query the database and display the number of plants for that strain.
-3. Adjust the "Number of Labels" if needed.
-4. Click Print Tags.
-5. Confirm that labels print correctly with the strain name centered on each label.
-
-**Print Production Labels**
-
-1. Select the correct Crop Number.
-2. For each strain in the crop:
-	- Select the strain.
-	- The system automatically queries scaleplants table and displays the plant count.
-	- Verify or adjust the "Number of Labels" field as needed.
-	- Click Print Tags.
-	- Verify that the correct number of strain name labels have been printed.
-
-#### 4.3 Label Plants
-
-**Prepare Tags**
-
-1. Locate the pre-numbered plant tags from Metric.
-2. Affix one printed strain name label to the back of each Metric tag.
-
-**Apply Tags to Plants**
-
-1. Apply one numbered Metric tag to each plant:
-	- Attach the tag to the plant stem above the first branch.
-	- Ensure the tag is secure and will not fall off during harvest.
-	- Verify the Metric number on the front is visible.
-	- Verify the strain name label on the back is secure.
-
-**Verification**
-
-Confirm that every plant is labeled before proceeding to harvest.
-
-#### 4.4 Register Plant Tags in Metrc
-
-1. After physical plant tags have been affixed, log into Metrc.
-2. Navigate to: **Grow → Immature / Vegetative / Flowering Plants → Add Plants**.
-3. For each strain group:
-    1. Enter the assigned Metrc Plant Tag UID numbers.
-    2. Verify that the plant count in Metrc matches the number of physical tags applied.
-4. Save the entries.
-
-**Compliance Check**
-
-- The number of plants in Metrc must equal the number of physically tagged plants before harvest may proceed.
-
----
-
-### 5. Quality & Compliance Checks
-
-- All plants in the crop must have a readable, affixed Metric tag with strain name label prior to harvest.
-- Tag count should match the number of plants imported from Bamboo.
-- Damaged or unreadable strain labels must be reprinted immediately.
-
-### 6. Records
-
-- Bamboo export CSV
-- Supabase scalecrops entry
-- Supabase scaleplants import
-- Label print logs (if applicable)
-
-\newpage
-
-## Section 2: Harvesting Plants
+## Section 1: Harvesting Plants
 
 ### 1. Purpose
 
@@ -126,6 +14,8 @@ To outline the standardized procedure for removing plants from the grow room, ha
 
 1. Remove any totes from previous harvests
 2. Remove any rolling shelves containing product.
+3. Wash walls, sweep and mop floor.
+4. Sanidate the room using the compressor and foaming machine
 
 **Remove trellis from plants:**
 
@@ -135,13 +25,13 @@ To outline the standardized procedure for removing plants from the grow room, ha
 
 **Remove fertigation lines:**
 
-1. Detach fertigation tubes from the soil bags prior to cutting plants.
+1. Remove fertigation tubes from the soil bags prior to cutting plants.
 
 **Cut the plant at the base:**
 
 1. Use lopper shears to cut the plant at the stem base.
 2. Verify the plant tag is still attached.
-3. Transport the plant to the weighing station (see Section 2.2 below).
+3. Transport the plant to the weighing station (see Section 1.2 below).
 4. Remove remaining trellis once the plant is at the weighing station.
 
 **Manage soil bags during harvest:**
@@ -154,8 +44,8 @@ To outline the standardized procedure for removing plants from the grow room, ha
 1. Remove all remaining trellis from the tables and walkways.
 2. Transport used soil bags to the designated storage area.
 3. Separate soil from plastic:
-	- Empty the soil from the plastic grow bags.
-	- Place soil into the dump trailer for transport to the compost pile.
+    - Empty the soil from the plastic grow bags.
+    - Place soil into the dump trailer for transport to the compost pile.
 
 **Clean the grow tables:**
 
@@ -167,16 +57,18 @@ To outline the standardized procedure for removing plants from the grow room, ha
 1. Set up the compressor and Sanidate sprayer.
 2. Spray tables, walls, and floors.
 
-#### 2.2 Weighing Plants
+---
 
-##### 2.2.1 Set Up the Scale (If Necessary)
+#### 1.2 Weighing Plants
+
+##### 1.2.1 Set Up the Scale (If Necessary)
 
 1. Place the Ohaus Ranger scale on the rack above the drying room door.
 2. Screw the bottom hook into the scale.
 3. Hang one stainless steel "S" hook on the bottom hook.
 4. Tare the scale to zero.
 
-##### 2.2.2 Operating the Weighing Application
+##### 1.2.2 Operating the Weighing Application
 
 1. Select "Weigh Plants" from the Harvest menu.
 2. Confirm Plant Type = "Wet."
@@ -186,7 +78,7 @@ To outline the standardized procedure for removing plants from the grow room, ha
 
 1. Place an S hook on a lower branch.
 2. Hang the plant upside down from the scale.
-	- This same hook will be used to hang the plant in the drying room after weighing.
+    - This same hook will be used to hang the plant in the drying room after weighing.
 3. Verify the weight appears in the Weight box on screen.
 4. Use the handheld QR reader to scan the plant tag.
 
@@ -196,27 +88,29 @@ The system will:
 - Add a line to the Log box
 - Associate the weight with the correct plant ID automatically
 
-##### 2.2.3 If a QR Code Does Not Scan
+##### 1.2.3 If a QR Code Does Not Scan
 
 1. Hang the plant on the scale and verify the weight is displayed.
 2. Type the Plant ID manually.
 3. Click Process Current Plant.
 
-##### 2.2.4 Duplicate Weighing Warning
+##### 1.2.4 Duplicate Weighing Warning
 
 If the plant has already been weighed:
 
 - The system will display a warning message with options:
-	- Cancel
-	- Replace the Existing Weight
+    - Cancel
+    - Replace the Existing Weight
 - This situation is common when weighing dry plants while the application is still set to Wet mode.
 
-##### 2.2.5 After Weighing
+##### 1.2.5 After Weighing
 
 1. Hang the plant in the drying room.
 2. Ensure the plant tag remains attached so it can be identified and weighed again after drying.
 
-#### 2.3 Create Harvest Batch in Metrc
+---
+
+#### 1.3 Create Harvest Batch in Metrc
 
 1. After all plants from a grow room have been harvested and moved to the drying room, log into Metrc.
 2. Navigate to: **Grow → Harvests → Create Harvest Batch**.
@@ -233,9 +127,11 @@ If the plant has already been weighed:
 - All plant tags must be included in exactly one harvest batch.  
 - No plant tag may remain active after harvest.
 
+---
+
 \newpage
 
-## Section 3: Bucking Plants
+## Section 2: Bucking Plants
 
 ### 1. Purpose
 The bucking process removes flowers from stems following drying. This reduces material volume, prevents moisture retention, and prepares the flowers for trimming. Proper bucking supports product quality, reduces mold risk, and maintains strain separation and traceability.
@@ -246,7 +142,7 @@ The bucking process removes flowers from stems following drying. This reduces ma
 
 #### 2.1 Remove Plants From Drying Room
 1. Remove plants from the drying room **one strain at a time**.
-2. Weigh each plant before bucking (see **Section 3.3 – Weigh Dry Plants**).
+2. Weigh each plant before bucking (see **Section 2.3 – Weigh Dry Plants**).
 
 #### 2.2 Prepare Branches for Bucking
 1. Cut branches off the main stem to make them more manageable.
@@ -265,7 +161,7 @@ The bucking process removes flowers from stems following drying. This reduces ma
 
 #### 2.5 Weighing Bucked Flower Bags
 1. Seal each liner bag with a zip tie.
-2. Weigh each bag (see **Section 3.4 – Weigh Bucked Flower**).
+2. Weigh each bag (see **Section 2.4 – Weigh Bucked Flower**).
 3. Place weighed bags back into the tote and secure the lid.
 4. When space permits, return totes to the drying room.
 
@@ -362,9 +258,9 @@ This may occur if the software was previously set to **Wet** mode.
 **Printer Test**
 
 1. Select:
-	- Crop: **1**
-	- Strain: **Test Strain**
-	- Tote: **1**
+    - Crop: **1**
+    - Strain: **Test Strain**
+    - Tote: **1**
 2. Click **Print Label** to confirm printing works.
 
 #### 4.4 Weighing Bucked Flower Per Bag
@@ -374,24 +270,26 @@ For each strain:
 1. Select the **Crop Number**.
 2. Select the **Strain**.
 3. For each bag of bucked flower:
-	1. Remove the bag from the tote.
-	2. Seal with a zip tie.
-	3. Hang the bag from the scale.
-	4. Confirm the weight appears in the **Tote Weight** box.
-	5. Click **New Tote** to generate the next tote number.
-	6. Click **Save Tote Weight** to print the tote label.
-	7. Return the bag to the tote, affix the label, and cover the tote.
+    1. Remove the bag from the tote.
+    2. Seal with a zip tie.
+    3. Hang the bag from the scale.
+    4. Confirm the weight appears in the **Tote Weight** box.
+    5. Click **New Tote** to generate the next tote number.
+    6. Click **Save Tote Weight** to print the tote label.
+    7. Return the bag to the tote, affix the label, and cover the tote.
 
-## Section 5 — Lab Sampling & Test Status in Metrc
+---
 
-### 5.1 Create Lab Sample
+## Section 3 — Lab Sampling & Test Status in Metrc
+
+### 3.1 Create Lab Sample
 
 1. When all bulk bucked flower totes for a strain are complete, log into Metrc.
 2. Navigate to: **Lab Testing → Create Sample**.
 3. Select all bulk bucked flower package UIDs for the strain.
 4. Generate the lab sample manifest for the licensed laboratory.
 
-### 5.2 Record Test Results
+### 3.2 Record Test Results
 
 1. After receiving a passing COA, log into Metrc.
 2. Navigate to: **Lab Testing → Record Test Results**.

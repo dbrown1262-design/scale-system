@@ -49,13 +49,13 @@ def show_busy_overlay(parent):
 
 SCRIPTS = {
     "Harvest": [
+        ("Print Plant Tags", os.path.join("Harvest", "PrintPlantTags.py")),
         ("Weigh Plants", os.path.join("Harvest", "WeighHarvest.py")),
-        ("Plant Summary", os.path.join("Harvest", "PlantWeightsSummary.py")),
         ("Weigh Bucked Totes", os.path.join("Harvest", "WeighBucked.py")),
+        ("Plant Summary", os.path.join("Harvest", "PlantWeightsSummary.py")),
     ],
     "Packaging": [
         ("Add Package", os.path.join("Packaging", "AddPackage.py")),
-        ("Edit Package Types", os.path.join("Packaging", "EditPackageTypes.py")),
     ],
     "Trimmer": [
         ("Enter Daily Trim", os.path.join("Trimmers", "TrimmerDailyWeigh.py")),
@@ -67,11 +67,10 @@ SCRIPTS = {
         ("Enter Rosin Run", os.path.join("Processing", "EnterRosinRun.py")),
     ],
     "Admin": [
-        ("Print Plant Tags", os.path.join("Harvest", "PrintPlantTags.py")),
-        ("Assign Batch IDs", os.path.join("Harvest", "AssignBatchId.py")),
         ("Edit Daily Trim", os.path.join("Trimmers", "EditDailyTrim.py")),
         ("Edit Trimmer List", os.path.join("Trimmers", "EditTrimmerList.py")),
         ("Edit Trim Rates", os.path.join("Trimmers", "EditTrimRates.py")),
+        ("Edit Package Types", os.path.join("Packaging", "EditPackageTypes.py")),
         ("Scanner Setup", os.path.join("Common", "ScannerSetup.py")),],
 }
 

@@ -12,6 +12,7 @@ import customtkinter as ctk
 from tkinter import ttk, messagebox
 import re
 from datetime import datetime
+from pathlib import Path
 import SubSupa
 import SubPrintLabels
 import os
@@ -28,6 +29,19 @@ def restart_menu():
     menu_path = os.path.join(BASE_DIR, "menu.py")
     subprocess.Popen([sys.executable, menu_path], cwd=BASE_DIR)
 
+def launch_sop():
+    # AddPackage.py is in scale/Packaging/
+    this_file = Path(__file__).resolve()
+    scale_root = this_file.parents[1]  # .../scale
+    sop_md = scale_root / "sop" / "Packaging" / "AddPackage.md"
+    viewer_py = scale_root / "common" / "SopViewer.py"
+
+    # Launch separate process (non-blocking)
+    subprocess.Popen(
+        [sys.executable, str(viewer_py), str(sop_md)],
+        cwd=str(scale_root),
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform.startswith("win") else 0
+    )
 
 APP_TITLE = "Add Package"
 DEFAULT_FONT = ("Arial", 15)
@@ -36,6 +50,27 @@ DEFAULT_FONT = ("Arial", 15)
 class AddPackageApp(ctk.CTk):
     def __init__(self):
         super().__init__()
+
+        menu_bar = ctk.CTkFrame(self, height=32)
+        menu_bar.pack(fill="x", side="top")
+
+        help_btn = ctk.CTkButton(
+            menu_bar,
+            text="Help",
+            width=60,
+            fg_color="transparent",
+            text_color="white",
+            hover_color="#333333",
+            command=launch_sop
+        )
+        help_btn.pack(side="left", padx=6, pady=4)
+        
+        # QR scanner status indicator
+        self.QrStatusLabel = ctk.CTkLabel(menu_bar, text="QR: Checking...", font=("Arial", 12), 
+                                          text_color="#ff8800", corner_radius=6, 
+                                          fg_color="#2b2b2b", padx=10, pady=5)
+        self.QrStatusLabel.pack(side="right", padx=6, pady=4)
+        
         self.title(APP_TITLE)
         self.geometry("1100x520")
 
@@ -150,6 +185,11 @@ class AddPackageApp(ctk.CTk):
 
         # Start checking for QR codes
         self.check_qr_code()
+        
+        # Initialize QR status tracking and start periodic status checks
+        self.PrevQrStatus = None
+        self.check_qr_status()
+        self.schedule_qr_status_check()
 
         # initial load
         self.load_crops()
@@ -305,6 +345,29 @@ class AddPackageApp(ctk.CTk):
             self.on_metrc_entered()
         # Check again in 100ms
         self.after(100, self.check_qr_code)
+    
+    def check_qr_status(self):
+        """Check QR scanner status"""
+        try:
+            qr_available = hasattr(SubReadQRCode, 'QrReader') and SubReadQRCode.QrReader is not None
+            if qr_available != self.PrevQrStatus:
+                self.PrevQrStatus = qr_available
+                if qr_available:
+                    self.QrStatusLabel.configure(text="QR: Connected", text_color="#00aa00")
+                else:
+                    self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
+        except Exception:
+            if self.PrevQrStatus is not False:
+                self.PrevQrStatus = False
+                self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
+    
+    def schedule_qr_status_check(self):
+        """Schedule periodic QR status checks every 10 seconds"""
+        self.check_qr_status()
+        try:
+            self.after(10000, self.schedule_qr_status_check)
+        except Exception:
+            pass
 
     def load_packages(self, crop_no: int, strain: str):
         try:

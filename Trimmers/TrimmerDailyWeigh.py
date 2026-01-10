@@ -13,6 +13,7 @@ User-defined identifiers use CamelCase per request.
 import sys
 import math
 import customtkinter as ctk
+from pathlib import Path
 # in-window status label will replace modal messagebox popups
 from tkcalendar import DateEntry
 from datetime import date, datetime, time, timedelta
@@ -30,7 +31,7 @@ if ROOT_DIR not in sys.path:
 import Common.SubScale as SubScale
 
 # Connect to hardware after imports
-SubScale.ConnectScales()
+# SubScale.ConnectScales()
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,6 +40,20 @@ def restart_menu():
     """Start menu.py again in a new process."""
     menu_path = os.path.join(BASE_DIR, "menu.py")
     subprocess.Popen([sys.executable, menu_path], cwd=BASE_DIR)
+
+def launch_sop():
+    # TrimmerDailyWeigh.py is in scale/Trimmers/
+    this_file = Path(__file__).resolve()
+    scale_root = this_file.parents[1]  # .../scale
+    sop_md = scale_root / "sop" / "Trimmers" / "TrimmerDailyWeigh.md"
+    viewer_py = scale_root / "common" / "SopViewer.py"
+
+    # Launch separate process (non-blocking)
+    subprocess.Popen(
+        [sys.executable, str(viewer_py), str(sop_md)],
+        cwd=str(scale_root),
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform.startswith("win") else 0
+    )
 
 APP_TITLE = "Trim Weight Entry"
 DEFAULT_FONT = ("Arial", 20)
@@ -62,6 +77,26 @@ def OnlyNumeric(NewValue: str) -> bool:
 class WeighApp(ctk.CTk):
     def __init__(self):
         super().__init__()
+
+        menu_bar = ctk.CTkFrame(self, height=32)
+        menu_bar.pack(fill="x", side="top")
+
+        help_btn = ctk.CTkButton(
+            menu_bar,
+            text="Help",
+            width=60,
+            fg_color="transparent",
+            text_color="white",
+            hover_color="#333333",
+            command=launch_sop
+        )
+        help_btn.pack(side="left", padx=6, pady=4)
+        
+        # Scout scale status indicator
+        self.ScaleStatusLabel = ctk.CTkLabel(menu_bar, text="Scale: Checking...", font=("Arial", 12), 
+                                             text_color="#ff8800", corner_radius=6, 
+                                             fg_color="#2b2b2b", padx=10, pady=5)
+        self.ScaleStatusLabel.pack(side="right", padx=6, pady=4)
         
         # Set dark mode theme
         ctk.set_appearance_mode("dark")
@@ -160,6 +195,7 @@ class WeighApp(ctk.CTk):
 
         # Start polling the physical scale and update the weight display periodically
         self.PrevScaleWeight = None
+        self.PrevScoutStatus = None
         self.ScalePollId = None
         self.StartScalePoll()
 
@@ -397,6 +433,20 @@ class WeighApp(ctk.CTk):
                 self.EntGrams.configure(state='disabled')
             except Exception:
                 pass
+        
+        # Check scale status and update if changed
+        try:
+            scout_connected, ranger_connected = SubScale.GetScaleStatus()
+            if scout_connected != self.PrevScoutStatus:
+                self.PrevScoutStatus = scout_connected
+                if scout_connected:
+                    self.ScaleStatusLabel.configure(text="Scale: Connected", text_color="#00aa00")
+                else:
+                    self.ScaleStatusLabel.configure(text="Scale: Not Found", text_color="#ff4444")
+        except Exception:
+            if self.PrevScoutStatus is not False:
+                self.PrevScoutStatus = False
+                self.ScaleStatusLabel.configure(text="Scale: Error", text_color="#ff4444")
 
         # schedule next poll
         try:

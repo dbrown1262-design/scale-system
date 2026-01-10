@@ -7,11 +7,21 @@ from reportlab.graphics.barcode import qr
 from reportlab.graphics.barcode import createBarcodeDrawing
 from reportlab.graphics.shapes import Drawing
 from reportlab.graphics import renderPDF
+from pathlib import Path
 import SubSupa
 import tempfile
 import os
 import subprocess
 import sys
+
+# Import hardware modules for status checking
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
+import Common.SubScale as SubScale
+import Common.SubReadQRCode as SubReadQRCode
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,6 +31,19 @@ def restart_menu():
     menu_path = os.path.join(BASE_DIR, "menu.py")
     subprocess.Popen([sys.executable, menu_path], cwd=BASE_DIR)
 
+def launch_sop():
+    # PrintPlantTags.py is in scale/Harvest/
+    this_file = Path(__file__).resolve()
+    scale_root = this_file.parents[1]  # .../scale
+    sop_md = scale_root / "sop" / "Harvest" / "PrintPlantTags.md"
+    viewer_py = scale_root / "common" / "SopViewer.py"
+
+    # Launch separate process (non-blocking)
+    subprocess.Popen(
+        [sys.executable, str(viewer_py), str(sop_md)],
+        cwd=str(scale_root),
+        creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform.startswith("win") else 0
+    )
 
 APP_TITLE = "Print Plant Tags"
 DEFAULT_FONT = ("Arial", 14)
@@ -29,6 +52,32 @@ DEFAULT_FONT = ("Arial", 14)
 class PrintPlantTagsApp(ctk.CTk):
     def __init__(self):
         super().__init__()
+
+        menu_bar = ctk.CTkFrame(self, height=32)
+        menu_bar.pack(fill="x", side="top")
+
+        help_btn = ctk.CTkButton(
+            menu_bar,
+            text="Help",
+            width=60,
+            fg_color="transparent",
+            text_color="white",
+            hover_color="#333333",
+            command=launch_sop
+        )
+        help_btn.pack(side="left", padx=6, pady=4)
+        
+        # QR scanner status indicator
+        self.QrStatusLabel = ctk.CTkLabel(menu_bar, text="QR: Checking...", font=("Arial", 12), 
+                                          text_color="#ff8800", corner_radius=6, 
+                                          fg_color="#2b2b2b", padx=10, pady=5)
+        self.QrStatusLabel.pack(side="right", padx=6, pady=4)
+        
+        # Ranger scale status indicator
+        self.ScaleStatusLabel = ctk.CTkLabel(menu_bar, text="Scale: Checking...", font=("Arial", 12), 
+                                             text_color="#ff8800", corner_radius=6, 
+                                             fg_color="#2b2b2b", padx=10, pady=5)
+        self.ScaleStatusLabel.pack(side="right", padx=6, pady=4)
         
         # Set dark mode theme
         ctk.set_appearance_mode("dark")
@@ -65,6 +114,12 @@ class PrintPlantTagsApp(ctk.CTk):
         self.StatusLabel.grid(row=4, column=0, columnspan=2, sticky="w", pady=(8,0))
 
         self.load_crops()
+        
+        # Initialize status tracking and start periodic status checks
+        self.PrevQrStatus = None
+        self.PrevRangerStatus = None
+        self.check_hardware_status()
+        self.schedule_status_check()
 
     def set_status(self, text: str):
         try:
@@ -154,6 +209,44 @@ class PrintPlantTagsApp(ctk.CTk):
             self.set_status(f"Query failed: {e}")
             self.LabelCountEntry.delete(0, "end")
             self.LabelCountEntry.insert(0, "0")
+
+    def check_hardware_status(self):
+        """Check QR scanner and Ranger scale status"""
+        # Check QR scanner
+        try:
+            qr_available = hasattr(SubReadQRCode, 'QrReader') and SubReadQRCode.QrReader is not None
+            if qr_available != self.PrevQrStatus:
+                self.PrevQrStatus = qr_available
+                if qr_available:
+                    self.QrStatusLabel.configure(text="QR: Connected", text_color="#00aa00")
+                else:
+                    self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
+        except Exception:
+            if self.PrevQrStatus is not False:
+                self.PrevQrStatus = False
+                self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
+        
+        # Check Ranger scale status
+        try:
+            scout_connected, ranger_connected = SubScale.GetScaleStatus()
+            if ranger_connected != self.PrevRangerStatus:
+                self.PrevRangerStatus = ranger_connected
+                if ranger_connected:
+                    self.ScaleStatusLabel.configure(text="Scale: Connected", text_color="#00aa00")
+                else:
+                    self.ScaleStatusLabel.configure(text="Scale: Not Found", text_color="#ff4444")
+        except Exception:
+            if self.PrevRangerStatus is not False:
+                self.PrevRangerStatus = False
+                self.ScaleStatusLabel.configure(text="Scale: Error", text_color="#ff4444")
+    
+    def schedule_status_check(self):
+        """Schedule periodic hardware status checks every 10 seconds"""
+        self.check_hardware_status()
+        try:
+            self.after(10000, self.schedule_status_check)
+        except Exception:
+            pass
 
     def print_tags(self):
         sel_crop = (self.CropCombo.get() or "").strip()
