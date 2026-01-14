@@ -44,6 +44,35 @@ class PlantWeightsSummary(ctk.CTk):
         top = ctk.CTkFrame(self)
         top.pack(fill="x", padx=10, pady=8)
 
+        # Crop selector
+        ctk.CTkLabel(top, text="Harvest Date:", font=("Arial", 14, "bold")).pack(side="left", padx=(10, 6))
+        
+        # Load crops from database
+        try:
+            crop_options = SubSupa.LoadCrops() or []
+            # LoadCrops already returns formatted strings like "CropNo - HarvestDate"
+            if not crop_options:
+                crop_options = ["No crops found"]
+        except Exception as e:
+            crop_options = ["No crops found"]
+        
+        self.crop_combo = ctk.CTkComboBox(
+            top, 
+            values=crop_options,
+            width=250,
+            font=DEFAULT_FONT,
+            command=self.on_crop_select
+        )
+        self.crop_combo.pack(side="left", padx=6)
+        
+        # Set first crop if available
+        if crop_options and crop_options[0] != "No crops found":
+            self.crop_combo.set(crop_options[0])
+            # Auto-load first crop
+            self.after(100, self.on_crop_select)
+        
+        ctk.CTkButton(top, text="Refresh", command=self.on_crop_select, width=100, font=DEFAULT_FONT).pack(side="left", padx=6)
+
         # Configure treeview style for dark theme
         style = ttk.Style(self)
         try:

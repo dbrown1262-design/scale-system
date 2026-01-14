@@ -10,7 +10,7 @@ scaleschema = "scale"
 sb = supabase.schema(scaleschema)
 
 def LoadCrops():
-    print("LoadCrops called")
+#    print("LoadCrops called")
     res = (sb.table("scalecrops").select("CropNo, HarvestDate, CropStat")
             .eq("CropStat", "Active").order("CropNo", desc=True).execute())
     crops = res.data or []
@@ -20,6 +20,7 @@ def LoadCrops():
         date = c.get("HarvestDate")
         label = f"{crop_no} - {date}" if date else str(crop_no)
         result.append((label))
+#    print("LoadCrops result:", result)
     return ["Select"] + result
 
 

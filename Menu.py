@@ -23,6 +23,45 @@ ROOT_DIR = os.path.dirname(__file__)
 DEFAULT_FONT = ("Arial", 14)
 
 
+def open_sop(rel_path: str, status_label: ctk.CTkLabel):
+    """Launch the SOP viewer for the given script path."""
+    # Convert script path to SOP path
+    # e.g., "Harvest/PrintPlantTags.py" -> "sop/Harvest/PrintPlantTags.md"
+    if not rel_path:
+        return
+    
+    # Extract folder and filename without extension
+    parts = rel_path.replace("\\", "/").split("/")
+    if len(parts) < 2:
+        return
+    
+    folder = parts[0]
+    script_name = os.path.splitext(parts[1])[0]
+    sop_path = os.path.join(ROOT_DIR, "sop", folder, f"{script_name}.md")
+    
+    if not os.path.exists(sop_path):
+        messagebox.showinfo("SOP Not Found", f"No SOP available for {script_name}")
+        status_label.configure(text=f"SOP not found: {script_name}.md")
+        return
+    
+    # Launch SOP viewer
+    viewer_path = os.path.join(ROOT_DIR, "Common", "SopViewer.py")
+    if not os.path.exists(viewer_path):
+        messagebox.showwarning("Viewer Not Found", f"SOP Viewer not found at: {viewer_path}")
+        return
+    
+    try:
+        subprocess.Popen(
+            [sys.executable, viewer_path, sop_path],
+            cwd=ROOT_DIR,
+            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform.startswith("win") else 0
+        )
+        status_label.configure(text=f"Opened SOP: {script_name}.md")
+    except Exception as e:
+        messagebox.showerror("Launch Failed", f"Failed to open SOP: {e}")
+        status_label.configure(text=f"SOP launch failed: {e}")
+
+
 def show_busy_overlay(parent):
     overlay = ctk.CTkFrame(parent, fg_color="transparent",cursor="watch")
     overlay.place(relx=0, rely=0, relwidth=1, relheight=1)
@@ -71,7 +110,9 @@ SCRIPTS = {
         ("Edit Trimmer List", os.path.join("Trimmers", "EditTrimmerList.py")),
         ("Edit Trim Rates", os.path.join("Trimmers", "EditTrimRates.py")),
         ("Edit Package Types", os.path.join("Packaging", "EditPackageTypes.py")),
-        ("Scanner Setup", os.path.join("Common", "ScannerSetup.py")),],
+        ("Scanner Setup", os.path.join("Common", "ScannerSetup.py")),
+        ("Edit SOP Index", os.path.join("SopScripts", "EditSopIndex.py")),
+    ],
 }
 
 
@@ -159,9 +200,15 @@ class MenuApp(ctk.CTk):
             button_frame.pack(padx=10, pady=(0, 10))
             
             for idx, (label, rel) in enumerate(items):
-                btn = ctk.CTkButton(button_frame, text=label, width=260, font=DEFAULT_FONT, 
+                # Main button
+                btn = ctk.CTkButton(button_frame, text=label, width=220, font=DEFAULT_FONT, 
                                    command=lambda r=rel: open_script(r, self.status, self))
-                btn.grid(row=idx, column=0, pady=6, padx=6)
+                btn.grid(row=idx, column=0, pady=6, padx=(6, 2))
+                
+                # SOP button (small)
+                sop_btn = ctk.CTkButton(button_frame, text="SOP", width=40, font=("Arial", 12),
+                                       command=lambda r=rel: open_sop(r, self.status))
+                sop_btn.grid(row=idx, column=1, pady=6, padx=(2, 6))
 
 
         # Exit button

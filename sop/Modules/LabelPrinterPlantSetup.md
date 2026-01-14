@@ -1,9 +1,11 @@
 
-### Printer Setup for Plant Tags
+# Printer Setup for Plant Tags
 
-1. Ensure the 4BARCODE printer is set as the default printer on the workstation.
-2. Go to Printer Preferences and confirm label Stock Size = 2.25 in × 0.75 in.
-3. Load the correct label roll into the printer.
+## Procedure
+
+- Ensure the 4BARCODE printer is set as the default printer on the workstation.
+- Go to Printer Preferences and confirm label Stock Size = 2.25 in × 0.75 in.
+- Load the correct label roll into the printer.
 
 **Printer Test (Recommended)**
 
