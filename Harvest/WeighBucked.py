@@ -70,7 +70,7 @@ class WeighBuckedApp(ctk.CTk):
         ctk.set_default_color_theme("dark-blue")
         
         self.title(APP_TITLE)
-        self.geometry("680x320")
+        self.geometry("680x420")
 
         frame = ctk.CTkFrame(self)
         frame.pack(fill="both", expand=True, padx=12, pady=12)
@@ -259,18 +259,20 @@ class WeighBuckedApp(ctk.CTk):
         # Check QR reader for metric tag
         try:
             if hasattr(SubReadQRCode, 'QrReader'):
-                qr_code = SubReadQRCode.CheckMetricQr()
+                (qr_code) = SubReadQRCode.CheckMetricQr()
                 if qr_code and qr_code != "none":
                     # Verify tag is valid before accepting
                     try:
-                        tag_valid = SubSupa.CheckTag(qr_code)
-                        if tag_valid:
+                        tag_type = SubSupa.GetMetrcType(qr_code)
+                        print(tag_type)
+                        if tag_type == "Cult":
                             # Update metric tag entry
                             self.MetricTagEntry.delete(0, 'end')
                             self.MetricTagEntry.insert(0, qr_code)
                             self.setStatus(f"Scanned metric tag: {qr_code}")
                         else:
-                            self.setStatus(f"Invalid tag: {qr_code} - Not found in Metric tag list")
+                            self.MetricTagEntry.delete(0, 'end')
+                            self.setStatus(f"Invalid tag: {qr_code} - wrong type")
                     except Exception as e:
                         self.setStatus(f"CheckTag error: {e}")
         except Exception as e:

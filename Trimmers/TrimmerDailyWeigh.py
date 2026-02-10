@@ -15,7 +15,7 @@ import math
 import customtkinter as ctk
 from pathlib import Path
 # in-window status label will replace modal messagebox popups
-from tkcalendar import DateEntry
+import tkinter as tk
 from datetime import date, datetime, time, timedelta
 
 # Import SubSupa (DB) and SubScale (physical scale). SubScale is optional.
@@ -121,16 +121,16 @@ class WeighApp(ctk.CTk):
         self.CmbTrimmer.grid(row=1, column=1, sticky="w", pady=8)
 
         # Trim Date
-        ctk.CTkLabel(Container, text="Trim Date", font=DEFAULT_FONT).grid(row=1, column=2, sticky="e", padx=(0, 10), pady=8)
-        self.DateBox = DateEntry(Container, font=DEFAULT_FONT, width=12, year=date.today().year,
-                                  background='#343638', foreground='#DCE4EE', 
-                                  fieldbackground='#343638', borderwidth=2)
+        ctk.CTkLabel(Container, text="Trim Date", font=DEFAULT_FONT).grid(
+            row=1, column=2, sticky="e", padx=(0, 10), pady=8
+        )
+        
+        self.DateBox = ctk.CTkEntry(Container, font=DEFAULT_FONT, width=160, placeholder_text="YYYY-MM-DD")
         self.DateBox.grid(row=1, column=3, sticky="w", pady=8)
-        # Style the entry widget inside DateEntry
-        try:
-            self.DateBox.entry.configure(bg='#343638', fg='#DCE4EE', insertbackground='#DCE4EE')
-        except Exception:
-            pass
+        # Set today's date as default
+        self.DateBox.insert(0, date.today().strftime("%Y-%m-%d"))
+        # Bind validation on focus out
+        self.DateBox.bind("<FocusOut>", self._validate_date_entry)
 
         # Crop No
         ctk.CTkLabel(Container, text="Crop No", font=DEFAULT_FONT).grid(row=2, column=0, sticky="e", padx=(0, 10), pady=8)
@@ -204,6 +204,20 @@ class WeighApp(ctk.CTk):
             self.protocol("WM_DELETE_WINDOW", self._on_close)
         except Exception:
             pass
+
+    def _validate_date_entry(self, event=None):
+        """Validate date entry format and provide feedback."""
+        date_str = self.DateBox.get().strip()
+        try:
+            parsed_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            # Valid date - clear any error styling
+            self.DateBox.configure(border_color="#565b5e")  # default border
+            return True
+        except ValueError:
+            # Invalid date format - show error styling
+            self.DateBox.configure(border_color="#ff4444")  # red border
+            self.ShowStatus("Invalid date format. Use YYYY-MM-DD (e.g., 2026-01-29)", kind="warning")
+            return False
 
     def GenerateTimeValues(self) -> list:
         """Return list of formatted times from 8:00 AM to 5:00 PM every 15 minutes."""
@@ -314,7 +328,16 @@ class WeighApp(ctk.CTk):
         CropDisplay = self.CmbCrop.get().strip()
         Strain = self.CmbStrain.get().strip()
         TypeVal = self.CmbType.get().strip()
-        TrimDate = self.DateBox.get_date()
+        
+        # Validate and parse date
+        date_str = self.DateBox.get().strip()
+        try:
+            TrimDate = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            self.ShowStatus("Invalid date format. Use YYYY-MM-DD (e.g., 2026-01-29)", kind="warning")
+            self.DateBox.configure(border_color="#ff4444")
+            return
+        
         Ampm = self.CmbAmpm.get().strip()
 
         if Trimmer == "Select" or Trimmer == "":

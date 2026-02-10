@@ -276,6 +276,20 @@ def UpdateDailytrim(match_key: dict, new_values: dict):
 # Weigh Trim functions
 #
 #################################################################################################
+def GetTrimBags(CropNo, Strain, Type):
+    res = (
+        sb.schema("scale")
+        .table("scaletrim")
+        .select("MetrcId")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("Type", Type)
+        .order("MetrcId")
+        .execute()
+    )
+    metrc_ids = [row["MetrcId"] for row in res.data if row.get("MetrcId")] if res.data else []
+    return ["Select", "New"] + metrc_ids
+
 
 def CheckTrimBag(CropNo: int, Strain: str, MetrcId: str):
     """Load existing ToteNos for crop and strain."""
@@ -299,6 +313,17 @@ def CheckTrimBag(CropNo: int, Strain: str, MetrcId: str):
         else:
             ReturnVal = "Error"
 
+def GetBagWeight(MetrcId: str):
+    res = (
+        sb.schema("scale")
+        .table("scaletrim")
+        .select("Weight")
+        .eq("MetrcId", MetrcId)
+        .execute()  
+    )
+    if res.data and len(res.data) > 0:
+        return res.data[0].get("Weight", 0)
+    return 0
 
 def InsertTrimBag(CropNo: int, Strain: str, Type: str, MetrcId: str, Weight, TrimDate):
     """Insert a new TagNo for crop and strain."""
@@ -325,6 +350,22 @@ def GetHarvestDate(crop_no: int):
     if res.data and len(res.data) > 0:
         return res.data[0].get("HarvestDate")
     return None
+
+
+def GetMetrcType(MetrcId):
+    prefix = MetrcId[:-9]
+    res = (
+        sb.schema("scale")
+        .table("metrctagtypes")
+        .select("MetrcType")
+        .eq("MetrcId", prefix)
+        .execute()
+    )
+
+    if res.data and len(res.data) > 0:
+        return res.data[0].get("MetrcType")
+    else:
+        return None
 
 
 #testcrop = LoadCrops()

@@ -1,4 +1,5 @@
 from datetime import datetime
+from unittest import result
 from supabase import create_client, Client
 
 supabase_url = "https://figubkupxgxcrxtvsoji.supabase.co"
@@ -23,6 +24,42 @@ def LoadCrops():
 #    print("LoadCrops result:", result)
     return ["Select"] + result
 
+def LoadAllCrops():
+    """Load all crops (Active and Inactive) for editing purposes"""
+    res = (sb.table("scalecrops").select("CropNo, HarvestDate, CropStat")
+            .order("CropNo", desc=True).execute())
+    crops = res.data or []
+    result = []
+    for c in crops:
+        crop_no = c.get("CropNo")
+        date = c.get("HarvestDate")
+        stat = c.get("CropStat", "")
+        label = f"{crop_no} - {date} ({stat})" if date else f"{crop_no} ({stat})"
+        result.append(label)
+    return ["Select", "New Crop"] + result
+
+def GetCropData(crop_no: int):
+    res = sb.schema("scale").table("scalecrops").select("*").eq("CropNo", crop_no).execute()
+    if res.data and len(res.data) > 0:
+        return res.data[0]
+    return None
+
+def InsertCrop(CropNo, HarvestDate, CropStat):
+    data = {
+        "CropNo": CropNo,
+        "HarvestDate": HarvestDate,
+        "CropStat": CropStat
+    }
+    res = sb.schema("scale").table("scalecrops").insert(data).execute()
+    return res.data[0]  
+
+def UpdateCrop(CropNo, HarvestDate, CropStat):
+    data = {
+        "HarvestDate": HarvestDate,
+        "CropStat": CropStat
+    }
+    res = sb.schema("scale").table("scalecrops").update(data).eq("CropNo", CropNo).execute()
+    return res.data[0]
 
 def LoadStrains(crop_no: int):
     print("LoadStrains for CropNo:", crop_no)
@@ -278,6 +315,103 @@ def UpdateTagWeight(CropNo, Strain, TagNo, Weight):
         .execute()
     )
     return res.data
+
+""" Metrc Tags routines to verify the tag type for each script"""
+
+def GetMetrcType(MetrcId):
+    prefix = MetrcId[:-9]
+    res = (
+        sb.schema("scale")
+        .table("metrctagtypes")
+        .select("MetrcType")
+        .eq("MetrcId", prefix)
+        .execute()
+    )
+
+    if res.data and len(res.data) > 0:
+        return res.data[0].get("MetrcType")
+    else:
+        return None
+
+#mtype = GetMetrcType("1A4120300001DE2000000001")
+#print(mtype)
+
+def LoadMetrcTypes():
+    res = (
+        sb.schema("scale")
+        .table("metrctagtypes")
+        .select("MetrcId", "MetrcType")
+        .execute()
+    )
+    return res.data or []
+
+def InsertMetrcType(MetrcId: str, MetrcType: str):
+    """Insert a new Metrc tag type"""
+    data = {
+        "MetrcId": MetrcId,
+        "MetrcType": MetrcType
+    }
+    res = sb.schema("scale").table("metrctagtypes").insert(data).execute()
+    return res.data[0] if res.data else None
+
+def UpdateMetrcType(MetrcId: str, MetrcType: str):
+    """Update an existing Metrc tag type"""
+    data = {
+        "MetrcType": MetrcType
+    }
+    res = sb.schema("scale").table("metrctagtypes").update(data).eq("MetrcId", MetrcId).execute()
+    return res.data[0] if res.data else None
+
+
+def CheckTags(crop_no: str, strain: str):
+    """
+    Returns:
+        {
+            "start_seq": int,
+            "end_seq": int,
+            "count": int,
+            "missing": list   # empty if continuous
+        }
+    """
+
+    # Pull plant IDs for the strain
+    resp = (
+        sb.table("scaleplants")
+        .select("PlantNo")
+        .eq("CropNo", crop_no)
+        .eq("Strain", strain)
+        .execute()
+    )
+
+    rows = resp.data
+    if not rows:
+        return None
+
+    # Extract sequence numbers (last 9 digits)
+    seqs = []
+    for r in rows:
+        plant_id = r["PlantNo"]
+        seq = int(plant_id[-9:])
+        seqs.append(seq)
+
+    seqs.sort()
+
+    start_seq = seqs[0]
+    end_seq   = seqs[-1]
+
+    # Check for gaps
+    expected = set(range(start_seq, end_seq + 1))
+    missing = sorted(list(expected - set(seqs)))
+
+    return {
+        "start_seq": start_seq,
+        "end_seq": end_seq,
+        "count": len(seqs),
+        "missing": missing
+    }
+
+(Start, End, Count, Missing) = CheckTags(21, "Sherb").values()
+print(f"Start: {Start}, End: {End}, Count: {Count}, Missing: {Missing}")
 
 
 """ 

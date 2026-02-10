@@ -67,16 +67,34 @@ class EnterDailyTrimApp(ctk.CTk):
 
         # Row 1: TrimDate and entry fields
         ctk.CTkLabel(frame, text="Trim Date:", font=("Arial", 18)).grid(row=1, column=0, sticky="e", padx=(6,6), pady=8)
-        self.TrimDateEntry = DateEntry(frame, width=18, font=("Arial", 18), date_pattern='yyyy-mm-dd',
-                                        background='#343638', foreground='#DCE4EE', 
-                                        fieldbackground='#343638', borderwidth=2)
-        self.TrimDateEntry.grid(row=1, column=1, sticky="w", pady=8)
+        
+        # Create a sub-frame for date entry and refresh button
+        date_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        date_frame.grid(row=1, column=1, sticky="w", pady=8)
+        
+        self.TrimDateEntry = DateEntry(date_frame, width=18, font=("Arial", 18), date_pattern='yyyy-mm-dd',
+                                        background='darkblue', foreground='white', 
+                                        fieldbackground='#343638', 
+                                        borderwidth=2,
+                                        headersbackground='darkblue',
+                                        headersforeground='white',
+                                        selectbackground='darkblue',
+                                        selectforeground='white',
+                                        normalbackground='white',
+                                        normalforeground='black',
+                                        weekendbackground='white',
+                                        weekendforeground='black',
+                                        state='normal')
+        self.TrimDateEntry.pack(side="left", padx=(0, 8))
         # Additional styling for the entry widget inside DateEntry
         try:
             self.TrimDateEntry.entry.configure(bg='#343638', fg='#DCE4EE', insertbackground='#DCE4EE')
         except Exception:
             pass
-        self.TrimDateEntry.bind("<<DateEntrySelected>>", lambda e: self.OnFilterChanged())
+        # No binding - let user freely select date without auto-refresh interfering with calendar
+        
+        # Add Refresh button to update treeview with selected date
+        ctk.CTkButton(date_frame, text="Refresh", width=80, command=self.OnFilterChanged).pack(side="left")
 
         ctk.CTkLabel(frame, text="AM Flower:", font=DEFAULT_FONT).grid(row=1, column=2, sticky="e", padx=(6,6), pady=8)
         self.AmFlowerEntry = ctk.CTkEntry(frame, width=120)

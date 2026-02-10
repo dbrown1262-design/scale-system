@@ -198,13 +198,41 @@ class PrintPlantTagsApp(ctk.CTk):
                 self.set_status("Cannot parse Crop number")
                 return
         
-        # Query scaleplants table for count
+        # Query scaleplants table using CheckTags
         try:
-            count = SubSupa.CountPlants(crop_no, sel_strain)
+            result = SubSupa.CheckTags(crop_no, sel_strain)
+            
+            if result is None:
+                self.LabelCountEntry.delete(0, "end")
+                self.LabelCountEntry.insert(0, "0")
+                self.set_status(f"No plants found for {sel_strain}")
+                return
+            
+            start_seq = result.get("start_seq")
+            end_seq = result.get("end_seq")
+            count = result.get("count")
+            missing = result.get("missing", [])
             
             self.LabelCountEntry.delete(0, "end")
             self.LabelCountEntry.insert(0, str(count))
-            self.set_status(f"Found {count} plants for {sel_strain}")
+            
+            # Build status message with start/end sequence
+            status_msg = f"Found {count} plants for {sel_strain} (Seq: {start_seq} to {end_seq})"
+            self.set_status(status_msg)
+            
+            # Show warning if there are missing tags
+            if missing:
+                missing_str = ", ".join(str(m) for m in missing[:10])  # Show first 10
+                if len(missing) > 10:
+                    missing_str += f", ... ({len(missing) - 10} more)"
+                
+                warning_msg = f"WARNING: Missing tag sequences detected!\n\n"
+                warning_msg += f"Total missing: {len(missing)}\n"
+                warning_msg += f"Missing sequences: {missing_str}\n\n"
+                warning_msg += f"This indicates gaps in the tag sequence from {start_seq} to {end_seq}."
+                
+                messagebox.showwarning("Missing Tags Detected", warning_msg)
+                self.set_status(f"{status_msg} - WARNING: {len(missing)} missing tags!")
         except Exception as e:
             self.set_status(f"Query failed: {e}")
             self.LabelCountEntry.delete(0, "end")
@@ -258,6 +286,30 @@ class PrintPlantTagsApp(ctk.CTk):
             messagebox.showwarning("Select Strain", "Please select a strain")
             return
 
+        # Parse crop number
+        token = sel_crop.split('-')[0].strip()
+        try:
+            crop_no = int(token.split()[0])
+        except Exception:
+            try:
+                crop_no = int(token)
+            except Exception:
+                messagebox.showwarning("Invalid Crop", "Cannot parse crop number")
+                return
+
+        # Get tag information using CheckTags
+        try:
+            result = SubSupa.CheckTags(crop_no, sel_strain)
+            if result is None:
+                messagebox.showwarning("No Plants", f"No plants found for {sel_strain}")
+                return
+            
+            start_seq = result.get("start_seq")
+            end_seq = result.get("end_seq")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to get tag information: {e}")
+            return
+
         # Get number of labels to print
         try:
             num_labels = int(self.LabelCountEntry.get())
@@ -274,6 +326,13 @@ class PrintPlantTagsApp(ctk.CTk):
 
         c = canvas.Canvas("C:\\labels\\label.pdf", pagesize=(label_w, label_h))
 
+        # Print header label with strain and sequence range
+        c.setFont("Helvetica-Bold", 14)
+        c.drawCentredString(label_w / 2, label_h * 0.65, sel_strain)
+        c.setFont("Helvetica", 10)
+        c.drawCentredString(label_w / 2, label_h * 0.35, f"Seq: {start_seq} to {end_seq}")
+        c.showPage()
+
         # Print the specified number of labels with just the strain name
         for i in range(num_labels):
             # Center the strain name vertically and horizontally
@@ -286,7 +345,7 @@ class PrintPlantTagsApp(ctk.CTk):
         command = "{} {}".format('c:\\labels\\PDFtoPrinter.exe','C:\\labels\\label.pdf')
 #        subprocess.call(command,shell=False)
 
-        self.set_status(f"Printed {num_labels} labels for {sel_strain}")
+        self.set_status(f"Printed 1 header + {num_labels} labels for {sel_strain}")
 
 
 if __name__ == '__main__':

@@ -339,10 +339,15 @@ class AddPackageApp(ctk.CTk):
         """Periodically check for QR code scans"""
         qr_code = SubReadQRCode.CheckQr()
         if qr_code and qr_code != "none":
+            mtype = SubSupa.GetMetrcType(qr_code)
+            if mtype != "Proc":
+                self.ent_metrc.delete(0, 'end')
+                self.set_status(f"Scanned QR code is not a package Metrc ID: Type={mtype}")
+            else:
             # QR code scanned, populate Metrc ID field
-            self.ent_metrc.delete(0, 'end')
-            self.ent_metrc.insert(0, qr_code)
-            self.on_metrc_entered()
+                self.ent_metrc.delete(0, 'end')
+                self.ent_metrc.insert(0, qr_code)
+                self.on_metrc_entered()
         # Check again in 100ms
         self.after(100, self.check_qr_code)
     

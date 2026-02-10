@@ -5,6 +5,7 @@ import serial
 import serial.tools.list_ports
 from tkinter import messagebox
 import sys
+import argparse 
 
 ScaleBuffer = ""
 LastWeight = None
@@ -12,6 +13,16 @@ ScaleRanger = None
 ScaleScout = None
 ScoutConnected = False
 RangerConnected = False
+
+p = argparse.ArgumentParser()
+
+p.add_argument("--test", action="store_true")
+args = p.parse_args()
+global TestMode
+TestMode = args.test
+if TestMode:
+    print("Running in Test Mode - no scanner connection")
+
 
 def ConnectScales():
     """Connect to Ohaus scales with retry logic. Call this after app initialization."""
@@ -35,8 +46,11 @@ def ConnectScales():
                 ScoutConnected = True
                 print("Connected to Scout Scale " + scaleport)
         
-        if not (ScoutConnected or RangerConnected):
-            raise Exception("No Ohaus scale detected")
+#        if not (ScoutConnected or RangerConnected):
+#            if TestMode:
+#                return True
+#            else:
+#                raise Exception("No Ohaus scale detected")
             
     except Exception as e:
         print(f"Failed to connect to scale: {e}")
@@ -62,6 +76,10 @@ def GetScaleStatus():
 # Scale must be set to send continuous data, with units in grams
 ###########################################################
 def GetScoutWeight():
+    if TestMode:
+        return 100.0
+    if not ScoutConnected:
+        return None
     global ScaleBuffer, LastWeight
     # Read whatever is waiting, don't block
     data = ScaleScout.read(ScaleScout.in_waiting or 0).decode(errors="ignore")
@@ -90,6 +108,9 @@ def GetScoutWeight():
 ###########################################################
 
 def GetRangerWeight():
+    if TestMode:
+        return 100.0   
+    
     ScaleRanger.reset_input_buffer()
     ScaleRanger.write("IP\r\n".encode())
     weight = str(ScaleRanger.readline())
@@ -104,7 +125,7 @@ def GetRangerWeight():
 
 
 
-ConnectScales()
+#ConnectScales()
 #time.sleep(5)  # wait for scale to initialize
 #w = GetScoutWeight()
 #print("Weight is ", w)

@@ -148,10 +148,52 @@ Each printed label includes:
 - Ensure scale is tared to zero
 - Check that the "S" hook is properly attached
 
-**Invalid Tag error:**
+**Invalid Tag  error:**
 - Verify the Metric tag number is correct
-- Ensure the tag exists in the Metric tag database
+- Check for typos if tag was manually entered
 - Contact administrator if tag should be valid but is rejected
+
+**Invalid Tag Type error:**
+
+If you receive an "Invalid Tag Type" error, this typically means you attached the wrong physical tag to the tote.
+
+**Most Common Cause — Wrong Tag Used:**
+
+The error usually occurs when a tag intended for a different purpose (Processing, Distribution , or Plant) was accidentally attached to the bucked flower tote instead of a Cultivation tag.
+
+**Resolution Steps:**
+
+1. **First, verify you are using the correct physical tag:**
+	- Check the tag attached to the tote
+	- Bucked flower totes require **Cultivation (Cult)** tags only
+	- If you attached a Processing, Distribution, or Plant tag by mistake:
+		- Remove the incorrect tag from the tote
+		- Attach the correct Distribution tag
+		- Scan or enter the new tag number
+		- Proceed with weighing
+
+2. **If you confirmed the tag is correct but still get the error:**
+
+	The tag may be registered with the wrong type in the database. To fix this, a supervisor may:
+
+	a. Note the Metric tag number shown in the error message
+	b. Click **OK** to dismiss the error dialog
+	c. From the Main Menu, navigate to Harvest → **Edit Metrc Tag Types**
+	d. In the Edit Metrc Tag Types application:
+		- The tag types list will display all registered tags
+		- Locate the Metric tag that failed (or scan/enter it in the Metrc ID field)
+		- Select the correct type from the dropdown:
+			- **Cult** — For bucked flower totes (required for WeighBucked)
+			- **Proc** — For processing tags
+			- **Dist** — For Distribution tags
+			- **Plant** — For plant tags
+		- If updating an existing tag, click on the row in the list, then click **Update**
+		- If adding a new tag, scan or enter the ID, select type, then click **Add**
+	e. Return to the Weigh Bucked Totes application
+	f. Re-scan or re-enter the Metric tag
+	g. The tag should now be accepted and the weight saved
+
+> **Important:** Before changing a tag type in the database, always verify that you didn't simply use the wrong physical tag. Changing tag types should be rare and only done when tags are genuinely miscategorized in the system.
 
 **Weight appears incorrect:**
 - Ensure tare weight is zero before hanging bag

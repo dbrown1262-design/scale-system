@@ -30,9 +30,9 @@ import Common.SubScale as SubScale
 import Common.SubReadQRCode as SubReadQRCode
 
 # Connect to hardware after imports (before GUI creation)
-SubReadQRCode.ConnectScanner()
+ScannerConnected = SubReadQRCode.ConnectScanner()
 
-ScoutConnected, RangerConnected = SubScale.GetScaleStatus()
+_, RangerConnected = SubScale.GetScaleStatus()
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -95,7 +95,7 @@ class WeighTrimApp(ctk.CTk):
         ctk.set_default_color_theme("dark-blue")
         
         self.title(APP_TITLE)
-        self.geometry("800x340")
+        self.geometry("800x440")
 
         container = ctk.CTkFrame(self, corner_radius=12)
         container.pack(fill="both", expand=True, padx=12, pady=12)
@@ -112,20 +112,27 @@ class WeighTrimApp(ctk.CTk):
         self.CmbStrain.grid(row=2, column=1, columnspan=2, sticky="w", pady=6)
 
         ctk.CTkLabel(container, text="Type", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(0,10))
-        self.CmbType = ctk.CTkComboBox(container, values=["Flower", "Smalls", "Trim"], width=320, font=DEFAULT_FONT)
+        self.CmbType = ctk.CTkComboBox(container, values=["Select", "Flower", "Smalls", "Trim"], width=320, font=DEFAULT_FONT, command=self.OnTypeChanged)
         self.CmbType.grid(row=3, column=1, columnspan=2, sticky="w", pady=6)
-        self.CmbType.set("Flower")
+        self.CmbType.set("Select")
 
-        ctk.CTkLabel(container, text="Metric Tag", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(0,10))
+        ctk.CTkLabel(container, text="Bag", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(0,10))
+        self.CmbBag = ctk.CTkComboBox(container, values=["Select", "New"], width=320, font=DEFAULT_FONT, command=self.OnBagChanged)
+        self.CmbBag.grid(row=4, column=1, columnspan=2, sticky="w", pady=6)
+        self.CmbBag.set("Select")
+
+        ctk.CTkLabel(container, text="Metric Tag", font=DEFAULT_FONT).grid(row=5, column=0, sticky="e", padx=(0,10))
         self.EntMetricTag = ctk.CTkEntry(container, width=260, font=DEFAULT_FONT)
-        self.EntMetricTag.grid(row=4, column=1, sticky="w", pady=6)
+        self.EntMetricTag.grid(row=5, column=1, sticky="w", pady=6)
 
-        ctk.CTkLabel(container, text="Weight (g)", font=DEFAULT_FONT).grid(row=5, column=0, sticky="e", padx=(0,10))
-        self.EntWeight = ctk.CTkEntry(container, width=160, font=DEFAULT_FONT, state="disabled")
-        self.EntWeight.grid(row=5, column=1, sticky="w", pady=6)
+        ctk.CTkLabel(container, text="Weight (g)", font=DEFAULT_FONT).grid(row=6, column=0, sticky="e", padx=(0,10))
+        # Weight entry is editable if no Ranger scale, disabled if scale is connected
+        initial_weight_state = "disabled" if RangerConnected else "normal"
+        self.EntWeight = ctk.CTkEntry(container, width=160, font=DEFAULT_FONT, state=initial_weight_state)
+        self.EntWeight.grid(row=6, column=1, sticky="w", pady=6)
 
         btn_frame = ctk.CTkFrame(container, fg_color="transparent")
-        btn_frame.grid(row=7, column=0, columnspan=3, pady=(18,0))
+        btn_frame.grid(row=8, column=0, columnspan=3, pady=(18,0))
 
         self.BtnSave = ctk.CTkButton(btn_frame, text="Save Weight", font=DEFAULT_FONT, command=self.OnSave)
         self.BtnPrintLabel = ctk.CTkButton(btn_frame, text="Print Label", font=DEFAULT_FONT, command=self.OnPrintLabel)
@@ -140,14 +147,13 @@ class WeighTrimApp(ctk.CTk):
         self.BtnClose.grid(row=0, column=4, padx=8)
 
         self.StatusLabel = ctk.CTkLabel(container, text="", font=("Arial", 12), text_color="#00aa00")
-        self.StatusLabel.grid(row=8, column=0, columnspan=3, sticky="w", pady=(12,0))
+        self.StatusLabel.grid(row=9, column=0, columnspan=3, sticky="w", pady=(12,0))
 
         # initial load
         self.LoadLists()
 
         # scale poll
         self.PrevScaleWeight = None
-        self.PrevScoutStatus = None
         self.PrevRangerStatus = None
         self.PrevQrStatus = None
         self.StatusCheckCounter = 0
@@ -175,6 +181,8 @@ class WeighTrimApp(ctk.CTk):
         try:
             self.CmbStrain.configure(values=["Select"])
             self.CmbStrain.set("Select")
+            self.CmbBag.configure(values=["Select", "New"])
+            self.CmbBag.set("Select")
             self.EntMetricTag.delete(0, 'end')
         except Exception:
             pass
@@ -204,19 +212,82 @@ class WeighTrimApp(ctk.CTk):
                 self.SetStatus("Please select a strain")
                 return
             self.SetStatus(f"Selected {strain}. Scan metric tag or enter manually.")
+            # Load bags when strain changes
+            self.LoadBags()
         except Exception:
             self.SetStatus("Cannot parse strain")
             return
+
+    def OnTypeChanged(self, value):
+        """Load bags when type is changed."""
+        try:
+            self.LoadBags()
+        except Exception as e:
+            self.SetStatus(f"LoadBags failed: {e}")
+
+    def LoadBags(self):
+        """Load bags based on current crop, strain, and type selection."""
+        try:
+            crop_display = (self.CmbCrop.get() or "").strip()
+            strain = (self.CmbStrain.get() or "").strip()
+            trim_type = (self.CmbType.get() or "").strip()
+            
+            if not crop_display or crop_display.lower().startswith("select"):
+                self.CmbBag.configure(values=["Select", "New"])
+                self.CmbBag.set("Select")
+                return
+            if not strain or strain.lower().startswith("select"):
+                self.CmbBag.configure(values=["Select", "New"])
+                self.CmbBag.set("Select")
+                return
+                
+            crop_no = int(crop_display.split('-')[0])
+            bags = SubSupa.GetTrimBags(crop_no, strain, trim_type) or ["Select", "New"]
+            self.CmbBag.configure(values=bags)
+            self.CmbBag.set("Select")
+        except Exception as e:
+            self.SetStatus(f"LoadBags error: {e}")
+            self.CmbBag.configure(values=["Select", "New"])
+            self.CmbBag.set("Select")
+
+    def OnBagChanged(self, value):
+        """Enable/disable Save Weight button based on bag selection."""
+        try:
+            bag = (value or "").strip()
+            if bag == "New":
+                self.BtnSave.configure(state="normal")
+                self.EntMetricTag.delete(0, 'end')
+                self.SetStatus("New bag selected - you can save weight")
+            else:
+                self.BtnSave.configure(state="disabled")
+                # Populate the metric tag field with the selected bag
+                self.EntMetricTag.delete(0, 'end')
+                self.EntMetricTag.insert(0, bag)
+                # Get and populate the weight for this bag
+                try:
+                    weight = SubSupa.GetBagWeight(bag)
+                    self.EntWeight.configure(state='normal')
+                    self.EntWeight.delete(0, 'end')
+                    self.EntWeight.insert(0, str(weight))
+                    if RangerConnected:
+                        self.EntWeight.configure(state='disabled')
+                except Exception as e:
+                    self.SetStatus(f"Error loading bag weight: {e}")
+                self.SetStatus(f"Existing bag {bag} - you can only print label")
+        except Exception:
+            pass
 
     def OnClear(self):
         try:
             self.CmbCrop.set("Select")
             self.CmbStrain.set("Select")
             self.CmbType.set("Flower")
+            self.CmbBag.set("Select", "New")
             self.EntMetricTag.delete(0, 'end')
             self.EntWeight.configure(state='normal')
             self.EntWeight.delete(0, 'end')
             self.EntWeight.configure(state='disabled')
+            self.BtnSave.configure(state="normal")
             self.SetStatus("")
         except Exception:
             pass
@@ -348,40 +419,44 @@ class WeighTrimApp(ctk.CTk):
         self._poll_scale(IntervalMs)
 
     def _poll_scale(self, IntervalMs: int = 500):
-        WStr = '0'
-        try:
-            ScoutConnected, RangerConnected
-            if RangerConnected:
+        # Only poll Ranger scale if connected
+        if RangerConnected:
+            WStr = '0'
+            try:
                 W = SubScale.GetRangerWeight()
                 WStr = str(W)
-            elif ScoutConnected:
-                W = SubScale.GetScoutWeight()
-                WStr = str(W)
-        except Exception:
-            WStr = '0'
-
-        if WStr != getattr(self, 'PrevScaleWeight', None):
-            self.PrevScaleWeight = WStr
-            try:
-                self.EntWeight.configure(state='normal')
-                self.EntWeight.delete(0, 'end')
-                self.EntWeight.insert(0, WStr)
-                self.EntWeight.configure(state='disabled')
             except Exception:
-                pass
+                WStr = '0'
 
-        # Check QR reader for metric tag
-        try:
-            if hasattr(SubReadQRCode, 'QrReader'):
-                qr_code = SubReadQRCode.CheckMetricQr()
-                if qr_code and qr_code != "none":
-                    # Update metric tag entry
-                    self.EntMetricTag.delete(0, 'end')
-                    self.EntMetricTag.insert(0, qr_code)
-                    self.SetStatus(f"Scanned metric tag: {qr_code}")
-        except Exception as e:
-            # Silently ignore QR reader errors
-            pass
+            if WStr != getattr(self, 'PrevScaleWeight', None):
+                self.PrevScaleWeight = WStr
+                try:
+                    self.EntWeight.configure(state='normal')
+                    self.EntWeight.delete(0, 'end')
+                    self.EntWeight.insert(0, WStr)
+                    self.EntWeight.configure(state='disabled')
+                except Exception:
+                    pass
+
+        # Check QR reader for metric tag (only if scanner is connected)
+        if ScannerConnected:
+            try:
+                if hasattr(SubReadQRCode, 'QrReader'):
+                    qr_code = SubReadQRCode.CheckMetricQr()
+                    if qr_code and qr_code != "none":
+                        TagType = SubSupa.GetMetrcType(qr_code)
+                        if TagType == "Cult":
+                            # Update metric tag entry
+                            self.EntMetricTag.delete(0, 'end')
+                            self.EntMetricTag.insert(0, qr_code)
+                            self.SetStatus(f"Scanned metric tag: {qr_code}")
+                        else:
+                            self.EntMetricTag.delete(0, 'end')
+                            self.SetStatus(f"Invalid metric tag: {qr_code}")
+
+            except Exception as e:
+                # Silently ignore QR reader errors
+                pass
         
         # Periodically check QR and scale status (every 20 polls = ~10 seconds)
         self.StatusCheckCounter += 1
@@ -390,7 +465,7 @@ class WeighTrimApp(ctk.CTk):
             
             # Check QR scanner status
             try:
-                qr_available = hasattr(SubReadQRCode, 'QrReader') and SubReadQRCode.QrReader is not None
+                qr_available = ScannerConnected and hasattr(SubReadQRCode, 'QrReader') and SubReadQRCode.QrReader is not None
                 if qr_available != self.PrevQrStatus:
                     self.PrevQrStatus = qr_available
                     if qr_available:
@@ -402,27 +477,17 @@ class WeighTrimApp(ctk.CTk):
                     self.PrevQrStatus = False
                     self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
             
-            # Check scale status
+            # Check scale status (Ranger only)
             try:
-                scout_connected, ranger_connected = SubScale.GetScaleStatus()
-                if scout_connected or ranger_connected:
-                    status_changed = (scout_connected != self.PrevScoutStatus or 
-                                    ranger_connected != self.PrevRangerStatus)
-                    if status_changed:
-                        self.PrevScoutStatus = scout_connected
-                        self.PrevRangerStatus = ranger_connected
-                        if ranger_connected:
-                            self.ScaleStatusLabel.configure(text="Scale: Connected (Ranger)", text_color="#00aa00")
-                        elif scout_connected:
-                            self.ScaleStatusLabel.configure(text="Scale: Connected (Scout)", text_color="#00aa00")
-                else:
-                    if self.PrevScoutStatus is not False or self.PrevRangerStatus is not False:
-                        self.PrevScoutStatus = False
-                        self.PrevRangerStatus = False
+                _, ranger_connected = SubScale.GetScaleStatus()
+                if ranger_connected != self.PrevRangerStatus:
+                    self.PrevRangerStatus = ranger_connected
+                    if ranger_connected:
+                        self.ScaleStatusLabel.configure(text="Scale: Connected (Ranger)", text_color="#00aa00")
+                    else:
                         self.ScaleStatusLabel.configure(text="Scale: Not Found", text_color="#ff4444")
             except Exception:
-                if self.PrevScoutStatus is not False or self.PrevRangerStatus is not False:
-                    self.PrevScoutStatus = False
+                if self.PrevRangerStatus is not False:
                     self.PrevRangerStatus = False
                     self.ScaleStatusLabel.configure(text="Scale: Error", text_color="#ff4444")
 

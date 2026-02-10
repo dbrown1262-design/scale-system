@@ -44,9 +44,11 @@ def ConnectScanner():
         try:
             QrReader = serial.Serial(scanner_port, 115200, timeout=1)
             print("Scanner ready on", scanner_port)
+            return True
         except Exception as e:
             print(f"Failed to open scanner on {scanner_port}: {e}")
-            retry = messagebox.askretrycancel(
+            retry = messagebox.askyesnocancel(
+#            retry = messagebox.askretrycancel(
                 "Scanner Not Available",
                 f"Could not connect to QR scanner on {scanner_port}.\n\n"
                 f"Please check:\n"
@@ -54,11 +56,13 @@ def ConnectScanner():
                 f"2. Scanner is paired via Bluetooth\n"
                 f"3. Scanner is not being used by another application\n\n"
                 f"Error: {e}\n\n"
-                f"Click Retry to try again, or Cancel to exit."
+                f"Click Yes to try again, No to ignore or Cancel to exit."
             )
-            if not retry:
+            if retry == None: # user cancelled
                 import sys
                 sys.exit(1)
+            elif not retry:    # user clicked No
+                return False
 
 
 def CheckQr():
@@ -81,6 +85,10 @@ def CheckQr():
 #            Qr1 = "202"
         Qr2 = ptext
         print("Qqr2 = ", Qr2)
+        TagType = Qr2[:-9]
+        TagSeq = Qr2[-9:]
+        print("TagType =", TagType, "TagSeq =", TagSeq)
+
     return (Qr2)
 
 def CheckMetricQr():
@@ -90,16 +98,19 @@ def CheckMetricQr():
     ptext = "none"
     if QrReader and QrReader.in_waiting > 0:
         raw = QrReader.readline()
-        print("raw =", raw)
 
         # Decode from bytes to text and strip whitespace
         ptext = raw.decode().strip()
         print("ptext =", ptext)
+
     return (ptext)
 
-ConnectScanner()
-qr = CheckMetricQr()
-print("QR Code read:", qr)
-#while (ptext := CheckMetricQr()) == "none":
+#ConnectScanner()
+#qr = CheckMetricQr()
+#print("QR Code read:", qr)
+#ptext = "none"
+#while (ptext == "none"):
+#    (ptext, TagType) = CheckMetricQr()
 #    print("Waiting for QR code...")
 #    time.sleep(1)
+#print(ptext)

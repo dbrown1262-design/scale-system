@@ -29,6 +29,8 @@ def restart_menu():
 APP_TITLE = "Weigh Harvest"
 DEFAULT_FONT = ("Arial", 15)
 
+SubReadQRCode.ConnectScanner()
+
 def launch_sop():
     # WeighHarvest.py is in scale/Harvest/
     this_file = Path(__file__).resolve()

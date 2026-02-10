@@ -85,6 +85,24 @@ def UpdateBatchId(CropNo, Strain, BatchId):
 #
 #################################################################################################
 
+def GetMetrcType(MetrcId):
+    prefix = MetrcId[:-9]
+    res = (
+        sb.schema("scale")
+        .table("metrctagtypes")
+        .select("MetrcType")
+        .eq("MetrcId", prefix)
+        .execute()
+    )
+
+    if res.data and len(res.data) > 0:
+        return res.data[0].get("MetrcType")
+    else:
+        return None
+
+#mtype = GetMetrcType("1A4120300001DE2000000001")
+#print(mtype)
+
 def GetPackages(CropNo, Strain):
     # Execute the query and return the data list (include UnitWeight)
     result = (

@@ -88,6 +88,7 @@ def show_busy_overlay(parent):
 
 SCRIPTS = {
     "Harvest": [
+        ("Edit Crops", os.path.join("Harvest", "EditCrops.py")),
         ("Print Plant Tags", os.path.join("Harvest", "PrintPlantTags.py")),
         ("Weigh Plants", os.path.join("Harvest", "WeighHarvest.py")),
         ("Weigh Bucked Totes", os.path.join("Harvest", "WeighBucked.py")),
@@ -112,6 +113,11 @@ SCRIPTS = {
         ("Edit Package Types", os.path.join("Packaging", "EditPackageTypes.py")),
         ("Scanner Setup", os.path.join("Common", "ScannerSetup.py")),
         ("Edit SOP Index", os.path.join("SopScripts", "EditSopIndex.py")),
+    ],
+    "Supplies": [
+        ("Order Supplies", os.path.join("Supplies", "OrderSupplies.py")),
+        ("View Orders", os.path.join("Supplies", "ViewSupplies.py")),
+        ("Edit Supplies, Vendors, Dept", os.path.join("Supplies", "EditSupplies.py")),
     ],
 }
 
@@ -174,21 +180,22 @@ class MenuApp(ctk.CTk):
         self.status = ctk.CTkLabel(main, text="", font=("Arial", 16))
         self.status.grid(row=99, column=0, columnspan=3, sticky="w", pady=(12,0))
 
-        # Layout sections: Harvest and Packaging in column 0 (rows 1 and 2), Trimmer and Processing in column 1 (rows 1 and 2), Admin in column 2
+        # Layout sections: Harvest and Packaging in column 0 (rows 1 and 2), Trimmer and Processing in column 1 (rows 1 and 2), Admin in column 2 row 1, Supplies in column 2 row 2
         row_col_map = {
             "Harvest": (1, 0),
             "Packaging": (2, 0),
             "Trimmer": (1, 1),
             "Processing": (2, 1),
             "Admin": (1, 2),
+            "Supplies": (2, 2),
         }
         
         for section, items in SCRIPTS.items():
             row, col = row_col_map.get(section, (0, 0))
             # Create a frame with a label for the section
             section_frame = ctk.CTkFrame(main)
-            # Admin section spans 2 rows
-            rowspan = 2 if section == "Admin" else 1
+            # All sections occupy 1 row each
+            rowspan = 1
             section_frame.grid(row=row, column=col, rowspan=rowspan, padx=8, pady=8, sticky="n")
             
             # Section title label

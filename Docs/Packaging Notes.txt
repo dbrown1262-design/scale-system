@@ -39,21 +39,25 @@ Each Run:	Select RosinBatchId, HashBatchId, RunNumber, , look for row with weigh
 		At end, put Rosin on scale, click Save Hash Weight
 
 
-I need a script (WeighTrim.py) in the Trimmers folder (similar to the TrimmerDailyWeigh.py script) to weigh the trim at the end of the day or when they finish a strain.  The user selects the CropNo using SubSupa.LoadCrops.  The script then loads the strain combo box using SubSupa.LoadStrains.  When a strain is selected, load BagNo combobox using SubSupa.LoadTrimBagNos.  The weight entry box should be populated SubScale.GetWeight function, which should be called every 500 ns and the entry box updated any time the weight changes.  When the user clicks on the Save Weight button, verify that selections for CropNo, Strain and BagNo are not = "Select" and the weight > 0, then insert a row in the scaletrim table using SubSupa.InsertTrimBag
-	
-
-
-i need a script in the Packaging folder to edit the packagetypes table.  table contains id (index), TypeName(eighths, prerolls, etc), UnitWeight (float), NumUnits(int), TotWeight(float).
-script should create a treeview of all package types using SubSupa.LoadPackageTypes. For a selected row, the script should display entry boxes for TypeName, UnitWeight, NumUnits and TotWeight and allow the user to edit the fields and save the changes.  The script also should allow the user to enter the fields and add a row to the table
 
 
 
 
 I need a script AddPackage.py in the Packaging folder to enter packaging activity.  
 The Tables used are:
-batchtable: 	CropNo, Strain, BatchId, BatchType
 packagetypes:	PackageType(eighths, prerolls, etc), UnitWeight (grams)
-packages:	BatchId, PackageType, UnitWeight, TotUnits, TotWeight, PackDate
+packages:	CropNo, Strain, CaseNo, MetrcID, PackageType, TotUnits, TotWeight, PackDate
+
+in AddPackage.py, 
+change cmb_type to call a function load_cases when a selection is made
+add load_cases function to populate the Case No combo using SubSupa.LoadCases and populate Metrc ID entry if metrc is not None
+
+when a case is selected:
+	if value is "New" use SubSupa.GeTNewCaseNo to get CaseNo
+
+
+
+
 
 The user selects the CropNo using SubSupa.LoadCrops.  The script then loads the strain combo box using SubSupa.LoadStrains.
 
@@ -63,6 +67,8 @@ When a batch is selected,  display Package type in a disabled entry box: If Batc
 and display a treeview of the packages rows for the selected batch and package type.  Treeview columns are Batch Id, Strain, Package Type, Quantity, Weight from the SubSupa.GetPackages function.
 when the user enters a quantity and clicks on Save, the script should get the unit weight using SubSupa.GetPackageWeight function, multiply the unit weight by the quantity to get the total weight and insert a row in the packages table using SubSupa.InsertPackage
 
+i need to modify AddPackage.py to perform the following:
+Add a button to print a label using SubPrintLabels.PrintPackageLabel(Strain, HarvestDate, PackageType, CaseNo, MetrcID, Units, Weight) .  Get the data for the label using SubSupa.GetOnePackage which executes select("CropNo", "Strain", "CaseNo", "MetrcID", "PackageType", "TotUnits", "TotWeight", "PackDate")
 
 
 
