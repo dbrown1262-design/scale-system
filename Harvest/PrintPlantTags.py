@@ -343,7 +343,7 @@ class PrintPlantTagsApp(ctk.CTk):
         c.save()
 
         command = "{} {}".format('c:\\labels\\PDFtoPrinter.exe','C:\\labels\\label.pdf')
-#        subprocess.call(command,shell=False)
+        subprocess.call(command,shell=False)
 
         self.set_status(f"Printed 1 header + {num_labels} labels for {sel_strain}")
 
