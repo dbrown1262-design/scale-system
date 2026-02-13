@@ -32,7 +32,7 @@ def ConnectScales():
     try:
         ports = list(serial.tools.list_ports.comports())
         for p in ports:
-#            print(f"Found device: VID={p.vid}, PID={p.pid}, Device={p.device}")
+            print(f"Found device: VID={p.vid}, PID={p.pid}, Device={p.device}")
             if p.vid == 1027 and p.pid == 24577:
                 scaleport = p.device
                 print("Connecting to Ranger Scale on " + scaleport)
