@@ -31,7 +31,7 @@ import Common.SubReadQRCode as SubReadQRCode
 
 # Connect to hardware after imports (before GUI creation)
 ScannerConnected = SubReadQRCode.ConnectScanner()
-
+SubScale.ConnectScales()
 _, RangerConnected = SubScale.GetScaleStatus()
 
 # BASE_DIR is the folder that contains menu.py
