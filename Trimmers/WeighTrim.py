@@ -136,15 +136,17 @@ class WeighTrimApp(ctk.CTk):
 
         self.BtnSave = ctk.CTkButton(btn_frame, text="Save Weight", font=DEFAULT_FONT, command=self.OnSave)
         self.BtnPrintLabel = ctk.CTkButton(btn_frame, text="Print Label", font=DEFAULT_FONT, command=self.OnPrintLabel)
+        self.BtnTare = ctk.CTkButton(btn_frame, text="Tare Scale", font=DEFAULT_FONT, command=self.OnTare)
         self.BtnClear = ctk.CTkButton(btn_frame, text="Clear", font=DEFAULT_FONT, command=self.OnClear)
         self.BtnRefresh = ctk.CTkButton(btn_frame, text="Refresh Lists", font=DEFAULT_FONT, command=self.LoadLists)
         self.BtnClose = ctk.CTkButton(btn_frame, text="Close", font=DEFAULT_FONT, command=self._on_close)
 
         self.BtnSave.grid(row=0, column=0, padx=8)
         self.BtnPrintLabel.grid(row=0, column=1, padx=8)
-        self.BtnClear.grid(row=0, column=2, padx=8)
-        self.BtnRefresh.grid(row=0, column=3, padx=8)
-        self.BtnClose.grid(row=0, column=4, padx=8)
+        self.BtnTare.grid(row=0, column=2, padx=8)
+        self.BtnClear.grid(row=1, column=0, padx=8, pady=(8,0))
+        self.BtnRefresh.grid(row=1, column=1, padx=8, pady=(8,0))
+        self.BtnClose.grid(row=1, column=2, padx=8, pady=(8,0))
 
         self.StatusLabel = ctk.CTkLabel(container, text="", font=("Arial", 12), text_color="#00aa00")
         self.StatusLabel.grid(row=9, column=0, columnspan=3, sticky="w", pady=(12,0))
@@ -291,6 +293,15 @@ class WeighTrimApp(ctk.CTk):
             self.SetStatus("")
         except Exception:
             pass
+
+    def OnTare(self):
+        """Tare the Ranger scale to zero"""
+        try:
+            SubScale.SetRangerTare()
+            self.SetStatus("Scale tared successfully")
+        except Exception as e:
+            self.SetStatus(f"Tare failed: {e}")
+            messagebox.showerror("Tare Error", f"Failed to tare scale: {e}")
 
     def OnPrintLabel(self):
         crop_display = (self.CmbCrop.get() or "").strip()

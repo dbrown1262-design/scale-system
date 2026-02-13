@@ -123,6 +123,12 @@ def GetRangerWeight():
         Weight = str(round(float(w[1])))
     return Weight
 
+def SetRangerTare():
+    if not RangerConnected:
+        return False
+    if RangerConnected:
+        ScaleRanger.write("T\r\n".encode())
+    return True
 
 
 #ConnectScales()
