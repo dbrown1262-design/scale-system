@@ -30,6 +30,7 @@ APP_TITLE = "Weigh Harvest"
 DEFAULT_FONT = ("Arial", 15)
 
 SubReadQRCode.ConnectScanner()
+SubScale.ConnectScales()
 
 def launch_sop():
     # WeighHarvest.py is in scale/Harvest/
