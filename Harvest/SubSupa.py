@@ -209,7 +209,37 @@ def UpdateTagWeight(TagNo, Weight):
     upd = {"Weight": Weight}
     res = sb.schema("scale").table("scalebuck").update(upd, returning="representation").eq("TagNo", TagNo).execute()
 
+def LoadToteReport(StartDate, EndDate):
+    """Load all rows from scalebuck where BuckDate is between StartDate and EndDate
+    
+    Args:
+        StartDate: Start date string in format 'YYYY-MM-DD'
+        EndDate: End date string in format 'YYYY-MM-DD'
+    
+    Returns:
+        List of scalebuck records within the date range
+    """
+    res = (sb.schema("scale").table("scalebuck")
+            .select("*")
+            .gte("BuckDate", StartDate)
+            .lte("BuckDate", EndDate)
+            .order("TagNo")
+            .execute())
+    return res.data or []
+
+#res = LoadToteReport("2025-12-01", "2025-12-31")
+#print(res)
+
+def GetHarvestDate(CropNo):
+    res = sb.schema("scale").table("scalecrops").select("HarvestDate").eq("CropNo", CropNo).execute()
+    if res.data and len(res.data) > 0:
+        return res.data[0].get("HarvestDate")
+    else:
+        return None
+
+
 """batchtable functions"""
+
 
 def LoadOneBatch(CropNo, Strain):
     print("LoadOneBatch:", CropNo, Strain)
