@@ -77,8 +77,7 @@ def GetScaleStatus():
 # Scale must be set to send continuous data, with units in grams
 ###########################################################
 def GetScoutWeight():
-    if TestMode:
-        return 100.0
+#    print("Getting weight from Scout scale...")
     if not ScoutConnected:
         return None
     global ScaleBuffer, LastWeight

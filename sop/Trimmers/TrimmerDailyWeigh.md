@@ -192,6 +192,18 @@ The application will display color-coded status messages:
 - Ensure scale is tared to zero
 - Restart the application if scale was connected after app startup
 
+**Scale Setup:**
+- Power on scale- display should show USb.dEU in the power on sequence.  If not, check that the white interface cable is connected
+- The scale must be set continuous print.  The keys are multi-function.  For example, the Tare key is also the Menu Key.  To access the menu, press and hold the Tare key until the menu appears.  Once in the menu, the "No" keys is used to scroll through menu options, and the "Yes" key is used to select 
+- Hold Menu Key until "Menu" appears
+- Press "No" until "Print" appears
+- Press "Yes"
+- Press "No" until "A.Print" appears
+- Press "Yes"
+- Press "No" until "Cont" appears
+- Press "Yes"
+- Press "Exit"
+
 **Weight appears as "Error":**
 - The scale is disconnected or experiencing communication issues
 - Check USB connection
