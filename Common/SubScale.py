@@ -96,7 +96,7 @@ def GetScoutWeight():
             parts = line.split()
             LastWeight =float(parts[0])
             Unit = parts[1] 
-#            print("Parsed weight: ", LastWeight, Unit)
+            print("Parsed weight: ", LastWeight, Unit)
 #            val = _parse_ohaus_line(line)
 #            if val is not None:
 #                LastWeight = val
