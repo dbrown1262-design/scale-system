@@ -69,7 +69,7 @@ def ConnectScales():
 
 def GetScaleStatus():
     global ScoutConnected, RangerConnected
-    print(f"Scale status - Scout: {ScoutConnected}, Ranger: {RangerConnected}")
+#    print(f"Scale status - Scout: {ScoutConnected}, Ranger: {RangerConnected}")
     return ScoutConnected, RangerConnected
 
 ###########################################################

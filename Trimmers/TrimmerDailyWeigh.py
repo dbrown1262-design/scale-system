@@ -31,7 +31,7 @@ if ROOT_DIR not in sys.path:
 import Common.SubScale as SubScale
 
 # Connect to hardware after imports
-# SubScale.ConnectScales()
+ SubScale.ConnectScales()
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
