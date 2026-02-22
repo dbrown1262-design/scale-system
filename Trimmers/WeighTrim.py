@@ -471,8 +471,10 @@ class WeighTrimApp(ctk.CTk):
         
         # Periodically check QR and scale status (every 20 polls = ~10 seconds)
         self.StatusCheckCounter += 1
-        if self.StatusCheckCounter >= 20:
+        self.interval = 1
+        if self.StatusCheckCounter >= self.interval:
             self.StatusCheckCounter = 0
+            self.interval = 20
             
             # Check QR scanner status
             try:
