@@ -471,7 +471,7 @@ class WeighTrimApp(ctk.CTk):
         
         # Periodically check QR and scale status (every 20 polls = ~10 seconds)
         self.StatusCheckCounter += 1
-        self.interval = 10
+        self.interval = 5
         if self.StatusCheckCounter >= self.interval:
             self.StatusCheckCounter = 0
             
