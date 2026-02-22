@@ -492,7 +492,6 @@ class WeighTrimApp(ctk.CTk):
             # Check scale status (Ranger only)
             try:
                 _, ranger_connected = SubScale.GetScaleStatus()
-                print(f"Scale status check - Ranger: {ranger_connected}")
                 if ranger_connected != self.PrevRangerStatus:
                     self.PrevRangerStatus = ranger_connected
                     if ranger_connected:
