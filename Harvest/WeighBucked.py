@@ -101,19 +101,25 @@ class WeighBuckedApp(ctk.CTk):
         self.StrainCombo = ctk.CTkComboBox(frame, values=["Select"], width=200, font=DEFAULT_FONT, command=self.onStrainSelected)
         self.StrainCombo.grid(row=2, column=1, sticky="w", pady=6)
 
+        # Tote Type selector
+        ctk.CTkLabel(frame, text="Tote Type", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(6,6))
+        self.ToteTypeCombo = ctk.CTkComboBox(frame, values=["Select", "Flower", "Smalls", "Trim"], width=200, font=DEFAULT_FONT)
+        self.ToteTypeCombo.grid(row=3, column=1, sticky="w", pady=6)
+        self.ToteTypeCombo.set("Select")
+
         # Metric Tag Number entry box (populated from QR reader)
-        ctk.CTkLabel(frame, text="Metric Tag", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(6,6))
+        ctk.CTkLabel(frame, text="Metric Tag", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(6,6))
         self.MetricTagEntry = ctk.CTkEntry(frame, width=220, font=DEFAULT_FONT)
-        self.MetricTagEntry.grid(row=3, column=1, sticky="w", pady=6)
+        self.MetricTagEntry.grid(row=4, column=1, sticky="w", pady=6)
 
         # Weight display (read-only)
-        ctk.CTkLabel(frame, text="Tote Weight (g)", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(6,6))
+        ctk.CTkLabel(frame, text="Tote Weight (g)", font=DEFAULT_FONT).grid(row=5, column=0, sticky="e", padx=(6,6))
         self.WeightEntry = ctk.CTkEntry(frame, width=200, font=DEFAULT_FONT, state="disabled")
-        self.WeightEntry.grid(row=4, column=1, sticky="w", pady=6)
+        self.WeightEntry.grid(row=5, column=1, sticky="w", pady=6)
 
         # Buttons row: Save, Print Label, and Close
         button_row = ctk.CTkFrame(frame, fg_color="transparent")
-        button_row.grid(row=5, column=0, columnspan=3, sticky="ew", pady=(12,0))
+        button_row.grid(row=6, column=0, columnspan=3, sticky="ew", pady=(12,0))
         
         self.BtnSave = ctk.CTkButton(button_row, text="Save Tote Weight", font=DEFAULT_FONT, command=self.saveToteWeight)
         self.BtnSave.pack(side="left", padx=(0,8))
@@ -125,7 +131,7 @@ class WeighBuckedApp(ctk.CTk):
 
         # Status
         self.StatusLabel = ctk.CTkLabel(frame, text="", font=("Arial", 12), text_color="#00aa00")
-        self.StatusLabel.grid(row=6, column=0, columnspan=3, sticky="w", pady=(8,0))
+        self.StatusLabel.grid(row=7, column=0, columnspan=3, sticky="w", pady=(8,0))
 
         # Polling state
         self._PollId = None
@@ -307,12 +313,16 @@ class WeighBuckedApp(ctk.CTk):
     def saveToteWeight(self):
         selCrop = (self.CropCombo.get() or "").strip()
         selStrain = (self.StrainCombo.get() or "").strip()
+        toteType = (self.ToteTypeCombo.get() or "").strip()
         metricTag = (self.MetricTagEntry.get() or "").strip()
         if not selCrop or selCrop.lower().startswith("select"):
             messagebox.showwarning("Select Crop", "Please select a crop")
             return
         if not selStrain or selStrain.lower().startswith("select"):
             messagebox.showwarning("Select Strain", "Please select a strain")
+            return
+        if not toteType or toteType.lower().startswith("select"):
+            messagebox.showwarning("Select Tote Type", "Please select a tote type")
             return
         if not metricTag:
             messagebox.showwarning("Enter Metric Tag", "Please scan or enter a metric tag number")
@@ -365,13 +375,13 @@ class WeighBuckedApp(ctk.CTk):
         else:
             # Insert new tag weight
             try:
-                SubSupa.InsertNewTag(crop_no, selStrain, metricTag, int(currentWeight))
+                SubSupa.InsertNewTag(crop_no, selStrain, metricTag, toteType, int(currentWeight))
                 self.setStatus(f"Saved metric tag {metricTag} weight: {int(currentWeight)} g")
             except Exception as e:
                 self.setStatus(f"InsertNewTag failed: {e}")
                 return
         
-        PrintOneLabel(selStrain, "Bucked Flower", selCrop, "Metric", metricTag, int(currentWeight))
+        PrintOneLabel(selStrain, toteType, selCrop, "Metric", metricTag, int(currentWeight))
         
         # Clear metric tag for next bag
         self.MetricTagEntry.delete(0, 'end')
@@ -380,12 +390,16 @@ class WeighBuckedApp(ctk.CTk):
     def printLabel(self):
         selCrop = (self.CropCombo.get() or "").strip()
         selStrain = (self.StrainCombo.get() or "").strip()
+        toteType = (self.ToteTypeCombo.get() or "").strip()
         metricTag = (self.MetricTagEntry.get() or "").strip()
         if not selCrop or selCrop.lower().startswith("select"):
             messagebox.showwarning("Select Crop", "Please select a crop")
             return
         if not selStrain or selStrain.lower().startswith("select"):
             messagebox.showwarning("Select Strain", "Please select a strain")
+            return
+        if not toteType or toteType.lower().startswith("select"):
+            messagebox.showwarning("Select Tote Type", "Please select a tote type")
             return
         if not metricTag:
             messagebox.showwarning("Enter Metric Tag", "Please scan or enter a metric tag number")
@@ -408,7 +422,7 @@ class WeighBuckedApp(ctk.CTk):
             self.setStatus(f"GetOneTag failed: {e}")
             return
 
-        PrintOneLabel(selStrain, "Bucked Flower", selCrop, "Metric", metricTag, weight_val)
+        PrintOneLabel(selStrain, toteType, selCrop, "Metric", metricTag, weight_val)
 
         self.setStatus(f"Sent label to printer for metric tag {metricTag}")
 

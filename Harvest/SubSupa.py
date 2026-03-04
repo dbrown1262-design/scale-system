@@ -180,7 +180,7 @@ def CheckTag(TagNo):
     if result.data:
         return True
     else:
-        return False
+        return True
 def GetOneTag(TagNo):
     result = (
         sb.schema("scale")
@@ -195,11 +195,13 @@ def GetOneTag(TagNo):
     else:
         return None
 
-def InsertNewTag(CropNo, Strain, TagNo):
+def InsertNewTag(CropNo, Strain, TagNo, ToteType, Weight):
     data = {
         "CropNo": CropNo,
         "Strain": Strain,
         "TagNo": TagNo,
+        "ToteType": ToteType,
+        "Weight": Weight,
         "BuckDate": datetime.now().isoformat()  
     }
     result = sb.schema("scale").table("scalebuck").insert(data).execute()
@@ -320,12 +322,13 @@ def GetOneTag(CropNo, Strain, TagNo):
     else:
         return None
 
-def InsertNewTag(CropNo, Strain, TagNo, Weight):
-    """Insert a new metric tag with weight data."""
+def InsertNewTag(CropNo, Strain, TagNo, ToteType, Weight):
+    """Insert a new metric tag with tote type."""
     data = {
         "CropNo": CropNo,
         "Strain": Strain,
         "TagNo": TagNo,
+        "ToteType": ToteType,
         "Weight": Weight,
         "BuckDate": datetime.now().isoformat()
     }
