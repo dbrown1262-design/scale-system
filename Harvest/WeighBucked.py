@@ -330,13 +330,13 @@ class WeighBuckedApp(ctk.CTk):
             return
         
         # Validate that tag exists in metrictags table
-        try:
-            if not SubSupa.CheckTag(metricTag):
-                messagebox.showerror("Invalid Tag", f"Tag {metricTag} is not in the Metric tag list. Please verify the tag number.")
-                return
-        except Exception as e:
-            self.setStatus(f"CheckTag failed: {e}")
-            return
+#        try:
+#            if not SubSupa.CheckTag(metricTag):
+#                messagebox.showerror("Invalid Tag", f"Tag {metricTag} is not in the Metric tag list. Please verify the tag number.")
+#                return
+#        except Exception as e:
+#            self.setStatus(f"CheckTag failed: {e}")
+#            return
         
         token = selCrop.split('-')[0].strip()
         try:
