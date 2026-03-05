@@ -16,9 +16,7 @@ ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
 if ROOT_DIR not in sys.path:
     sys.path.insert(0, ROOT_DIR)
 import Common.SubScale as SubScale
-import Common.SubReadQRCode as SubReadQRCode
 
-SubReadQRCode.ConnectScanner()
 SubScale.ConnectScales()
 
 # BASE_DIR is the folder that contains menu.py
@@ -80,12 +78,6 @@ class WeighBuckedApp(ctk.CTk):
         header_frame = ctk.CTkFrame(frame, fg_color="transparent")
         header_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=(0, 12))
         
-        # QR Reader status indicator
-        self.QrStatusLabel = ctk.CTkLabel(header_frame, text="QR: Checking...", font=("Arial", 12), 
-                                          text_color="#ff8800", corner_radius=6, 
-                                          fg_color="#2b2b2b", padx=10, pady=5)
-        self.QrStatusLabel.pack(side="right", padx=(8, 0))
-        
         # Scale status indicator
         self.ScaleStatusLabel = ctk.CTkLabel(header_frame, text="Scale: Checking...", font=("Arial", 12), 
                                              text_color="#ff8800", corner_radius=6, 
@@ -104,14 +96,15 @@ class WeighBuckedApp(ctk.CTk):
 
         # Tote Type selector
         ctk.CTkLabel(frame, text="Tote Type", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(6,6))
-        self.ToteTypeCombo = ctk.CTkComboBox(frame, values=["Select", "Flower", "Smalls", "Trim"], width=200, font=DEFAULT_FONT)
+        self.ToteTypeCombo = ctk.CTkComboBox(frame, values=["Select", "Flower", "Smalls", "Trim"], width=200, font=DEFAULT_FONT, command=self.onToteTypeSelected)
         self.ToteTypeCombo.grid(row=3, column=1, sticky="w", pady=6)
         self.ToteTypeCombo.set("Select")
 
-        # Metric Tag Number entry box (populated from QR reader)
-        ctk.CTkLabel(frame, text="Metric Tag", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(6,6))
-        self.MetricTagEntry = ctk.CTkEntry(frame, width=220, font=DEFAULT_FONT)
-        self.MetricTagEntry.grid(row=4, column=1, sticky="w", pady=6)
+        # Tote Number combo box
+        ctk.CTkLabel(frame, text="Tote No", font=DEFAULT_FONT).grid(row=4, column=0, sticky="e", padx=(6,6))
+        self.ToteNoCombo = ctk.CTkComboBox(frame, values=["Select", "New Tote"], width=200, font=DEFAULT_FONT)
+        self.ToteNoCombo.grid(row=4, column=1, sticky="w", pady=6)
+        self.ToteNoCombo.set("Select")
 
         # Weight display (read-only)
         ctk.CTkLabel(frame, text="Tote Weight (g)", font=DEFAULT_FONT).grid(row=5, column=0, sticky="e", padx=(6,6))
@@ -138,11 +131,6 @@ class WeighBuckedApp(ctk.CTk):
         self._PollId = None
         self._PrevWeight = None
         self._PrevRangerStatus = None
-        self._QrStatusCheckCounter = 0  # Counter for periodic QR status checks
-
-        # Check QR reader status initially
-        self.checkQrStatus()
-
         # Load crops
         self.loadCrops()
 
@@ -154,18 +142,6 @@ class WeighBuckedApp(ctk.CTk):
             self.protocol("WM_DELETE_WINDOW", self.onClose)
         except Exception:
             pass
-
-    # ---- QR Reader Status ----
-    def checkQrStatus(self):
-        """Check if QR reader is connected and update status label."""
-        try:
-            # Check if QrReader exists in SubReadQRCode module
-            if hasattr(SubReadQRCode, 'QrReader') and SubReadQRCode.QrReader:
-                self.QrStatusLabel.configure(text="QR: Connected", text_color="#00aa00")
-            else:
-                self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
-        except Exception:
-            self.QrStatusLabel.configure(text="QR: Not Found", text_color="#ff4444")
 
     def setStatus(self, text: str):
         try:
@@ -220,9 +196,49 @@ class WeighBuckedApp(ctk.CTk):
         selCrop = (self.CropCombo.get() or "").strip()
         selStrain = (self.StrainCombo.get() or "").strip()
         if not selCrop or selCrop.lower().startswith("select") or not selStrain or selStrain.lower().startswith("select"):
+            self.ToteNoCombo.configure(values=["Select", "New Tote"])
+            self.ToteNoCombo.set("Select")
             return
-        # Strain selected, ready for metric tag scanning
-        self.setStatus(f"Selected {selStrain}. Scan metric tag or enter manually.")
+        
+        self.setStatus(f"Selected {selStrain}. Select tote type.")
+
+    def onToteTypeSelected(self, val=None):
+        selCrop = (self.CropCombo.get() or "").strip()
+        selStrain = (self.StrainCombo.get() or "").strip()
+        selToteType = (self.ToteTypeCombo.get() or "").strip()
+        if not selCrop or selCrop.lower().startswith("select") or not selStrain or selStrain.lower().startswith("select"):
+            self.ToteNoCombo.configure(values=["Select", "New Tote"])
+            self.ToteNoCombo.set("Select")
+            return
+        if not selToteType or selToteType.lower().startswith("select"):
+            self.ToteNoCombo.configure(values=["Select", "New Tote"])
+            self.ToteNoCombo.set("Select")
+            return
+        
+        # Parse crop number
+        token = selCrop.split('-')[0].strip()
+        try:
+            crop_no = int(token.split()[0])
+        except Exception:
+            try:
+                crop_no = int(token)
+            except Exception:
+                self.setStatus("Cannot parse Crop number")
+                return
+        
+        # Load totes for this crop/strain/tote type
+        try:
+            totes = SubSupa.LoadTotes(crop_no, selStrain, selToteType)
+            if totes:
+                self.ToteNoCombo.configure(values=totes)
+                self.ToteNoCombo.set(totes[0])
+            else:
+                self.ToteNoCombo.configure(values=["Select", "New Tote"])
+                self.ToteNoCombo.set("Select")
+        except Exception as e:
+            self.setStatus(f"LoadTotes failed: {e}")
+        
+        self.setStatus(f"Selected {selToteType}. Select tote number.")
 
     # ---- Polling ----
     def startPolling(self):
@@ -262,35 +278,7 @@ class WeighBuckedApp(ctk.CTk):
             if self._PrevRangerStatus is not False:
                 self._PrevRangerStatus = False
                 self.ScaleStatusLabel.configure(text="Scale: Error", text_color="#ff4444")
-
-        # Check QR reader for metric tag
-        try:
-            if hasattr(SubReadQRCode, 'QrReader'):
-                (qr_code) = SubReadQRCode.CheckMetricQr()
-                if qr_code and qr_code != "none":
-                    # Verify tag is valid before accepting
-                    try:
-                        tag_type = SubSupa.GetMetrcType(qr_code)
-                        print(tag_type)
-                        if tag_type == "Cult":
-                            # Update metric tag entry
-                            self.MetricTagEntry.delete(0, 'end')
-                            self.MetricTagEntry.insert(0, qr_code)
-                            self.setStatus(f"Scanned metric tag: {qr_code}")
-                        else:
-                            self.MetricTagEntry.delete(0, 'end')
-                            self.setStatus(f"Invalid tag: {qr_code} - wrong type")
-                    except Exception as e:
-                        self.setStatus(f"CheckTag error: {e}")
-        except Exception as e:
-            self.setStatus(f"QR Reader error: {e}")
         
-        # Periodically check QR reader status (every 20 polls = ~10 seconds at 500ms intervals)
-        self._QrStatusCheckCounter = getattr(self, '_QrStatusCheckCounter', 0) + 1
-        if self._QrStatusCheckCounter >= 20:
-            self._QrStatusCheckCounter = 0
-            self.checkQrStatus()
-
         try:
             self._PollId = self.after(POLL_INTERVAL_MS, lambda: self.pollWeight())
         except Exception:
@@ -315,7 +303,7 @@ class WeighBuckedApp(ctk.CTk):
         selCrop = (self.CropCombo.get() or "").strip()
         selStrain = (self.StrainCombo.get() or "").strip()
         toteType = (self.ToteTypeCombo.get() or "").strip()
-        metricTag = (self.MetricTagEntry.get() or "").strip()
+        toteNoSel = (self.ToteNoCombo.get() or "").strip()
         if not selCrop or selCrop.lower().startswith("select"):
             messagebox.showwarning("Select Crop", "Please select a crop")
             return
@@ -325,18 +313,9 @@ class WeighBuckedApp(ctk.CTk):
         if not toteType or toteType.lower().startswith("select"):
             messagebox.showwarning("Select Tote Type", "Please select a tote type")
             return
-        if not metricTag:
-            messagebox.showwarning("Enter Metric Tag", "Please scan or enter a metric tag number")
+        if not toteNoSel or toteNoSel.lower().startswith("select"):
+            messagebox.showwarning("Select Tote", "Please select a tote number or New Tote")
             return
-        
-        # Validate that tag exists in metrictags table
-#        try:
-#            if not SubSupa.CheckTag(metricTag):
-#                messagebox.showerror("Invalid Tag", f"Tag {metricTag} is not in the Metric tag list. Please verify the tag number.")
-#                return
-#        except Exception as e:
-#            self.setStatus(f"CheckTag failed: {e}")
-#            return
         
         token = selCrop.split('-')[0].strip()
         try:
@@ -348,9 +327,23 @@ class WeighBuckedApp(ctk.CTk):
                 self.setStatus("Cannot parse Crop number")
                 return
 
+        # Determine tote number
+        if toteNoSel.lower() == "new tote":
+            try:
+                toteNo = SubSupa.GetNewToteNo(crop_no, selStrain)
+            except Exception as e:
+                self.setStatus(f"GetNewToteNo failed: {e}")
+                return
+        else:
+            try:
+                toteNo = int(toteNoSel)
+            except Exception:
+                self.setStatus("Invalid tote number")
+                return
+
         # Check if tag already has weight data
         try:
-            existingWeight = SubSupa.GetOneTag(crop_no, selStrain, metricTag)
+            existingWeight = SubSupa.GetOneTag(crop_no, selStrain, toteNo)
         except Exception as e:
             self.setStatus(f"GetOneTag failed: {e}")
             return
@@ -362,37 +355,42 @@ class WeighBuckedApp(ctk.CTk):
             return
 
         if existingWeight and float(existingWeight) > 0:
-            resp = messagebox.askyesno("Tag Already Weighed", f"Metric tag {metricTag} has weight {existingWeight} g. Replace this weight?")
+            resp = messagebox.askyesno("Tote Already Weighed", f"Tote {toteNo} has weight {existingWeight} g. Replace this weight?")
             if not resp:
                 self.setStatus("Update cancelled")
                 return
             # Update existing weight
             try:
-                SubSupa.UpdateTagWeight(crop_no, selStrain, metricTag, int(currentWeight))
-                self.setStatus(f"Updated metric tag {metricTag} weight to {int(currentWeight)} g")
+                SubSupa.UpdateTagWeight(crop_no, selStrain, toteNo, int(currentWeight))
+                self.setStatus(f"Updated tote {toteNo} weight to {int(currentWeight)} g")
             except Exception as e:
                 self.setStatus(f"UpdateTagWeight failed: {e}")
                 return
         else:
-            # Insert new tag weight
+            # Insert new tote weight
             try:
-                SubSupa.InsertNewTag(crop_no, selStrain, metricTag, toteType, int(currentWeight))
-                self.setStatus(f"Saved metric tag {metricTag} weight: {int(currentWeight)} g")
+                SubSupa.InsertNewTag(crop_no, selStrain, toteNo, toteType, int(currentWeight))
+                self.setStatus(f"Saved tote {toteNo} weight: {int(currentWeight)} g")
             except Exception as e:
                 self.setStatus(f"InsertNewTag failed: {e}")
                 return
         
-        PrintOneLabel(selStrain, toteType, selCrop, "Metric", metricTag, int(currentWeight))
+        PrintOneLabel(selStrain, toteType, selCrop, "Tote", str(toteNo), int(currentWeight))
         
-        # Clear metric tag for next bag
-        self.MetricTagEntry.delete(0, 'end')
+        # Reload totes and set to New Tote for next bag
+        try:
+            totes = SubSupa.LoadTotes(crop_no, selStrain)
+            self.ToteNoCombo.configure(values=totes)
+            self.ToteNoCombo.set("New Tote")
+        except Exception as e:
+            self.setStatus(f"Reload totes failed: {e}")
         
 
     def printLabel(self):
         selCrop = (self.CropCombo.get() or "").strip()
         selStrain = (self.StrainCombo.get() or "").strip()
         toteType = (self.ToteTypeCombo.get() or "").strip()
-        metricTag = (self.MetricTagEntry.get() or "").strip()
+        toteNoSel = (self.ToteNoCombo.get() or "").strip()
         if not selCrop or selCrop.lower().startswith("select"):
             messagebox.showwarning("Select Crop", "Please select a crop")
             return
@@ -402,9 +400,16 @@ class WeighBuckedApp(ctk.CTk):
         if not toteType or toteType.lower().startswith("select"):
             messagebox.showwarning("Select Tote Type", "Please select a tote type")
             return
-        if not metricTag:
-            messagebox.showwarning("Enter Metric Tag", "Please scan or enter a metric tag number")
+        if not toteNoSel or toteNoSel.lower().startswith("select") or toteNoSel.lower() == "new tote":
+            messagebox.showwarning("Select Tote", "Please select an existing tote number to print")
             return
+        
+        try:
+            toteNo = int(toteNoSel)
+        except Exception:
+            self.setStatus("Invalid tote number")
+            return
+            
         token = selCrop.split('-')[0].strip()
         try:
             crop_no = int(token.split()[0])
@@ -417,15 +422,15 @@ class WeighBuckedApp(ctk.CTk):
 
         # retrieve weight (if any)
         try:
-            weight = SubSupa.GetOneTag(crop_no, selStrain, metricTag)
+            weight = SubSupa.GetOneTag(crop_no, selStrain, toteNo)
             weight_val = int(weight) if weight else 0
         except Exception as e:
             self.setStatus(f"GetOneTag failed: {e}")
             return
 
-        PrintOneLabel(selStrain, toteType, selCrop, "Metric", metricTag, weight_val)
+        PrintOneLabel(selStrain, toteType, selCrop, "Tote", str(toteNo), weight_val)
 
-        self.setStatus(f"Sent label to printer for metric tag {metricTag}")
+        self.setStatus(f"Sent label to printer for tote {toteNo}")
 
 if __name__ == '__main__':
     ctk.set_appearance_mode("dark")

@@ -137,13 +137,15 @@ def InsertScaleLog(PlantNo: str, Strain: str, PlantType: str, Weight: int):
 
 """Scalebuck table functions"""
 
-def LoadTotes(CropNo, Strain):
+def LoadTotes(CropNo, Strain, ToteType):
     res = (sb.schema("scale").table("scalebuck").select("ToteNo")
             .eq("CropNo", CropNo)
             .eq("Strain", Strain)
+            .eq("ToteType", ToteType)
             .order("ToteNo", desc=True).execute())
     crops = res.data or []
-    result = ["Select"]
+    print(f"LoadTotes for CropNo {CropNo}, Strain {Strain}, ToteType {ToteType}: found {len(crops)} totes")
+    result = ["Select", "New Tote"]
     for c in crops:
         Toteno = c.get("ToteNo")
         date = c.get("HarvestDate")
@@ -195,11 +197,11 @@ def GetOneTag(TagNo):
     else:
         return None
 
-def InsertNewTag(CropNo, Strain, TagNo, ToteType, Weight):
+def InsertNewTag(CropNo, Strain, ToteNo, ToteType, Weight):
     data = {
         "CropNo": CropNo,
         "Strain": Strain,
-        "TagNo": TagNo,
+        "ToteNo": ToteNo,
         "ToteType": ToteType,
         "Weight": Weight,
         "BuckDate": datetime.now().isoformat()  
@@ -306,15 +308,15 @@ def CheckTag(TagNo):
     )
     return result.data is not None and len(result.data) > 0
 
-def GetOneTag(CropNo, Strain, TagNo):
-    """Get weight data for a specific metric tag if it has been used."""
+def GetOneTag(CropNo, Strain, ToteNo):
+    """Get weight data for a specific tote if it has been used."""
     result = (
         sb.schema("scale")
         .table("scalebuck")
         .select("Weight")
         .eq("CropNo", CropNo)
         .eq("Strain", Strain)
-        .eq("TagNo", TagNo)
+        .eq("ToteNo", ToteNo)
         .execute()
     )
     if result.data and len(result.data) > 0:
@@ -322,12 +324,12 @@ def GetOneTag(CropNo, Strain, TagNo):
     else:
         return None
 
-def InsertNewTag(CropNo, Strain, TagNo, ToteType, Weight):
-    """Insert a new metric tag with tote type."""
+def InsertNewTag(CropNo, Strain, ToteNo, ToteType, Weight):
+    """Insert a new tote with tote type."""
     data = {
         "CropNo": CropNo,
         "Strain": Strain,
-        "TagNo": TagNo,
+        "ToteNo": ToteNo,
         "ToteType": ToteType,
         "Weight": Weight,
         "BuckDate": datetime.now().isoformat()
@@ -335,8 +337,8 @@ def InsertNewTag(CropNo, Strain, TagNo, ToteType, Weight):
     result = sb.schema("scale").table("scalebuck").insert(data).execute()
     return result
 
-def UpdateTagWeight(CropNo, Strain, TagNo, Weight):
-    """Update the weight for an existing metric tag."""
+def UpdateTagWeight(CropNo, Strain, ToteNo, Weight):
+    """Update the weight for an existing tote."""
     upd = {"Weight": Weight}
     res = (
         sb.schema("scale")
@@ -344,7 +346,7 @@ def UpdateTagWeight(CropNo, Strain, TagNo, Weight):
         .update(upd, returning="representation")
         .eq("CropNo", CropNo)
         .eq("Strain", Strain)
-        .eq("ToteNo", TagNo)
+        .eq("ToteNo", ToteNo)
         .execute()
     )
     return res.data
