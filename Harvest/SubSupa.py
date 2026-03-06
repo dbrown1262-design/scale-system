@@ -164,13 +164,16 @@ def GetNewToteNo(CropNo, Strain):
         .limit(1)
         .execute()
     )
-
+#    print(f"GetNewToteNo for CropNo {CropNo}, Strain {Strain}: result={result.data}")
     if result.data and len(result.data) > 0:
         NewToteNo = result.data[0]["ToteNo"] + 1
         return NewToteNo
     else:
         return 1
-    
+
+#result = GetNewToteNo(1, "Test Strain")
+#print("GetNewToteNo result:", result)   
+
 def CheckTag(TagNo):
     result = (
         sb.schema("scale")
@@ -308,7 +311,7 @@ def CheckTag(TagNo):
     )
     return result.data is not None and len(result.data) > 0
 
-def GetOneTag(CropNo, Strain, ToteNo):
+def GetOneTote(CropNo, Strain, ToteType, ToteNo):
     """Get weight data for a specific tote if it has been used."""
     result = (
         sb.schema("scale")
@@ -316,6 +319,7 @@ def GetOneTag(CropNo, Strain, ToteNo):
         .select("Weight")
         .eq("CropNo", CropNo)
         .eq("Strain", Strain)
+        .eq("ToteType", ToteType)
         .eq("ToteNo", ToteNo)
         .execute()
     )

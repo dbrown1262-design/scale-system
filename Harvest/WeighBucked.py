@@ -343,9 +343,9 @@ class WeighBuckedApp(ctk.CTk):
 
         # Check if tag already has weight data
         try:
-            existingWeight = SubSupa.GetOneTag(crop_no, selStrain, toteNo)
+            existingWeight = SubSupa.GetOneTote(crop_no, selStrain, toteType, toteNo)
         except Exception as e:
-            self.setStatus(f"GetOneTag failed: {e}")
+            self.setStatus(f"GetOneTote failed: {e}")
             return
 
         try:
@@ -361,7 +361,7 @@ class WeighBuckedApp(ctk.CTk):
                 return
             # Update existing weight
             try:
-                SubSupa.UpdateTagWeight(crop_no, selStrain, toteNo, int(currentWeight))
+                SubSupa.UpdateTagWeight(crop_no, selStrain, toteType, toteNo, int(currentWeight))
                 self.setStatus(f"Updated tote {toteNo} weight to {int(currentWeight)} g")
             except Exception as e:
                 self.setStatus(f"UpdateTagWeight failed: {e}")
@@ -379,7 +379,7 @@ class WeighBuckedApp(ctk.CTk):
         
         # Reload totes and set to New Tote for next bag
         try:
-            totes = SubSupa.LoadTotes(crop_no, selStrain)
+            totes = SubSupa.LoadTotes(crop_no, selStrain, toteType)
             self.ToteNoCombo.configure(values=totes)
             self.ToteNoCombo.set("New Tote")
         except Exception as e:
