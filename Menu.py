@@ -93,7 +93,7 @@ SCRIPTS = {
         ("Weigh Plants", os.path.join("Harvest", "WeighHarvest.py")),
         ("Weigh Bucked Totes", os.path.join("Harvest", "WeighBucked.py")),
         ("Print Bucked Report", os.path.join("Harvest", "PrintBuckedReport.py")),
-        ("Plant Summary", os.path.join("Harvest", "PlantWeightsSummary.py")),
+        ("Harvest Summary", os.path.join("Harvest", "HarvestSummary.py")),
     ],
     "Packaging": [
         ("Add Package", os.path.join("Packaging", "AddPackage.py")),

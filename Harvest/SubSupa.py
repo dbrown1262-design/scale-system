@@ -10,6 +10,8 @@ supabase = create_client(supabase_url, supabase_key)
 scaleschema = "scale"
 sb = supabase.schema(scaleschema)
 
+GRAMS_TO_LBS = 0.00220462262185
+
 def LoadCrops():
 #    print("LoadCrops called")
     res = (sb.table("scalecrops").select("CropNo, HarvestDate, CropStat")
@@ -135,6 +137,43 @@ def InsertScaleLog(PlantNo: str, Strain: str, PlantType: str, Weight: int):
     result = sb.schema("scale").table("scalelog").insert(data).execute()
     return result
 
+def GetStrainWeights(crop_no: int):
+    """Get total wet and dry weights for each strain in a crop.
+    
+    Returns:
+        List of dicts with keys: strain, wet_lbs, dry_lbs
+    """
+    res = sb.schema("scale").table("scaleplants").select("Strain,WetWeight,DryWeight").eq("CropNo", crop_no).execute()
+    rows = res.data or []
+    
+    # Aggregate by strain
+    agg = {}
+    for r in rows:
+        strain = (r.get("Strain") or "").strip()
+        if not strain:
+            continue
+        wet = float(r.get("WetWeight") or 0.0)
+        dry = float(r.get("DryWeight") or 0.0)
+        if strain not in agg:
+            agg[strain] = {"wet_g": 0.0, "dry_g": 0.0}
+        agg[strain]["wet_g"] += wet
+        agg[strain]["dry_g"] += dry
+    
+    # Build result list sorted by strain
+    result = []
+    for strain in sorted(agg.keys()):
+        vals = agg[strain]
+        result.append({
+            "strain": strain,
+            "wet_lbs": round(vals.get("wet_g", 0.0) * GRAMS_TO_LBS, 1),
+            "dry_lbs": round(vals.get("dry_g", 0.0) * GRAMS_TO_LBS, 1)
+        })
+    
+    return result
+
+#res = GetStrainWeights(21)
+#print(res)
+
 """Scalebuck table functions"""
 
 def LoadTotes(CropNo, Strain, ToteType):
@@ -236,6 +275,45 @@ def LoadToteReport(StartDate, EndDate):
 
 #res = LoadToteReport("2025-12-01", "2025-12-31")
 #print(res)
+
+def GetBuckedSummary(CropNo, Strain):
+    """Get total weight in pounds and count of totes for each tote type (Flower, Smalls, Trim).
+    
+    Returns:
+        List of dicts with keys: ToteType, TotalWeightLbs, ToteCount
+    """
+    res = (sb.schema("scale").table("scalebuck")
+            .select("ToteType, Weight")
+            .eq("CropNo", CropNo)
+            .eq("Strain", Strain)
+            .execute())
+    
+    data = res.data or []
+    
+    # Aggregate by ToteType
+    summary = {}
+    for row in data:
+        tote_type = row.get("ToteType", "Unknown")
+        weight_g = float(row.get("Weight") or 0.0)
+        
+        if tote_type not in summary:
+            summary[tote_type] = {"total_g": 0.0, "count": 0}
+        
+        summary[tote_type]["total_g"] += weight_g
+    
+    # Build result with weights in pounds
+    result = []
+    for tote_type in sorted(summary.keys()):
+        vals = summary[tote_type]
+        result.append({
+            "ToteType": tote_type,
+            "Weight": round(vals["total_g"] * GRAMS_TO_LBS, 1),
+        })
+    
+    return result
+
+sum = GetBuckedSummary(21, "Sherb")
+print(sum)
 
 def GetHarvestDate(CropNo):
     res = sb.schema("scale").table("scalecrops").select("HarvestDate").eq("CropNo", CropNo).execute()
@@ -449,8 +527,8 @@ def CheckTags(crop_no: str, strain: str):
         "missing": missing
     }
 
-(Start, End, Count, Missing) = CheckTags(21, "Sherb").values()
-print(f"Start: {Start}, End: {End}, Count: {Count}, Missing: {Missing}")
+#(Start, End, Count, Missing) = CheckTags(21, "Sherb").values()
+#print(f"Start: {Start}, End: {End}, Count: {Count}, Missing: {Missing}")
 
 
 """ 

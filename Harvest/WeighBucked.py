@@ -121,6 +121,9 @@ class WeighBuckedApp(ctk.CTk):
         self.BtnPrintLabel = ctk.CTkButton(button_row, text="Print Label", font=DEFAULT_FONT, command=self.printLabel)
         self.BtnPrintLabel.pack(side="left", padx=(0,8))
         
+        self.BtnTare = ctk.CTkButton(button_row, text="Tare Scale", font=DEFAULT_FONT, command=self.onTare)
+        self.BtnTare.pack(side="left", padx=(0,8))
+        
         ctk.CTkButton(button_row, text="Close", font=DEFAULT_FONT, command=self.onClose).pack(side="left", padx=(0,8))
 
         # Status
@@ -431,6 +434,15 @@ class WeighBuckedApp(ctk.CTk):
         PrintOneLabel(selStrain, toteType, selCrop, "Tote", str(toteNo), weight_val)
 
         self.setStatus(f"Sent label to printer for tote {toteNo}")
+
+    def onTare(self):
+        """Tare the Ranger scale to zero"""
+        try:
+            SubScale.SetRangerTare()
+            self.setStatus("Scale tared successfully")
+        except Exception as e:
+            self.setStatus(f"Tare failed: {e}")
+            messagebox.showerror("Tare Error", f"Failed to tare scale: {e}")
 
 if __name__ == '__main__':
     ctk.set_appearance_mode("dark")
