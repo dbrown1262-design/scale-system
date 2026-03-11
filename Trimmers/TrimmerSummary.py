@@ -16,6 +16,9 @@ from typing import Optional
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Conversion constant
+GRAMS_TO_LBS = 0.00220462262185
+
 def restart_menu():
     """Start menu.py again in a new process."""
     menu_path = os.path.join(BASE_DIR, "menu.py")
@@ -369,8 +372,9 @@ class SummaryScreen(ctk.CTkFrame):
 
         # Tree for strain summary: Date, Trimmer, Flower, Smalls
         self.StrainTree = ttk.Treeview(strain_tab, style="Large.Treeview", columns=("Date","Trimmer","Flower","Smalls"), show="headings")
+        headings = {"Date": "Date", "Trimmer": "Trimmer", "Flower": "Flower (lbs)", "Smalls": "Smalls (lbs)"}
         for c in ("Date","Trimmer","Flower","Smalls"):
-            self.StrainTree.heading(c, text=c)
+            self.StrainTree.heading(c, text=headings[c])
             if c == "Trimmer":
                 self.StrainTree.column(c, width=200, anchor="w")
             elif c == "Date":
@@ -391,10 +395,12 @@ class SummaryScreen(ctk.CTkFrame):
     def create_treeview(self, master=None, show_headings=True):
         # Extended columns: include Start/End/Hours (Hours computed for Flower rows only)
         cols = ("Date", "Strain", "Flower (g)", "Smalls (g)", "Start Time", "End Time", "Hours")
-        show_param = "headings" if show_headings else "tree"
-        tree = ttk.Treeview(master or self, style="Large.Treeview", columns=cols, show=show_param, height=7)
+        # Always use "headings" to ensure consistent column alignment
+        tree = ttk.Treeview(master or self, style="Large.Treeview", columns=cols, show="headings", height=7)
         for col in cols:
-            tree.heading(col, text=col)
+            # Show empty text for headings if show_headings is False (hides duplicate headers visually)
+            heading_text = col if show_headings else ""
+            tree.heading(col, text=heading_text)
             if col in ("Date", "Strain"):
                 anchor = "w"
             elif col in ("Start Time", "End Time"):
@@ -590,17 +596,17 @@ class SummaryScreen(ctk.CTkFrame):
 
         # Populate tree
         self.StrainTree.delete(*self.StrainTree.get_children())
-        total_flower = 0.0
-        total_smalls = 0.0
+        total_flower_lbs = 0.0
+        total_smalls_lbs = 0.0
         for (date_str, trimmer), vals in sorted(grouped.items()):
-            f = round(vals["flower"], 2)
-            s = round(vals["smalls"], 2)
-            total_flower += f
-            total_smalls += s
-            self.StrainTree.insert("", "end", values=(date_str, trimmer, f if f else "", s if s else ""))
+            f_lbs = round(vals["flower"] * GRAMS_TO_LBS, 1)
+            s_lbs = round(vals["smalls"] * GRAMS_TO_LBS, 1)
+            total_flower_lbs += f_lbs
+            total_smalls_lbs += s_lbs
+            self.StrainTree.insert("", "end", values=(date_str, trimmer, f"{f_lbs:.1f}" if f_lbs else "", f"{s_lbs:.1f}" if s_lbs else ""))
 
         # Insert totals as a final row in the tree with the 'total' tag for styling
-        self.StrainTree.insert("", "end", values=("", "TOTAL", f"{total_flower:.2f}", f"{total_smalls:.2f}"), tags=("total",))
+        self.StrainTree.insert("", "end", values=("", "TOTAL", f"{total_flower_lbs:.1f}", f"{total_smalls_lbs:.1f}"), tags=("total",))
     
     def export_strain_pdf(self):
         """Export the current StrainTree contents to a portrait LETTER PDF and open it."""

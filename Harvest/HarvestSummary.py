@@ -4,11 +4,12 @@ Display a comprehensive harvest summary showing wet/dry weights and bucked break
 by strain for a selected crop.
 """
 import customtkinter as ctk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 from pathlib import Path
 import os
 import sys
 import subprocess
+import csv
 
 import SubSupa
 
@@ -63,6 +64,7 @@ class HarvestSummaryApp(ctk.CTk):
         self.CropCombo.pack(side="left", padx=(0,16))
         
         ctk.CTkButton(header_frame, text="Refresh", width=100, font=DEFAULT_FONT, command=self.loadSummary).pack(side="left", padx=(0,16))
+        ctk.CTkButton(header_frame, text="Export CSV", width=100, font=DEFAULT_FONT, command=self.exportCSV).pack(side="left", padx=(0,16))
         ctk.CTkButton(header_frame, text="Close", width=100, font=DEFAULT_FONT, command=self.onClose).pack(side="left")
 
         # Treeview with summary data
@@ -269,6 +271,47 @@ class HarvestSummaryApp(ctk.CTk):
             self.setStatus(f"Loaded {len(strain_weights)} strains for crop {crop_no}")
         except Exception as e:
             self.setStatus(f"Load failed: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def exportCSV(self):
+        """Export treeview data to CSV file"""
+        # Check if there's data to export
+        if not self.Tree.get_children():
+            self.setStatus("No data to export")
+            return
+        
+        # Get crop name for default filename
+        selCrop = (self.CropCombo.get() or "").strip()
+        default_name = f"HarvestSummary_{selCrop.replace(' ', '_')}.csv" if selCrop else "HarvestSummary.csv"
+        
+        # Open save dialog
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".csv",
+            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+            initialfile=default_name
+        )
+        
+        if not file_path:
+            return
+        
+        try:
+            with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
+                writer = csv.writer(csvfile)
+                
+                # Write header
+                writer.writerow(["Strain", "Wet (lbs)", "Dry (lbs)", "Dry %", 
+                               "Flower (lbs)", "Flower %", "Smalls (lbs)", "Smalls %",
+                               "Trim (lbs)", "Trim %", "Stems (lbs)", "Stems %"])
+                
+                # Write data rows
+                for item in self.Tree.get_children():
+                    values = self.Tree.item(item, 'values')
+                    writer.writerow(values)
+                
+            self.setStatus(f"Exported to {file_path}")
+        except Exception as e:
+            self.setStatus(f"Export failed: {e}")
             import traceback
             traceback.print_exc()
 

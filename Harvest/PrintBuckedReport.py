@@ -69,7 +69,7 @@ class PrintBuckedReportApp(ctk.CTk):
         ctk.set_default_color_theme("dark-blue")
         
         self.title(APP_TITLE)
-        self.geometry("900x650")
+        self.geometry("900x700")
 
         # Configure treeview style for dark theme
         style = ttk.Style()
@@ -78,12 +78,12 @@ class PrintBuckedReportApp(ctk.CTk):
                        background="#2b2b2b",
                        foreground="#dce4ee",
                        fieldbackground="#2b2b2b",
-                       font=("Arial", 14),
+                       font=("Arial", 16),
                        rowheight=28)
         style.configure("Treeview.Heading",
                        background="#1f538d",
                        foreground="#ffffff",
-                       font=("Arial", 14, "bold"))
+                       font=("Arial", 16, "bold"))
         style.map("Treeview",
                  background=[("selected", "#144870")])
 
@@ -113,19 +113,19 @@ class PrintBuckedReportApp(ctk.CTk):
         tree_frame = ctk.CTkFrame(frame, fg_color="transparent")
         tree_frame.grid(row=1, column=0, columnspan=3, sticky="nsew", pady=(8,8))
         
-        cols = ("CropNo", "Strain", "TagNo", "Weight", "BuckDate", "HarvestDate")
+        cols = ("CropNo", "Strain", "ToteNo", "Weight", "BuckDate", "HarvestDate")
         self.Tree = ttk.Treeview(tree_frame, columns=cols, show="headings", height=18)
         
         self.Tree.heading("CropNo", text="Crop No")
         self.Tree.heading("Strain", text="Strain")
-        self.Tree.heading("TagNo", text="Tag No")
+        self.Tree.heading("ToteNo", text="Tote No")
         self.Tree.heading("Weight", text="Weight (g)")
         self.Tree.heading("BuckDate", text="Buck Date")
         self.Tree.heading("HarvestDate", text="Harvest Date")
         
         self.Tree.column("CropNo", width=80, anchor="center")
         self.Tree.column("Strain", width=180, anchor="w")
-        self.Tree.column("TagNo", width=200, anchor="w")
+        self.Tree.column("ToteNo", width=80, anchor="center")
         self.Tree.column("Weight", width=100, anchor="center")
         self.Tree.column("BuckDate", width=120, anchor="center")
         self.Tree.column("HarvestDate", width=120, anchor="center")
@@ -202,7 +202,7 @@ class PrintBuckedReportApp(ctk.CTk):
             for tote in totes:
                 crop_no = tote.get("CropNo", "")
                 strain = tote.get("Strain", "")
-                tag_no = tote.get("TagNo", "")
+                tote_no = tote.get("ToteNo", "")
                 weight = tote.get("Weight", "")
                 buck_date = tote.get("BuckDate", "")
                 
@@ -215,7 +215,7 @@ class PrintBuckedReportApp(ctk.CTk):
                 if harvest_date and len(harvest_date) > 10:
                     harvest_date = harvest_date[:10]
                 
-                self.Tree.insert('', 'end', values=(crop_no, strain, tag_no, weight, buck_date, harvest_date))
+                self.Tree.insert('', 'end', values=(crop_no, strain, tote_no, weight, buck_date, harvest_date))
             
             row_count = len(totes)
             self.set_status(f"Loaded {row_count} totes from {start_date} to {end_date}")
@@ -261,7 +261,7 @@ class PrintBuckedReportApp(ctk.CTk):
             story.append(Spacer(1, 0.2 * inch))
             
             # Build table data
-            header = ["Crop No", "Strain", "Tag No", "Weight (g)", "Buck Date", "Harvest Date"]
+            header = ["Crop No", "Strain", "Tote No", "Weight (g)", "Buck Date", "Harvest Date"]
             table_data = [header]
             
             # Group by crop and strain for easier data entry
@@ -287,7 +287,7 @@ class PrintBuckedReportApp(ctk.CTk):
                 ("ALIGN", (0,1), (0,-1), "CENTER"),  # Crop No center
                 ("ALIGN", (3,1), (3,-1), "CENTER"),  # Weight center
                 ("ALIGN", (4,1), (5,-1), "CENTER"),  # Buck Date and Harvest Date center
-                ("ALIGN", (1,1), (2,-1), "LEFT"),    # Strain and Tag left
+                ("ALIGN", (1,1), (2,-1), "LEFT"),    # Strain and Tote No left
                 ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
                 ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.whitesmoke, colors.white]),
                 ("BOTTOMPADDING", (0,0), (-1,-1), 4),
