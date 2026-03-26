@@ -71,12 +71,13 @@ class HarvestSummaryApp(ctk.CTk):
         tree_frame = ctk.CTkFrame(frame, fg_color="transparent")
         tree_frame.grid(row=1, column=0, columnspan=3, sticky="nsew", pady=(0,8))
         
-        cols = ("Strain", "WetLbs", "DryLbs", "DryPct", "FlowerLbs", "FlowerPct", 
+        cols = ("Strain", "Plants", "WetLbs", "DryLbs", "DryPct", "FlowerLbs", "FlowerPct", 
                 "SmallsLbs", "SmallsPct", "TrimLbs", "TrimPct", "StemsLbs", "StemsPct")
         self.Tree = ttk.Treeview(tree_frame, columns=cols, show="headings", height=20)
         
         # Configure columns
         self.Tree.heading("Strain", text="Strain")
+        self.Tree.heading("Plants", text="Plants")
         self.Tree.heading("WetLbs", text="Wet ")
         self.Tree.heading("DryLbs", text="Dry ")
         self.Tree.heading("DryPct", text="%")
@@ -90,6 +91,7 @@ class HarvestSummaryApp(ctk.CTk):
         self.Tree.heading("StemsPct", text=" %")
         
         self.Tree.column("Strain", width=150, anchor="w")
+        self.Tree.column("Plants", width=70, anchor="e")
         self.Tree.column("WetLbs", width=90, anchor="e")
         self.Tree.column("DryLbs", width=90, anchor="e")
         self.Tree.column("DryPct", width=80, anchor="e")
@@ -175,6 +177,7 @@ class HarvestSummaryApp(ctk.CTk):
                 return
             
             # Initialize totals
+            total_plants = 0
             total_wet = 0
             total_dry = 0
             total_flower = 0
@@ -185,6 +188,7 @@ class HarvestSummaryApp(ctk.CTk):
             # Process each strain
             for strain_data in strain_weights:
                 strain = strain_data.get("strain", "")
+                plant_count = strain_data.get("plant_count", 0)
                 wet_lbs = strain_data.get("wet_lbs", 0)
                 dry_lbs = strain_data.get("dry_lbs", 0)
                 
@@ -220,6 +224,7 @@ class HarvestSummaryApp(ctk.CTk):
                 stems_pct = round((stems_lbs / dry_lbs * 100), 1) if dry_lbs > 0 else 0
                 
                 # Add to totals
+                total_plants += plant_count
                 total_wet += wet_lbs
                 total_dry += dry_lbs
                 total_flower += flower_lbs
@@ -230,6 +235,7 @@ class HarvestSummaryApp(ctk.CTk):
                 # Insert row
                 self.Tree.insert('', 'end', values=(
                     strain,
+                    plant_count,
                     wet_lbs,
                     dry_lbs,
                     f"{dry_pct}%",
@@ -252,6 +258,7 @@ class HarvestSummaryApp(ctk.CTk):
             
             self.Tree.insert('', 'end', values=(
                 "TOTAL",
+                total_plants,
                 round(total_wet, 1),
                 round(total_dry, 1),
                 f"{total_dry_pct}%",
@@ -300,7 +307,7 @@ class HarvestSummaryApp(ctk.CTk):
                 writer = csv.writer(csvfile)
                 
                 # Write header
-                writer.writerow(["Strain", "Wet (lbs)", "Dry (lbs)", "Dry %", 
+                writer.writerow(["Strain", "Plants", "Wet (lbs)", "Dry (lbs)", "Dry %", 
                                "Flower (lbs)", "Flower %", "Smalls (lbs)", "Smalls %",
                                "Trim (lbs)", "Trim %", "Stems (lbs)", "Stems %"])
                 

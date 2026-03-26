@@ -102,6 +102,7 @@ SCRIPTS = {
         ("Enter Daily Trim", os.path.join("Trimmers", "TrimmerDailyWeigh.py")),
         ("Weigh Trim Bags", os.path.join("Trimmers", "WeighTrim.py")),
         ("Weekly Trimmer Summary", os.path.join("Trimmers", "TrimmerSummary.py")),
+        ("Trimmer Strain Summary", os.path.join("Trimmers", "TrimmerStrainSummary.py")),
     ],
     "Processing": [
         ("Enter Hash Run", os.path.join("Processing", "EnterHashRun.py")),

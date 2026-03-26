@@ -113,7 +113,7 @@ def GetTrimSummary(trimmer_name=None, start_date=None, end_date=None):
     q = (
         sb.schema("scale")
         .table("dailytrim")
-        .select("TrimmerName,TrimDate,CropNo,Strain,FlowerGrams,SmallsGrams,AmPm, StartTime,EndTime")
+        .select("TrimmerName,TrimDate,CropNo,Strain,FlowerGrams,SmallsGrams,AmPm,StartTime,EndTime")
     )
     if trimmer_name:
         q = q.eq("TrimmerName", trimmer_name)
@@ -127,7 +127,7 @@ def LoadFlowerTrimRecords(crop_no: int, strain: str):
     q = (
         sb.schema("scale")
         .table("dailytrim")
-        .select("TrimmerName,TrimDate,CropNo,Strain,FlowerGrams,SmallsGrams,BatchId")
+        .select("TrimmerName,TrimDate,CropNo,Strain,FlowerGrams,SmallsGrams,BatchId,AmPm,StartTime,EndTime")
         .eq("CropNo", crop_no)
         .eq("Strain", strain)
         .order("TrimDate")

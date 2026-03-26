@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from datetime import time as dt_time
 import subprocess
 from tkcalendar import DateEntry
-from SubSupa import GetTrimSummary, GetTrimmerList, GetRatesMap, LoadCrops, LoadStrains
+from SubSupa import GetTrimSummary, GetTrimmerList, GetRatesMap
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import LETTER, landscape
 from reportlab.lib.styles import getSampleStyleSheet
@@ -206,10 +206,7 @@ class SummaryScreen(ctk.CTkFrame):
         title = ctk.CTkLabel(self, text="Trimmer Summary", font=("Arial", 22, "bold"))
         title.pack(pady=(10, 6))
 
-        # Notebook with two tabs: Weekly Summary and Trimmer Strain Summary
-        nb = ttk.Notebook(self)
-        nb.pack(fill="both", expand=True, padx=8, pady=8)
-        # Make the notebook tabs stand out: larger bold font, padding, and selected tab background
+        # Configure treeview style for dark theme
         style = ttk.Style()
         try:
             try:
@@ -217,25 +214,6 @@ class SummaryScreen(ctk.CTkFrame):
                 style.theme_use("clam")
             except Exception:
                 pass
-            style.configure("TNotebook", background="#2b2b2b")
-            style.configure(
-                "TNotebook.Tab",
-                font=("Arial", 15, "bold"),
-                padding=(6, 4),
-                background="#1f538d",
-                foreground="#ffffff",
-                relief="raised",
-                borderwidth=2,
-            )
-            # When selected, make the tab stand out
-            style.map(
-                "TNotebook.Tab",
-                background=[("selected", "#144870")],
-                foreground=[("selected", "#ffffff")],
-                font=[("selected", ("Arial", 15, "bold"))],
-                padding=[("selected", (12, 8))],
-                relief=[("selected", "raised")],
-            )
             # Create a larger Treeview style for row detail readability with dark theme
             style.configure("Large.Treeview", 
                            background="#2b2b2b",
@@ -252,16 +230,8 @@ class SummaryScreen(ctk.CTkFrame):
         except Exception:
             pass
 
-        # Weekly summary tab (contains the existing UI)
-        weekly_tab = ctk.CTkFrame(nb)
-        nb.add(weekly_tab, text="Weekly Summary")
-
-        # Strain summary tab (new)
-        strain_tab = ctk.CTkFrame(nb)
-        nb.add(strain_tab, text="Trimmer Strain Summary")
-
-        # --- Weekly tab contents ---
-        filter_row = ctk.CTkFrame(weekly_tab)
+        # Filter row
+        filter_row = ctk.CTkFrame(self)
         filter_row.pack(fill="x", padx=10, pady=(0, 8))
 
         # Trimmer selection
@@ -299,13 +269,13 @@ class SummaryScreen(ctk.CTkFrame):
         ctk.CTkButton(filter_row, text="Close", width=100, command=lambda: self.master.destroy()).pack(side="left", padx=4)
 
         # Per-day summary container (one box per day in the selected week)
-        self.days_frame = ctk.CTkFrame(weekly_tab)
+        self.days_frame = ctk.CTkFrame(self)
         self.days_frame.pack(fill="both", expand=True, padx=10, pady=(6, 0))
         # days_info will hold tuples (date_obj, treeview)
         self.days_info = []
 
         # --- Grand Total section ---
-        grand_total_frame = ctk.CTkFrame(weekly_tab)
+        grand_total_frame = ctk.CTkFrame(self)
         grand_total_frame.pack(fill="x", padx=10, pady=(10, 0))
         
         ctk.CTkLabel(grand_total_frame, text="Week Grand Total:", font=("Arial", 16, "bold")).pack(side="left", padx=(10, 20))
@@ -317,80 +287,15 @@ class SummaryScreen(ctk.CTkFrame):
         self.grand_total_smalls_label.pack(side="left", padx=(0, 10))
 
         # --- Pay sections ---
-        pay_label = ctk.CTkLabel(weekly_tab, text="Pay Summary", font=("Arial", 18, "bold"))
+        pay_label = ctk.CTkLabel(self, text="Pay Summary", font=("Arial", 18, "bold"))
         pay_label.pack(pady=(16, 0))
 
         # Pay — Flower (Bigs)
-        pay_bigs_label = ctk.CTkLabel(weekly_tab, text="Pay — Flower (Bigs)", font=("Arial", 16, "bold"))
+        pay_bigs_label = ctk.CTkLabel(self, text="Pay — Flower (Bigs)", font=("Arial", 16, "bold"))
         pay_bigs_label.pack(pady=(8, 0))
-        # Create the pay tree as a child of the weekly tab so it does not appear in the Strain tab
-        self.pay_bigs_tree = self.create_pay_treeview(master=weekly_tab)
+        # Create the pay tree
+        self.pay_bigs_tree = self.create_pay_treeview(master=self)
         self.pay_bigs_tree.pack(padx=10, pady=5, fill="x")
-
-        # --- Strain tab contents ---
-        strain_filter = ctk.CTkFrame(strain_tab)
-        strain_filter.pack(fill="x", padx=10, pady=(6, 8))
-
-        # Crop selector
-        ctk.CTkLabel(strain_filter, text="Crop:", font=("Arial", 14)).pack(side="left", padx=(0,6))
-        crops = LoadCrops() or ["Select"]
-        self.CropCombo = ctk.CTkComboBox(strain_filter, values=crops, width=180, font=("Arial",13), command=self.on_strain_crop_changed)
-        self.CropCombo.set("Select")
-        self.CropCombo.pack(side="left", padx=(0,10))
-
-        # Strain selector
-        ctk.CTkLabel(strain_filter, text="Strain:", font=("Arial", 14)).pack(side="left", padx=(0,6))
-        self.StrainCombo = ctk.CTkComboBox(strain_filter, values=["Select"], width=220, font=("Arial",13))
-        self.StrainCombo.set("Select")
-        self.StrainCombo.pack(side="left", padx=(0,10))
-
-        # Start/End date for range
-        ctk.CTkLabel(strain_filter, text="Start:", font=("Arial", 14)).pack(side="left")
-        self.StrainStart = DateEntry(strain_filter, width=12, font=("Arial",13), date_pattern="yyyy-mm-dd",
-                                      background='#343638', foreground='#DCE4EE', 
-                                      fieldbackground='#343638', borderwidth=2)
-        self.StrainStart.set_date(datetime.now().date())
-        self.StrainStart.pack(side="left", padx=(5,6))
-        try:
-            self.StrainStart.entry.configure(bg='#343638', fg='#DCE4EE', insertbackground='#DCE4EE')
-        except Exception:
-            pass
-
-        ctk.CTkLabel(strain_filter, text="End:", font=("Arial", 14)).pack(side="left")
-        self.StrainEnd = DateEntry(strain_filter, width=12, font=("Arial",13), date_pattern="yyyy-mm-dd",
-                                    background='#343638', foreground='#DCE4EE', 
-                                    fieldbackground='#343638', borderwidth=2)
-        self.StrainEnd.set_date(datetime.now().date())
-        self.StrainEnd.pack(side="left", padx=(5,6))
-        try:
-            self.StrainEnd.entry.configure(bg='#343638', fg='#DCE4EE', insertbackground='#DCE4EE')
-        except Exception:
-            pass
-
-        ctk.CTkButton(strain_filter, text="Load Strain Summary", command=self.load_strain_summary, width=170).pack(side="left", padx=6)
-        ctk.CTkButton(strain_filter, text="Export Strain PDF", command=self.export_strain_pdf, width=150).pack(side="left", padx=6)
-
-        # Tree for strain summary: Date, Trimmer, Flower, Smalls
-        self.StrainTree = ttk.Treeview(strain_tab, style="Large.Treeview", columns=("Date","Trimmer","Flower","Smalls"), show="headings")
-        headings = {"Date": "Date", "Trimmer": "Trimmer", "Flower": "Flower (lbs)", "Smalls": "Smalls (lbs)"}
-        for c in ("Date","Trimmer","Flower","Smalls"):
-            self.StrainTree.heading(c, text=headings[c])
-            if c == "Trimmer":
-                self.StrainTree.column(c, width=200, anchor="w")
-            elif c == "Date":
-                self.StrainTree.column(c, width=140, anchor="w")
-            else:
-                self.StrainTree.column(c, width=120, anchor="e")
-        self.StrainTree.pack(fill="both", expand=True, padx=10, pady=8)
-        # style tags for strain tree (so the TOTAL row is highlighted) - dark theme
-        try:
-            self.StrainTree.tag_configure("odd", background="#1f1f1f", foreground="#dce4ee")
-            self.StrainTree.tag_configure("even", background="#2b2b2b", foreground="#dce4ee")
-            self.StrainTree.tag_configure("total", background="#1f538d", foreground="#ffffff", font=("Arial", 14, "bold"))
-        except Exception:
-            pass
-
-    # Totals will be shown as a final row inside the tree (inserted after loading)
 
     def create_treeview(self, master=None, show_headings=True):
         # Extended columns: include Start/End/Hours (Hours computed for Flower rows only)
@@ -533,143 +438,7 @@ class SummaryScreen(ctk.CTkFrame):
             self.trimmer_combo.configure(values=["All"])
             self.trimmer_combo.set("All")
     
-    def on_strain_crop_changed(self, val):
-        """Called when the Crop combo in the Strain tab changes. Populate the Strain list."""
-        v = (val or "").strip()
-        if not v or v == "Select":
-            self.StrainCombo.configure(values=["Select"])
-            self.StrainCombo.set("Select")
-            return
-        try:
-            crop_no = int(v.split("-")[0].strip())
-        except Exception:
-            self.StrainCombo.configure(values=["Select"])
-            self.StrainCombo.set("Select")
-            return
-        try:
-            strains = LoadStrains(crop_no) or ["Select"]
-            self.StrainCombo.configure(values=strains)
-            self.StrainCombo.set("Select")
-        except Exception:
-            self.StrainCombo.configure(values=["Select"])
-            self.StrainCombo.set("Select")
 
-    def load_strain_summary(self):
-        """Load trimmer rows for the selected CropNo+Strain between the Start and End dates and populate the StrainTree."""
-        crop_display = (self.CropCombo.get() or "").strip()
-        strain = (self.StrainCombo.get() or "").strip()
-        if not crop_display or crop_display == "Select":
-            # nothing selected
-            return
-        try:
-            crop_no = int(crop_display.split("-")[0].strip())
-        except Exception:
-            return
-
-        if not strain or strain == "Select":
-            # require specific strain for this report
-            return
-
-        start = self.StrainStart.get_date()
-        end = self.StrainEnd.get_date()
-        if start > end:
-            # swap
-            start, end = end, start
-
-        data = GetTrimSummary(start_date=start, end_date=end)
-
-        # Filter for crop and strain
-        filtered = [r for r in data if int(r.get("CropNo") or 0) == crop_no and (r.get("Strain") or "").strip() == strain]
-
-        # Group by (date, trimmer)
-        grouped = {}
-        for r in filtered:
-            td = (r.get("TrimDate") or "").split("T", 1)[0]
-            tr = (r.get("TrimmerName") or "").strip()
-            key = (td, tr)
-            if key not in grouped:
-                grouped[key] = {"flower": 0.0, "smalls": 0.0}
-            flower_grams = float(r.get("FlowerGrams") or 0.0)
-            smalls_grams = float(r.get("SmallsGrams") or 0.0)
-            grouped[key]["flower"] += flower_grams
-            grouped[key]["smalls"] += smalls_grams
-
-        # Populate tree
-        self.StrainTree.delete(*self.StrainTree.get_children())
-        total_flower_lbs = 0.0
-        total_smalls_lbs = 0.0
-        for (date_str, trimmer), vals in sorted(grouped.items()):
-            f_lbs = round(vals["flower"] * GRAMS_TO_LBS, 1)
-            s_lbs = round(vals["smalls"] * GRAMS_TO_LBS, 1)
-            total_flower_lbs += f_lbs
-            total_smalls_lbs += s_lbs
-            self.StrainTree.insert("", "end", values=(date_str, trimmer, f"{f_lbs:.1f}" if f_lbs else "", f"{s_lbs:.1f}" if s_lbs else ""))
-
-        # Insert totals as a final row in the tree with the 'total' tag for styling
-        self.StrainTree.insert("", "end", values=("", "TOTAL", f"{total_flower_lbs:.1f}", f"{total_smalls_lbs:.1f}"), tags=("total",))
-    
-    def export_strain_pdf(self):
-        """Export the current StrainTree contents to a portrait LETTER PDF and open it."""
-        # Helper to pull rows from the strain tree
-        def tv_to_table(tree, header):
-            rows = [header]
-            for iid in tree.get_children():
-                vals = tree.item(iid, "values")
-                rows.append(list(vals))
-            return rows
-
-        # Build document
-        tmpdir = tempfile.gettempdir()
-        pdf_path = os.path.join(tmpdir, "trimmer_strain_summary.pdf")
-        doc = SimpleDocTemplate(pdf_path, pagesize=LETTER, leftMargin=24, rightMargin=24, topMargin=24, bottomMargin=24)
-        styles = getSampleStyleSheet()
-        story = []
-
-        # Title and context
-        story.append(Paragraph("<b>Trimmer Strain Summary</b>", styles["Title"]))
-        # Add crop/strain/date range info if available
-        crop_display = (self.CropCombo.get() or "").strip()
-        strain = (self.StrainCombo.get() or "").strip()
-        start = self.StrainStart.get_date() if getattr(self, 'StrainStart', None) else None
-        end = self.StrainEnd.get_date() if getattr(self, 'StrainEnd', None) else None
-        info_lines = []
-        if crop_display:
-            info_lines.append(f"Crop: {crop_display}")
-        if strain:
-            info_lines.append(f"Strain: {strain}")
-        if start and end:
-            info_lines.append(f"Range: {start.isoformat()} To {end.isoformat()}")
-        if info_lines:
-            story.append(Paragraph(" \u2022 ".join(info_lines), styles["Normal"]))
-            story.append(Spacer(1, 0.1 * inch))
-
-        # Table from the tree
-        header = ["Date", "Trimmer", "Flower (g)", "Smalls (g)"]
-        data = tv_to_table(self.StrainTree, header)
-        if len(data) <= 1:
-            # nothing to export
-            return
-
-        tbl = Table(data, hAlign="CENTER")
-        tbl.setStyle(TableStyle([
-            ("BACKGROUND", (0,0), (-1,0), colors.lightgrey),
-            ("TEXTCOLOR", (0,0), (-1,0), colors.black),
-            ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
-            ("FONTSIZE", (0,0), (-1,0), 12),
-            ("FONTSIZE", (0,1), (-1,-1), 12),
-            ("ALIGN", (0,0), (-1,0), "CENTER"),
-            ("ALIGN", (0,1), (-1,-1), "LEFT"),
-            ("GRID", (0,0), (-1,-1), 0.25, colors.grey),
-            ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.whitesmoke, colors.white]),
-            ("BOTTOMPADDING", (0,0), (-1,-1), 4),
-            ("TOPPADDING", (0,0), (-1,-1), 4),
-        ]))
-        story.append(tbl)
-        story.append(Spacer(1, 0.15 * inch))
-
-        doc.build(story)
-        self._open_file(pdf_path)
-        
     def insert_day_summary(self, tree, rows):
         """Populate a per-day tree. Display each row with FlowerGrams and SmallsGrams."""
         # Clear existing rows

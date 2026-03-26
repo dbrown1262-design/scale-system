@@ -141,13 +141,16 @@ The strain summary table displays:
 - **Trimmer:** Name of the trimmer who worked on this strain
 - **Flower:** Grams of flower trimmed
 - **Smalls:** Grams of smalls trimmed
+- **Hours:** Total hours worked by this trimmer on this strain for this date
+- **Grams/Hour:** Flower productivity rate (Flower grams ÷ Hours worked)
 
-A **TOTAL** row at the bottom shows cumulative weights across all trimmers and dates for the selected strain.
+A **TOTAL** row at the bottom shows cumulative weights and hours across all trimmers and dates for the selected strain.
 
 **Use this view to:**
 - Compare trimmer performance on the same strain
 - Track total production for a specific strain over time
 - Identify which trimmers are most efficient with particular strains
+- Analyze productivity rates (grams per hour) across different trimmers
 - Support crop-specific reporting and analysis
 
 #### 4.4.3 Export Strain Summary PDF
@@ -195,7 +198,7 @@ A **TOTAL** row at the bottom shows cumulative weights across all trimmers and d
 
 **Problem:** Pay rates show as $0.00 or incorrect amounts
 
-- **Solution:** 
+- **Solution:**
   1. Verify trimrates table has entries for all strains being trimmed.
   2. Contact administrator to update missing or incorrect rates.
   3. Use the Edit Trim Rates application (Admin menu) to correct rate data.

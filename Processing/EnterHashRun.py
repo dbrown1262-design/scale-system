@@ -8,15 +8,6 @@ import os
 import sys
 import subprocess
 
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
-import Common.SubScale as SubScale
-
-# Connect to hardware after imports
-SubScale.ConnectScales()
-
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,7 +18,6 @@ def restart_menu():
 
 APP_TITLE = "Enter Hash Run"
 DEFAULT_FONT = ("Arial", 15)
-POLL_INTERVAL_MS = 500
 
 
 class EnterHashRunApp(ctk.CTk):
@@ -89,7 +79,7 @@ class EnterHashRunApp(ctk.CTk):
         self.WeighTypeEntry.grid(row=2, column=1, sticky="w", pady=8)
 
         ctk.CTkLabel(frame, text="Weight (g):", font=DEFAULT_FONT).grid(row=2, column=2, sticky="e", padx=(6,6), pady=8)
-        # WeightEntry will be updated by scale polling
+        # WeightEntry for manual entry
         self.WeightEntry = ctk.CTkEntry(frame, width=200, font=DEFAULT_FONT)
         self.WeightEntry.grid(row=2, column=3, sticky="w", pady=8)
 
@@ -141,15 +131,8 @@ class EnterHashRunApp(ctk.CTk):
         frame.rowconfigure(3, weight=1)
         frame.columnconfigure(3, weight=1)
 
-        # polling state
-        self._PollId = None
-        self._PrevWeight = None
-
         # initial load
         self.LoadBatches()
-
-        # start polling weight
-        self.StartPolling()
 
         # ensure stop on close
         try:
@@ -163,44 +146,7 @@ class EnterHashRunApp(ctk.CTk):
         except Exception:
             pass
 
-    # --- Polling weight ---
-    def StartPolling(self):
-        self.PollWeight()
-
-    def PollWeight(self):
-        wstr = '0'
-        try:
-            w = SubScale.GetScoutWeight()
-            wstr = str(w)
-        except Exception as e:
-            wstr = 'Error'
-            print(f"Scale read failed: {e}")
-
-        if wstr != self._PrevWeight:
-            self._PrevWeight = wstr
-            try:
-                self.WeightEntry.configure(state='normal')
-                self.WeightEntry.delete(0, 'end')
-                self.WeightEntry.insert(0, wstr)
-                self.WeightEntry.configure(state='disabled')
-            except Exception:
-                pass
-
-        try:
-            self._PollId = self.after(POLL_INTERVAL_MS, lambda: self.PollWeight())
-        except Exception:
-            self._PollId = None
-
-    def StopPolling(self):
-        try:
-            if self._PollId:
-                self.after_cancel(self._PollId)
-                self._PollId = None
-        except Exception:
-            pass
-
     def OnClose(self):
-        self.StopPolling()
         try:
             self.destroy()
         except Exception:

@@ -141,7 +141,7 @@ def GetStrainWeights(crop_no: int):
     """Get total wet and dry weights for each strain in a crop.
     
     Returns:
-        List of dicts with keys: strain, wet_lbs, dry_lbs
+        List of dicts with keys: strain, wet_lbs, dry_lbs, plant_count
     """
     res = sb.schema("scale").table("scaleplants").select("Strain,WetWeight,DryWeight").eq("CropNo", crop_no).execute()
     rows = res.data or []
@@ -155,9 +155,12 @@ def GetStrainWeights(crop_no: int):
         wet = float(r.get("WetWeight") or 0.0)
         dry = float(r.get("DryWeight") or 0.0)
         if strain not in agg:
-            agg[strain] = {"wet_g": 0.0, "dry_g": 0.0}
+            agg[strain] = {"wet_g": 0.0, "dry_g": 0.0, "plant_count": 0}
         agg[strain]["wet_g"] += wet
         agg[strain]["dry_g"] += dry
+        # Count plants with dry weight > 0
+        if dry > 0:
+            agg[strain]["plant_count"] += 1
     
     # Build result list sorted by strain
     result = []
@@ -166,7 +169,8 @@ def GetStrainWeights(crop_no: int):
         result.append({
             "strain": strain,
             "wet_lbs": round(vals.get("wet_g", 0.0) * GRAMS_TO_LBS, 1),
-            "dry_lbs": round(vals.get("dry_g", 0.0) * GRAMS_TO_LBS, 1)
+            "dry_lbs": round(vals.get("dry_g", 0.0) * GRAMS_TO_LBS, 1),
+            "plant_count": vals.get("plant_count", 0)
         })
     
     return result
