@@ -90,45 +90,40 @@ class PrintBuckedReportApp(ctk.CTk):
         frame = ctk.CTkFrame(self)
         frame.pack(fill="both", expand=True, padx=12, pady=12)
 
-        # Date range inputs
-        date_frame = ctk.CTkFrame(frame, fg_color="transparent")
-        date_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=(0,8))
+        # Filter inputs
+        filter_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        filter_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=(0,8))
         
-        ctk.CTkLabel(date_frame, text="Start Date:", font=DEFAULT_FONT).pack(side="left", padx=(6,6))
-        self.StartDateEntry = ctk.CTkEntry(date_frame, width=140, font=DEFAULT_FONT)
-        self.StartDateEntry.pack(side="left", padx=(0,16))
+        ctk.CTkLabel(filter_frame, text="Crop No:", font=DEFAULT_FONT).pack(side="left", padx=(6,6))
+        self.CropNoCombo = ctk.CTkComboBox(filter_frame, values=["All"], state="readonly", width=160, font=DEFAULT_FONT)
+        self.CropNoCombo.pack(side="left", padx=(0,16))
+        self.CropNoCombo.set("All")
         
-        ctk.CTkLabel(date_frame, text="End Date:", font=DEFAULT_FONT).pack(side="left", padx=(6,6))
-        self.EndDateEntry = ctk.CTkEntry(date_frame, width=140, font=DEFAULT_FONT)
-        self.EndDateEntry.pack(side="left", padx=(0,16))
+        ctk.CTkButton(filter_frame, text="Refresh", width=100, font=DEFAULT_FONT, command=self.load_data).pack(side="left", padx=(0,8))
         
-        ctk.CTkButton(date_frame, text="Refresh", width=100, font=DEFAULT_FONT, command=self.load_data).pack(side="left", padx=(0,8))
-        
-        # Set default dates to today
-        today = datetime.now().strftime('%Y-%m-%d')
-        self.StartDateEntry.insert(0, today)
-        self.EndDateEntry.insert(0, today)
+        # Load crop list
+        self.load_crops()
 
         # Treeview with tote data
         tree_frame = ctk.CTkFrame(frame, fg_color="transparent")
         tree_frame.grid(row=1, column=0, columnspan=3, sticky="nsew", pady=(8,8))
         
-        cols = ("CropNo", "Strain", "ToteNo", "Weight", "BuckDate", "HarvestDate")
+        cols = ("CropNo", "Strain", "ToteType", "ToteNo", "Weight", "BuckDate")
         self.Tree = ttk.Treeview(tree_frame, columns=cols, show="headings", height=18)
         
         self.Tree.heading("CropNo", text="Crop No")
         self.Tree.heading("Strain", text="Strain")
+        self.Tree.heading("ToteType", text="Tote Type")
         self.Tree.heading("ToteNo", text="Tote No")
         self.Tree.heading("Weight", text="Weight (g)")
         self.Tree.heading("BuckDate", text="Buck Date")
-        self.Tree.heading("HarvestDate", text="Harvest Date")
         
         self.Tree.column("CropNo", width=80, anchor="center")
-        self.Tree.column("Strain", width=180, anchor="w")
+        self.Tree.column("Strain", width=150, anchor="w")
+        self.Tree.column("ToteType", width=90, anchor="center")
         self.Tree.column("ToteNo", width=80, anchor="center")
         self.Tree.column("Weight", width=100, anchor="center")
         self.Tree.column("BuckDate", width=120, anchor="center")
-        self.Tree.column("HarvestDate", width=120, anchor="center")
         
         # Add scrollbar
         scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=self.Tree.yview)
@@ -154,9 +149,6 @@ class PrintBuckedReportApp(ctk.CTk):
         frame.rowconfigure(1, weight=1)
         frame.columnconfigure(0, weight=1)
 
-        # Load initial data
-        self.load_data()
-
         try:
             self.protocol("WM_DELETE_WINDOW", self.on_close)
         except Exception:
@@ -168,27 +160,27 @@ class PrintBuckedReportApp(ctk.CTk):
         except Exception:
             pass
 
-    def validate_date(self, date_str: str) -> bool:
-        """Validate date format YYYY-MM-DD"""
+    def load_crops(self):
+        """Load crop numbers into combo box"""
         try:
-            datetime.strptime(date_str, '%Y-%m-%d')
-            return True
-        except ValueError:
-            return False
+            crops = SubSupa.LoadCrops() or []
+            crop_values = ["All"] + crops
+            self.CropNoCombo.configure(values=crop_values)
+        except Exception as e:
+            self.set_status(f"Load crops failed: {e}")
 
     def load_data(self):
-        """Load tote data based on date range"""
-        start_date = self.StartDateEntry.get().strip()
-        end_date = self.EndDateEntry.get().strip()
+        """Load tote data based on CropNo"""
+        crop_filter = self.CropNoCombo.get().strip()
         
-        # Validate dates
-        if not self.validate_date(start_date):
-            messagebox.showwarning("Invalid Date", "Start Date must be in YYYY-MM-DD format")
-            return
-        
-        if not self.validate_date(end_date):
-            messagebox.showwarning("Invalid Date", "End Date must be in YYYY-MM-DD format")
-            return
+        # Convert crop to number or None
+        crop_no = None
+        if crop_filter and crop_filter != "All":
+            try:
+                # Extract crop number from format "123" or "123 - 2024-01-01"
+                crop_no = int(crop_filter.split()[0])
+            except (ValueError, IndexError):
+                pass
         
         try:
             # Clear treeview
@@ -196,12 +188,13 @@ class PrintBuckedReportApp(ctk.CTk):
                 self.Tree.delete(iid)
             
             # Load data from database
-            totes = SubSupa.LoadToteReport(start_date, end_date)
+            totes = SubSupa.LoadToteReport(crop_no)
             
             # Populate treeview
             for tote in totes:
                 crop_no = tote.get("CropNo", "")
                 strain = tote.get("Strain", "")
+                tote_type = tote.get("ToteType", "")
                 tote_no = tote.get("ToteNo", "")
                 weight = tote.get("Weight", "")
                 buck_date = tote.get("BuckDate", "")
@@ -210,15 +203,11 @@ class PrintBuckedReportApp(ctk.CTk):
                 if buck_date and len(buck_date) > 10:
                     buck_date = buck_date[:10]
                 
-                # Get harvest date
-                harvest_date = SubSupa.GetHarvestDate(crop_no) if crop_no else ""
-                if harvest_date and len(harvest_date) > 10:
-                    harvest_date = harvest_date[:10]
-                
-                self.Tree.insert('', 'end', values=(crop_no, strain, tote_no, weight, buck_date, harvest_date))
+                self.Tree.insert('', 'end', values=(crop_no, strain, tote_type, tote_no, weight, buck_date))
             
             row_count = len(totes)
-            self.set_status(f"Loaded {row_count} totes from {start_date} to {end_date}")
+            filter_desc = f"Crop: {crop_filter}"
+            self.set_status(f"Loaded {row_count} totes ({filter_desc})")
         except Exception as e:
             self.set_status(f"Load failed: {e}")
             messagebox.showerror("Load Error", f"Failed to load data: {e}")
@@ -236,9 +225,8 @@ class PrintBuckedReportApp(ctk.CTk):
                 messagebox.showinfo("No Data", "No totes to print")
                 return
             
-            # Get date range for header
-            start_date = self.StartDateEntry.get().strip()
-            end_date = self.EndDateEntry.get().strip()
+            # Get filter info for header
+            crop_filter = self.CropNoCombo.get().strip()
             
             # Create PDF
             tmpdir = tempfile.gettempdir()
@@ -254,14 +242,14 @@ class PrintBuckedReportApp(ctk.CTk):
             story.append(Paragraph("Bucked Totes Report - Metrc Entry", styles["Title"]))
             story.append(Spacer(1, 0.1 * inch))
             
-            # Date range and report info
-            report_info = f"<b>Date Range:</b> {start_date} to {end_date} | "
+            # Filter and report info
+            report_info = f"<b>Filter:</b> Crop: {crop_filter} | "
             report_info += f"<b>Generated:</b> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
             story.append(Paragraph(report_info, styles["Normal"]))
             story.append(Spacer(1, 0.2 * inch))
             
             # Build table data
-            header = ["Crop No", "Strain", "Tote No", "Weight (g)", "Buck Date", "Harvest Date"]
+            header = ["Crop No", "Strain", "Tote Type", "Tote No", "Weight (g)", "Buck Date"]
             table_data = [header]
             
             # Group by crop and strain for easier data entry
@@ -285,9 +273,11 @@ class PrintBuckedReportApp(ctk.CTk):
                 ("FONTSIZE", (0,1), (-1,-1), 9),
                 ("ALIGN", (0,0), (-1,0), "CENTER"),
                 ("ALIGN", (0,1), (0,-1), "CENTER"),  # Crop No center
-                ("ALIGN", (3,1), (3,-1), "CENTER"),  # Weight center
-                ("ALIGN", (4,1), (5,-1), "CENTER"),  # Buck Date and Harvest Date center
-                ("ALIGN", (1,1), (2,-1), "LEFT"),    # Strain and Tote No left
+                ("ALIGN", (2,1), (2,-1), "CENTER"),  # Tote Type center
+                ("ALIGN", (3,1), (3,-1), "CENTER"),  # Tote No center
+                ("ALIGN", (4,1), (4,-1), "CENTER"),  # Weight center
+                ("ALIGN", (5,1), (5,-1), "CENTER"),  # Buck Date center
+                ("ALIGN", (1,1), (1,-1), "LEFT"),    # Strain left
                 ("GRID", (0,0), (-1,-1), 0.5, colors.grey),
                 ("ROWBACKGROUNDS", (0,1), (-1,-1), [colors.whitesmoke, colors.white]),
                 ("BOTTOMPADDING", (0,0), (-1,-1), 4),

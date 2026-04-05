@@ -161,6 +161,8 @@ def GetStrainWeights(crop_no: int):
         # Count plants with dry weight > 0
         if dry > 0:
             agg[strain]["plant_count"] += 1
+        elif wet > 0:
+            agg[strain]["plant_count"] += 1
     
     # Build result list sorted by strain
     result = []
@@ -259,25 +261,20 @@ def UpdateTagWeight(TagNo, Weight):
     upd = {"Weight": Weight}
     res = sb.schema("scale").table("scalebuck").update(upd, returning="representation").eq("TagNo", TagNo).execute()
 
-def LoadToteReport(StartDate, EndDate):
-    """Load all rows from scalebuck where BuckDate is between StartDate and EndDate
-    
-    Args:
-        StartDate: Start date string in format 'YYYY-MM-DD'
-        EndDate: End date string in format 'YYYY-MM-DD'
-    
+def LoadToteReport(CropNo):
+    """
     Returns:
-        List of scalebuck records within the date range
+        List of scalebuck records for selected cropno
     """
     res = (sb.schema("scale").table("scalebuck")
             .select("*")
-            .gte("BuckDate", StartDate)
-            .lte("BuckDate", EndDate)
+            .eq("CropNo", CropNo)
+            .order("ToteType")
             .order("TagNo")
             .execute())
     return res.data or []
 
-#res = LoadToteReport("2025-12-01", "2025-12-31")
+#res = LoadToteReport(21)
 #print(res)
 
 def GetBuckedSummary(CropNo, Strain):

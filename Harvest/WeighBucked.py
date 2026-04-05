@@ -96,7 +96,7 @@ class WeighBuckedApp(ctk.CTk):
 
         # Tote Type selector
         ctk.CTkLabel(frame, text="Tote Type", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(6,6))
-        self.ToteTypeCombo = ctk.CTkComboBox(frame, values=["Select", "Flower", "Smalls", "Trim"], width=200, font=DEFAULT_FONT, command=self.onToteTypeSelected)
+        self.ToteTypeCombo = ctk.CTkComboBox(frame, values=["Select", "Flower", "Smalls", "Trim", "Frozen"], width=200, font=DEFAULT_FONT, command=self.onToteTypeSelected)
         self.ToteTypeCombo.grid(row=3, column=1, sticky="w", pady=6)
         self.ToteTypeCombo.set("Select")
 
@@ -108,7 +108,7 @@ class WeighBuckedApp(ctk.CTk):
 
         # Weight display (read-only)
         ctk.CTkLabel(frame, text="Tote Weight (g)", font=DEFAULT_FONT).grid(row=5, column=0, sticky="e", padx=(6,6))
-        self.WeightEntry = ctk.CTkEntry(frame, width=200, font=DEFAULT_FONT, state="disabled")
+        self.WeightEntry = ctk.CTkEntry(frame, width=200, font=DEFAULT_FONT, state="normal")
         self.WeightEntry.grid(row=5, column=1, sticky="w", pady=6)
 
         # Buttons row: Save, Print Label, and Close
@@ -264,7 +264,7 @@ class WeighBuckedApp(ctk.CTk):
                 self.WeightEntry.configure(state='normal')
                 self.WeightEntry.delete(0, 'end')
                 self.WeightEntry.insert(0, wstr)
-                self.WeightEntry.configure(state='disabled')
+#                self.WeightEntry.configure(state='disabled')
             except Exception:
                 pass
         
@@ -378,7 +378,7 @@ class WeighBuckedApp(ctk.CTk):
                 self.setStatus(f"InsertNewTag failed: {e}")
                 return
         
-        PrintOneLabel(selStrain, toteType, selCrop, "Tote", str(toteNo), int(currentWeight))
+#        PrintOneLabel(selStrain, toteType, selCrop, "Tote", str(toteNo), int(currentWeight))
         
         # Reload totes and set to New Tote for next bag
         try:
