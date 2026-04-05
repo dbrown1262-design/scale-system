@@ -15,10 +15,15 @@ FAILS_REQUIRED = 3
 STATE_FILE = r"C:\nas_monitor\state.json"
 
 # Gmail settings
-SMTP_SERVER = "smtp.gmail.com"
+#SMTP_SERVER = "smtp.gmail.com"
+#SMTP_PORT = 465
+#SMTP_USER = "service@adkhempco.com"
+#SMTP_PASS = "hemphouse26"
+
+SMTP_SERVER = "smtp.mail.yahoo.com"
 SMTP_PORT = 465
-SMTP_USER = "service@adkhempco.com"
-SMTP_PASS = "PUT_APP_PASSWORD_HERE"
+SMTP_USER = "dbrown1262@verizon.net"
+SMTP_PASS = "metf eixc laeg yvir"
 
 ALERT_TO = "service@adkhempco.com"
 
@@ -46,10 +51,11 @@ def send_email(subject, body):
     msg.set_content(body)
 
     context = ssl.create_default_context()
-#    with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as smtp:
-#        smtp.login(SMTP_USER, SMTP_PASS)
-#        smtp.send_message(msg)
+    with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as smtp:
+        smtp.login(SMTP_USER, SMTP_PASS)
+        smtp.send_message(msg)
 
+#send_email("NAS Monitor Started", f"Monitoring started for {NAS_HOST}. Initial state: {load_state()}")
 
 def ping_host(host):
     result = subprocess.run(
