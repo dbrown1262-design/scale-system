@@ -270,3 +270,13 @@ If new crops or strains have been added to the database:
 4. **Metrc Compliance:**
 	- Each package must have a unique Metrc Package Tag UID
 	- Package records support compliance reporting and inventory tracking
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

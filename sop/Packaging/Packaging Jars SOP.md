@@ -27,8 +27,6 @@ To define the standardized procedure for packaging trimmed flower into 3.5 gram 
 - **Administrator (Packaging Menu):** Generate Processing Package UIDs, Retail Item IDs, and Distribution Tags in Metrc.
 - **Compliance Manager:** Verify packaging occurs only from batches marked **Tested – Passed**.
 
----
-
 ### 4. Procedure
 
 #### 4.1 Label Preparation
@@ -40,8 +38,6 @@ To define the standardized procedure for packaging trimmed flower into 3.5 gram 
     - Strain name
     - Processing Package UID
 
----
-
 #### 4.2 Prepare Jars
 
 1. Remove blank jars from the case.
@@ -49,8 +45,6 @@ To define the standardized procedure for packaging trimmed flower into 3.5 gram 
 3. Remove jar caps.
 4. Insert one **Boveda pack** into each jar.
 5. Move all prepared jars to the weighing station.
-
----
 
 #### 4.3 Weigh Flower
 
@@ -60,15 +54,11 @@ To define the standardized procedure for packaging trimmed flower into 3.5 gram 
 4. Replace the jar cap securely.
 5. Repeat until all jars are filled.
 
----
-
 #### 4.4 Finalize Jar Labeling
 
 1. Affix the **NYS required information label** to each jar over the blank area in the generic label.
 2. Apply a **tamper seal** to each jar.
 3. Place finished jars into the case.
-
----
 
 #### 4.5 Case Handling
 
@@ -93,8 +83,6 @@ To define the standardized procedure for packaging trimmed flower into 3.5 gram 
     - The system will generate the internal label
 
 
----
-
 #### 4.6 Order Fulfillment and Retail UID Assignment
 
 When an order is received:
@@ -106,8 +94,6 @@ When an order is received:
     4. Affix one **Retail Item ID label** to the cap of each jar.
     5. Affix one **Distribution Tag UID** to the outside of the case.
     6. Affix the **internal identification label** to the case to identify the contents.
-
----
 
 #### 4.7 Handling Leftover Material
 
@@ -126,8 +112,6 @@ When an order is received:
 
 - No leftover flower may remain unassigned to a Metrc package.
 
----
-
 ### 5. Quality & Compliance Checks
 
 1. All source flower packages must be marked **Tested – Passed** before packaging.
@@ -140,11 +124,88 @@ When an order is received:
 4. Unused jars with generic labels affixed must have the label removed or defaced.
 5. Unused generic strain labels not affixed to jars may be disposed of as ordinary waste.
 
----
-
 ### 6. Records
 
 - Metrc Processing Package creation logs
 - Retail Item ID print logs
 - Distribution Tag assignment logs
 - Packaging date and batch records
+
+## Section 2 — Packaging Eighths (Operational Procedure)
+
+### 1. Purpose
+
+Ensuring that only quality material is packaged and labeling is consistent.
+
+### 2. Required Tools & Materials
+
+- Eighth jars
+- Caps
+- Cap seals
+- Hydro packs
+- Labels:
+  - Primary labels (strain specific)
+  - Secondary labels
+  - Tamper seals
+  - Metrc labels (for harvests prior to 2/16/26)
+- Scale
+- Weighing cups
+- Bigs bucket
+- Trimming trays/shears
+
+### 3. Safety & Sanitation
+
+**Required PPE:**
+- Gloves
+- Hairnet
+- Beard net/mask
+
+### 4. Procedure
+
+#### 4.1 Jar Preparation
+
+1. Label jars with strain-specific **primary labels**
+2. Add **1 hydro pack** to each jar
+
+#### 4.2 Material Preparation
+
+1. Add material from bigs buckets to trim trays
+2. **Check for mold as you go:**
+   - Separate any moldy material into mold bags
+   - Re-sanitize before proceeding
+
+#### 4.3 Weighing & Filling
+
+1. Scale **3.6–3.7 grams** of bigs into weighing cup
+2. Trim off any remaining stems/leaf material
+3. Empty weighing cup into jar
+
+#### 4.4 Sealing
+
+1. Place cap seal in cap
+2. Twist cap fully onto jar
+
+#### 4.5 Final Labeling
+
+1. Add **secondary label** to designated gray space on primary
+2. Add **tamper seal** from top of cap down along seam of primary
+
+#### 4.6 Quality Control
+
+1. Quality check each jar before storing
+2. Verify:
+   - Proper weight (3.6–3.7g)
+   - No stems or excess leaf material
+   - No mold
+   - All labels properly applied
+   - Cap securely sealed
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

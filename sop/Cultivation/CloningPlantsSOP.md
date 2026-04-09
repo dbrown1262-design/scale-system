@@ -3,25 +3,17 @@
 ### 1. Purpose
 To standardize the process for taking, rooting, and caring for cannabis clones to ensure high survival rates, consistent plant quality, and clean, repeatable propagation practices.
 
----
-
 ### 2. Scope
 Applies to all propagation activities from selecting donor (mother) plants through transplanting rooted clones into veg containers.
-
----
 
 ### 3. Responsibilities
 - **Propagation Technician:** Executes cloning steps, documents counts and outcomes, maintains sanitation.
 - **Head Grower / Cultivation Lead:** Confirms mother selection standards, approves inputs/ratios, reviews rooting success metrics.
 
----
-
 ### 4. Safety & Compliance
 - Wear **nitrile gloves** and **eye protection** when handling disinfectants, rooting products, or nutrient solutions.
 - Follow facility sanitation and chemical handling requirements (labeling, storage, SDS access).
 - Keep propagation areas restricted and clean to prevent pest/disease transfer.
-
----
 
 ### 5. Materials & Equipment
 **Propagation & Handling**
@@ -43,14 +35,10 @@ Applies to all propagation activities from selecting donor (mother) plants throu
 - Thermometer/hygrometer (and controller if available)
 - Heat mat (optional, if room temps are low)
 
----
-
 ### 6. Definitions
 - **Mother plant:** Donor plant used to take cuttings.
 - **Clone batch:** Group of cuttings taken at the same time, labeled and tracked together.
 - **Rooted clone:** Cutting with visible, healthy root development suitable for transplant.
-
----
 
 ### 7. Procedure
 
@@ -73,8 +61,6 @@ Applies to all propagation activities from selecting donor (mother) plants throu
 5. **Prepare labels**
    - Batch ID, strain, mother ID, date/time, count planned.
 
----
-
 #### 7.2 Select and Take Cuttings
 1. Select **vigorous side branches** with healthy new growth.
 2. Target cutting size (facility standard; common practice):
@@ -86,8 +72,6 @@ Applies to all propagation activities from selecting donor (mother) plants throu
 - Damaged, wilted, overly woody, hollow, or pest/lesion suspected
 - Extremely thin or excessively soft growth
 
----
-
 #### 7.3 Prepare Each Cutting for Rooting
 Perform the following steps one cutting at a time to prevent drying:
 1. With a sterile blade, re-cut the stem end at a **clean angle**.
@@ -95,8 +79,6 @@ Perform the following steps one cutting at a time to prevent drying:
 3. If leaves are large, **trim leaf tips** to reduce transpiration (facility standard).
 4. Optional (only if your facility uses it): light stem scrape/score per standard practice.
 5. Apply rooting product to the stem end per label directions (do not contaminate the container).
-
----
 
 #### 7.4 Insert Cuttings into Media
 **Cubes/Plugs**
@@ -108,15 +90,11 @@ Perform the following steps one cutting at a time to prevent drying:
 1. Place cutting stem through collar so the stem hangs in the mist zone.
 2. Ensure collars are seated and cuttings are not pinched.
 
----
-
 #### 7.5 Initial Watering and Dome Setup
 1. Lightly mist the inside of the dome (if used) per facility standard.
 2. Water media lightly if needed (avoid saturation).
 3. Place dome and vents in the **closed** or “high humidity” position for day 0–1 (facility standard).
 4. Confirm labels are visible and correct.
-
----
 
 ### 8. Environmental Setpoints (Propagation)
 > Use your facility’s standard if different; consistency matters.
@@ -127,8 +105,6 @@ Perform the following steps one cutting at a time to prevent drying:
 - **Light intensity:** low to moderate (avoid high PPFD early)
 - **Photoperiod:** typically 18/6 or facility standard
 - **Air movement:** gentle; avoid direct fan blast on clones
-
----
 
 ### 9. Daily Care (Days 1–14, Typical)
 
@@ -149,8 +125,6 @@ Perform the following steps one cutting at a time to prevent drying:
 - Avoid overwatering (slow rooting, stem rot) and underwatering (wilting).
 - If using additives (clone nutrient, microbe product), follow facility recipe and keep it consistent.
 
----
-
 ### 10. Root Check and Transplanting
 
 #### 10.1 Root Check
@@ -169,16 +143,12 @@ Perform the following steps one cutting at a time to prevent drying:
 4. Water-in per facility standard.
 5. Move to veg area under **gentle** light for the first 24–48 hours, then ramp.
 
----
-
 ### 11. Sanitation (Post-Task)
 1. Discard plant waste in designated waste stream.
 2. Clean and disinfect:
    - Trays, domes, benches, tools
 3. Replace/refresh any reusable items per facility policy.
 4. Wash hands and reset the area for the next batch.
-
----
 
 ### 12. Records & Data Capture
 Record the following for each clone batch:
@@ -191,8 +161,6 @@ Record the following for each clone batch:
 - Daily losses (count and suspected cause)
 - Rooting success count and date ready for transplant
 - Notes (issues, corrective actions)
-
----
 
 ### 13. Troubleshooting Guide
 
@@ -211,4 +179,15 @@ Record the following for each clone batch:
 **Mold on media**
 - Excess humidity + stagnant air
 - Action: increase venting/air exchange, reduce standing water, sanitize trays
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release
 

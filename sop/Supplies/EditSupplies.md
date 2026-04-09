@@ -232,3 +232,14 @@ The Edit Supplies application performs the following validations:
 - **Receive Supplies SOP:** References supply items for inventory tracking
 - **Inventory Management SOP:** Queries supply records for stock levels
 - **Department Budget Tracking:** Uses department classifications for expense allocation
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

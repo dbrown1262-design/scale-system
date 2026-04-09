@@ -44,3 +44,14 @@ If the plant has already been weighed:
 
 1. Hang the plant in the drying room.
 2. Ensure the plant tag remains attached so it can be identified and weighed again after drying.
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

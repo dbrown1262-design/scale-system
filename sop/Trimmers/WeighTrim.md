@@ -186,3 +186,14 @@ If new crops or strains have been added to the database:
 - Print labels immediately after weighing for proper bag identification.
 - Keep Metric Tags organized and ensure they match the bags.
 - Clear the form between bags to avoid mixing data.
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

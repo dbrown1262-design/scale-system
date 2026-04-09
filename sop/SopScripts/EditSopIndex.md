@@ -126,3 +126,14 @@ To view and edit SOPs for a different activity:
 - Supabase sopfiles table
 - Updated sequence numbers and descriptions by Activity and FileName
 - Activity selection and file list used
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

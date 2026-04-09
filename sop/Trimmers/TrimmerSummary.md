@@ -234,3 +234,14 @@ A **TOTAL** row at the bottom shows cumulative weights and hours across all trim
 - **Edit Daily Trim:** Correcting or updating existing trim records
 - **Edit Trim Rates:** Managing pay rates per strain
 - **Edit Trimmer List:** Adding or removing trimmers from the system
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

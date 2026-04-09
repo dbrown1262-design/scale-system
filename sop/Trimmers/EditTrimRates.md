@@ -115,3 +115,14 @@ After updating:
 - Supabase trimrates table
 - Updated BigsRate values by CropNo and Strain
 - Crop selection and strain list used
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

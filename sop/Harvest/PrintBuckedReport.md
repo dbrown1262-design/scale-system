@@ -183,3 +183,14 @@ The PDF report includes:
 - Keep reports accessible for audits
 - Consider digital backup copies
 - Retain both the printed signed copy and digital PDF
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

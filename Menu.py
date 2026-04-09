@@ -109,6 +109,7 @@ SCRIPTS = {
         ("Enter Rosin Run", os.path.join("Processing", "EnterRosinRun.py")),
     ],
     "Admin": [
+        ("View/Print SOPs", os.path.join("SopScripts", "SopView.py")),
         ("Edit Daily Trim", os.path.join("Trimmers", "EditDailyTrim.py")),
         ("Edit Trimmer List", os.path.join("Trimmers", "EditTrimmerList.py")),
         ("Edit Trim Rates", os.path.join("Trimmers", "EditTrimRates.py")),

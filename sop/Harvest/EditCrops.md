@@ -168,3 +168,14 @@ The Edit Crops application performs the following validations:
 - **Print Plant Tags SOP:** Requires active crops with valid harvest dates
 - **Weigh Plants SOP:** Uses active crop data for harvest tracking
 - **Plant Weights Summary SOP:** Queries crop records for reporting
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

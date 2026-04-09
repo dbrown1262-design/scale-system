@@ -371,3 +371,14 @@ For each strain:
 **Compliance Check**
 
 - No bulk flower package may be packaged into retail units until marked **Tested – Passed**.
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

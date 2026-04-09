@@ -240,3 +240,14 @@ The application will display color-coded status messages:
 3. Ensure total hours worked are accurately recorded for payroll.
 4. Clean and tare the scale for the next day.
 5. Close the application.
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

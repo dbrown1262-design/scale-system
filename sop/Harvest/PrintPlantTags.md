@@ -109,3 +109,14 @@ Confirm that every plant is labeled before proceeding to harvest.
 - Supabase scalecrops entry
 - Supabase scaleplants import
 - Label print logs (if applicable)
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

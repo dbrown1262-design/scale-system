@@ -200,3 +200,14 @@ The error usually occurs when a tag intended for a different purpose (Processing
 - Check that only the liner bag is hanging (not touching tote)
 - Verify scale is stable and not swinging
 - Allow weight to stabilize before saving
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

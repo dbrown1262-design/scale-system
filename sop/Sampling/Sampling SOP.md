@@ -58,7 +58,12 @@ This SOP applies to all cannabis flower batches designated for laboratory testin
 
 ### 6.3 Video Surveillance
 - Confirm cameras are operational and recording
-- Sampling must occur within camera view when required
+1. Open the Synology Surveillance Station from bookmark in Chrome on the scale workstation.
+2. Sign in as AdkAdmin
+3. Click on the IP Camera icon, a list of cameras will appear
+4. Click on the camera image next to Generic_AMCREST-001
+5. A live image of the sampling area will appear on the screen
+6. Leave the live image on the screen for the duration of the sampling
 
 ---
 
@@ -92,10 +97,6 @@ Each sample must include:
 - Date of sampling
 - Initials of sampler
 
-Internal labels may include:
-- Internal batch UID
-- Container/bucket reference
-
 ---
 
 ## Section 9 — METRC Entry
@@ -108,65 +109,33 @@ Internal labels may include:
 
 ---
 
-## Section 10 — Documentation
-
-The following must be recorded:
-
-- Date and time of sampling
-- Employee performing sampling
-- Source batch/package ID
-- Sample package ID
-- Sample weight
-- Method of sampling
-
-Records must be stored in:
-- METRC
-- Internal tracking system (e.g., batch log or database)
-
----
-
-## Section 11 — Chain of Custody
-
-- Sample must remain secured after collection
-- Store in designated area until transfer
-- Record transfer to laboratory including:
-  - Date and time
-  - Receiving party
-  - Transport method
-
----
-
-## Section 12 — Post-Sampling
+## Section 10 — Post-Sampling
 
 - Return remaining product to storage
 - Clean and sanitize tools
 - Remove gloves and dispose properly
 - Verify all entries in METRC and internal system
 
----
+## Section 11 — Record Retention
 
-## Section 13 — Deviations
-
-Any deviation from this SOP must be documented, including:
-
-- Description of deviation
-- Reason
-- Corrective action taken
-
----
-
-## Section 14 — Corrective Actions
-
-If sampling errors or issues occur:
-
-- Notify Compliance Manager immediately
-- Evaluate need for re-sampling
-- Document incident and resolution
+- Scan the Chain of Custody form and save the file to "Chain of Custody" folder on OneDrive to store the file in the cloud
+- Download a copy of the recorded sampling session:
+1. In the Synology Surveillance Station main menu, click on the Recording icon.
+2. Click on the Download button, a popup download screen will appear
+3. Click on Download Specified Period button
+4. Select the Generic_AMCREST-001 camera
+5. Enter the starting and ending time
+6. Enter a file name- i.e. "Kaycha Sampling 4-5-26"
+7. Click on the Download button
+8. Save the file to the "Sampling Videos" folder on OneDrive to store the file in the cloud
 
 ---
 
-## Section 15 — Record Retention
+## Section 10 — Revision History
 
-All sampling records must be retained in accordance with OCM requirements (minimum 5 years or as required).
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
 
-
+Change Summary:
+Rev 1 – Initial release

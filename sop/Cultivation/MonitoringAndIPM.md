@@ -3,12 +3,8 @@
 ### 1. Purpose
 To establish a standardized procedure for monitoring pests and diseases and applying Integrated Pest Management (IPM) strategies to maintain healthy cannabis crops while ensuring compliance, worker safety, and product integrity.
 
----
-
 ### 2. Scope
 Applies to all cultivation areas including mother room, nursery/clone room, vegetative rooms, flower rooms, drying rooms, and processing-adjacent plant handling areas.
-
----
 
 ### 3. Responsibilities
 - **Cultivation Assistant / IPM Technician**
@@ -20,16 +16,12 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
   - Review scouting logs and adjust IPM strategies as needed.
   - Ensure compliance with state regulations and pre-harvest intervals (PHI).
 
----
-
 ### 4. Safety & Compliance
 - Follow all PPE and chemical handling requirements listed on product labels and facility SDS sheets.
 - Wear **nitrile gloves, eye protection, and respirator** when mixing or applying sprays.
 - Only apply **facility-approved IPM products** that are compliant with NYS cannabis regulations.
 - Observe all **Restricted Entry Intervals (REI)** and **Pre-Harvest Intervals (PHI)**.
 - Never spray flowering rooms unless explicitly approved by the Head Grower.
-
----
 
 ### 5. Materials & Equipment
 - Sticky traps (yellow and blue)
@@ -40,14 +32,10 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
 - Disinfectant for tools and surfaces
 - IPM Monitoring Log (digital or paper)
 
----
-
 ### 6. Definitions
 - **IPM:** Integrated Pest Management – a systematic approach using prevention, monitoring, and targeted treatment.
 - **Scouting:** Visual inspection of plants to detect pests or disease.
 - **Sticky Trap:** Adhesive card used to capture flying insects for monitoring.
-
----
 
 ### 7. Monitoring Procedure
 
@@ -60,8 +48,6 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
    - Initials
 3. Replace traps **weekly** or sooner if saturated.
 
----
-
 #### 7.2 Visual Scouting (Minimum 2× Weekly)
 1. Inspect underside of leaves, petioles, stems, and growing tips.
 2. Look for:
@@ -70,8 +56,6 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
    - **Disease:** powdery mildew, botrytis, leaf spot, wilting
 3. Use hand lens to confirm species when needed.
 4. Record findings in IPM log.
-
----
 
 ### 8. Action Thresholds
 | Pest/Disease | Trigger for Action |
@@ -83,8 +67,6 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
 | Powdery mildew| Any visible spores |
 | Botrytis      | Any infected tissue |
 
----
-
 ### 9. IPM Application Procedure
 
 #### 9.1 Preparation
@@ -92,8 +74,6 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
 2. Select product from **approved rotation list**.
 3. Check PHI/REI to ensure compliance.
 4. Mix product in a clean, labeled sprayer per manufacturer instructions.
-
----
 
 #### 9.2 Application
 1. Apply at lights-off or low-light period.
@@ -104,8 +84,6 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
    - Time/date
    - REI
 
----
-
 #### 9.3 Post-Application
 1. Remove PPE and wash hands.
 2. Clean sprayers thoroughly.
@@ -114,16 +92,12 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
    - Rooms treated
    - Observed efficacy
 
----
-
 ### 10. Cultural & Preventative Controls
 - Remove dead plant material daily.
 - Maintain proper VPD and airflow.
 - Sanitize tools between rooms.
 - Quarantine incoming clones/mothers.
 - Avoid overwatering and standing water.
-
----
 
 ### 11. Records & Documentation
 Maintain IPM records for:
@@ -134,8 +108,12 @@ Maintain IPM records for:
 
 ---
 
-### 12. Revision Control
-- **Document Owner:** Cultivation Lead
-- **Effective Date:** ____________________
-- **Revision:** _______
-- **Next Review Date:** ____________________
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release
+

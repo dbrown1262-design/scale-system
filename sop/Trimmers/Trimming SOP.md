@@ -137,3 +137,14 @@ Trimmed flower buckets must be weighed, sealed, and recorded in Metrc before sto
 
 - Each trimmed flower bucket must trace back to exactly one bucked tote UID.
 - Mixed-source buckets are prohibited.
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

@@ -139,3 +139,14 @@ The exported file includes:
 - **Print Plant Tags:** Initial crop setup and plant tagging
 - **Weigh Harvest:** Recording wet and dry plant weights
 - **Weigh Bucked Totes:** Post-processing weight tracking
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

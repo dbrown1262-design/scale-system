@@ -127,3 +127,14 @@ The configuration is now saved and will be used by all weighing and tracking app
 - Common/config.json file containing scanner_com_port value
 - Status log showing detected ports and test results
 - Bluetooth device pairing records in Windows settings
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

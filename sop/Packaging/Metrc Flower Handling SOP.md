@@ -129,3 +129,14 @@ To define the standardized procedure for weighing, tagging, and transferring can
 - Packaging case logs
 - Retail Item ID generation logs
 - Distribution transfer manifests
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release

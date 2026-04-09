@@ -91,3 +91,14 @@ If a plant has already been weighed, the system will display a warning with opti
 
 > **Warning:** This commonly occurs when the incorrect **Plant Type (Wet or Dry)** is selected.  
 > Always verify the Plant Type before continuing.
+
+---
+
+## Section 10 — Revision History
+
+Revision: 1
+Effective Date: 2026-04-09
+Approved By: President/CEO
+
+Change Summary:
+Rev 1 – Initial release
