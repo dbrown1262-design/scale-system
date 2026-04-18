@@ -1,4 +1,4 @@
-# Pest & Disease Monitoring and Integrated Pest Management (IPM) SOP
+# Pest & Disease Monitoring and IPM SOP
 
 ### 1. Purpose
 To establish a standardized procedure for monitoring pests and diseases and applying Integrated Pest Management (IPM) strategies to maintain healthy cannabis crops while ensuring compliance, worker safety, and product integrity.
@@ -29,6 +29,7 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
 - Approved IPM spray products (per facility list)
 - Clean, labeled sprayers (dedicated per product type)
 - PPE: gloves, goggles, respirator
+- Portable Lights
 - Disinfectant for tools and surfaces
 - IPM Monitoring Log (digital or paper)
 
@@ -40,13 +41,8 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
 ### 7. Monitoring Procedure
 
 #### 7.1 Sticky Trap Placement
-1. Place traps at canopy height in each room:
-   - Minimum of **1 trap per 100–200 sq ft**.
-2. Label each trap with:
-   - Room
-   - Date placed
-   - Initials
-3. Replace traps **weekly** or sooner if saturated.
+1. Place traps on/around the pots of every other plant.
+2. Replace traps **weekly** or as needed.
 
 #### 7.2 Visual Scouting (Minimum 2× Weekly)
 1. Inspect underside of leaves, petioles, stems, and growing tips.
@@ -77,7 +73,7 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
 
 #### 9.2 Application
 1. Apply at lights-off or low-light period.
-2. Spray evenly to underside of leaves and affected areas.
+2. Spray underside/topside depending on products used and pest/disease being targeted
 3. Avoid runoff into soil unless product allows.
 4. Post signage noting:
    - Product used
@@ -86,9 +82,10 @@ Applies to all cultivation areas including mother room, nursery/clone room, vege
 
 #### 9.3 Post-Application
 1. Remove PPE and wash hands.
-2. Clean sprayers thoroughly.
+2. Clean sprayers thoroughly:
+   - Rinse 3 times with hot water, then flush sprayer line with warm water until liquid runs clear.
 3. Update IPM log with:
-   - Product, dilution, lot #
+   - Product, dilution
    - Rooms treated
    - Observed efficacy
 
@@ -105,8 +102,6 @@ Maintain IPM records for:
 - Visual scouting results
 - Products used, dates, rates, applicator initials
 - Corrective actions and outcomes
-
----
 
 ## Section 10 — Revision History
 

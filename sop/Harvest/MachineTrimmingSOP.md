@@ -67,7 +67,7 @@ This procedure covers:
 
 ### 6.2 Pre-Trim Processing
 
-1. Retrieve Bucked Flower tote from store room.
+1. Retrieve Bucked Flower tote from store/drying room.
 2. Inspect flower for foreign material.
 3. Load flower into the trimming machine.
 4. Make sure the spacer is installed under the brush assembly
@@ -113,8 +113,9 @@ For strains with larger or fluffier flower structure:
 1. Load small buds into the trimming machine for a second trimming pass.
 2. Run the machine without spacers for large flower.
 3. After trimming, pass the material through the **½ inch screen again** to separate final small buds.
-
-Smalls should be designated for Pre-roll production
+4. Put the flower and smalls in separate totes.  The new totes are still part of same package (internal subdivision)
+5. At the end of each strain, use the Weigh Bucked Tote procedure to weigh each tote and generate an internal label
+6. Weighing of trimmed totes is for internal tracking only and does not create new inventory units.
 
 ---
 
@@ -128,7 +129,7 @@ Manual trimming output is recorded according to trimming productivity procedures
 
 ## 7. Weighing and Identification
 
-Trimmed flower is placed into collection buckets and weighed.
+Trimmed flower is placed into collection Buckets and weighed.
 
 Each bucket is assigned an identification label containing:
 
@@ -139,6 +140,10 @@ Each bucket is assigned an identification label containing:
 This information is recorded in the facility database.
 
 Labels are used by staff to identify product during further processing.
+
+Buckets are temporary processing containers and do not represent separate inventory units.
+
+All totes and buckets remain part of the same METRC package and may not be moved, processed, or reassigned independently without a formal METRC split.
 
 ---
 
@@ -181,7 +186,7 @@ All records must be retained according to facility record retention policies.
 
 ---
 
-## Section 10 — Revision History
+## Section 11 — Revision History
 
 Revision: 1
 Effective Date: 2026-04-09

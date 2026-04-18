@@ -14,7 +14,7 @@ To define the standardized procedure for receiving plant data, printing plant id
 - scaleplants table
 - 4BARCODE label printer
 - 2.25" × 0.75" label stock
-- Pre-numbered plant tags from Metric
+- Pre-numbered plant tags from METRC
 
 ---
 
@@ -39,7 +39,7 @@ To define the standardized procedure for receiving plant data, printing plant id
 
 ### 4.2 Print Strain Name Labels (Admin Menu)
 
-The new tagging system uses pre-numbered tags purchased from Metric. The Print Plant Tags application prints strain name labels to affix to the back of each Metric tag.
+The new tagging system uses pre-numbered tags purchased from METRC. The Print Plant Tags application prints strain name labels to affix to the back of each METRC tag.
 
 Before printing, verify system and printer configuration:
 
@@ -63,15 +63,15 @@ Before printing, verify system and printer configuration:
 
 **Prepare Tags**
 
-1. Locate the pre-numbered plant tags from Metric.
-2. Affix one printed strain name label to the back of each Metric tag.
+1. Locate the pre-numbered plant tags from METRC.
+2. Affix one printed strain name label to the back of each METRC tag.
 
 **Apply Tags to Plants**
 
-1. Apply one numbered Metric tag to each plant:
+1. Apply one numbered METRC tag to each plant:
 	- Attach the tag to the plant stem above the first branch.
 	- Ensure the tag is secure and will not fall off during harvest.
-	- Verify the Metric number on the front is visible.
+	- Verify the METRC number on the front is visible.
 	- Verify the strain name label on the back is secure.
 
 **Verification**
@@ -80,24 +80,24 @@ Confirm that every plant is labeled before proceeding to harvest.
 
 ---
 
-### 4.4 Register Plant Tags in Metrc
+### 4.4 Register Plant Tags in METRC
 
-1. After physical plant tags have been affixed, log into Metrc.
+1. After physical plant tags have been affixed, log into METRC.
 2. Navigate to: **Grow → Immature / Vegetative / Flowering Plants → Add Plants**.
 3. For each strain group:
-	1. Enter the assigned Metrc Plant Tag UID numbers.
-	2. Verify that the plant count in Metrc matches the number of physical tags applied.
+	1. Enter the assigned METRC Plant Tag UID numbers.
+	2. Verify that the plant count in METRC matches the number of physical tags applied.
 4. Save the entries.
 
 **Compliance Check**
 
-- The number of plants in Metrc must equal the number of physically tagged plants before harvest may proceed.
+- The number of plants in METRC must equal the number of physically tagged plants before harvest may proceed.
 
 ---
 
 ## 5. Quality & Compliance Checks
 
-- All plants in the crop must have a readable, affixed Metric tag with strain name label prior to harvest.
+- All plants in the crop must have a readable, affixed METRC tag with strain name label prior to harvest.
 - Tag count should match the number of plants imported from Bamboo.
 - Damaged or unreadable strain labels must be reprinted immediately.
 

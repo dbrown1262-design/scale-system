@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This application generates a detailed report of all bucked flower totes weighed within a specified date range. The report is designed to facilitate accurate data entry into the Metrc compliance system and includes signature lines for dual verification.
+This application generates a detailed report of all bucked flower totes weighed within a specified date range. The report is designed to facilitate accurate data entry into the METRC compliance system and includes signature lines for dual verification.
 
 The primary purposes are to:
 - Provide a complete record of bucked flower production for a date range
-- Support accurate and efficient Metrc data entry
+- Support accurate and efficient METRC data entry
 - Enable quality control through dual verification
 - Maintain compliance documentation
 
@@ -53,14 +53,13 @@ To specify the date range for the report:
 The data grid displays the following columns for each bucked tote:
 - **Crop No:** The crop number (e.g., "250101")
 - **Strain:** The cannabis strain name
-- **Tag No:** The Metrc tag number assigned to the tote
+- **Tote No:** The internal number assigned to the tote
 - **Weight:** The weight in grams
 - **Buck Date:** The date the tote was weighed
 - **Harvest Date:** The date the strain was harvested
 
 **Sorting:**
 - Click any column header to sort by that column
-- Data is initially sorted by Metrc ID
 
 ---
 
@@ -88,7 +87,7 @@ The PDF report includes:
 **Data Table:**
 - Crop Number
 - Strain Name
-- Metrc Tag Number
+- Tote Number
 - Weight (in grams)
 - Buck Date
 - Harvest Date
@@ -97,45 +96,11 @@ The PDF report includes:
 - Total number of totes
 
 **Signature Lines:**
-- "Entered By" — Person entering data into Metrc
 - "Checked By" — Person verifying the data entry
 
 ---
 
-### 6. Using the Report for Metrc Entry
-
-**Best Practices:**
-
-1. Print the report before beginning Metrc data entry.
-2. Have a second person available for verification.
-3. As each tote is entered into Metrc, mark it off on the printed report.
-4. When complete, have the person who entered the data sign "Entered By".
-5. Have a second person verify all entries in Metrc against the report.
-6. The verifier should sign "Checked By" after confirming accuracy.
-7. File the signed report with compliance documentation.
-
-**Data Entry Workflow:**
-
-- Enter totes in the order shown on the report
-- Confirm Metrc tag number is correct (no typos)
-- Verify weight matches exactly
-- Check Buck Date is accurate
-
----
-
-### 7. Quality & Compliance Checks
-
-- Always verify date range before generating report
-- Confirm total tote count matches expectations
-- Check that all strains from the date range are represented
-- Ensure Metrc tag numbers are complete and valid
-- Verify weights are reasonable (typical range: 400-800g per tote)
-- Obtain both signatures before filing the report
-- Retain signed reports for audit purposes
-
----
-
-### 8. Troubleshooting
+### 6. Troubleshooting
 
 **No data appears:**
 - Verify the date range includes days when bucked totes were weighed
@@ -176,7 +141,7 @@ The PDF report includes:
 
 ---
 
-### 9. Report Retention
+### 7. Report Retention
 
 - File signed reports in chronological order
 - Maintain reports for the duration required by state regulations
@@ -186,7 +151,7 @@ The PDF report includes:
 
 ---
 
-## Section 10 — Revision History
+## Section 8 — Revision History
 
 Revision: 1
 Effective Date: 2026-04-09

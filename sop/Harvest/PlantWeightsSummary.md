@@ -127,7 +127,7 @@ The exported file includes:
 
 **Problem:** Counts don't match expected plant numbers
 
-- **Solution:** 
+- **Solution:**
   1. Verify all plants were weighed using the Weigh Harvest application.
   2. Check for plants that may have been assigned to the wrong crop number.
   3. Review the original Bamboo import to confirm plant counts.
@@ -144,9 +144,9 @@ The exported file includes:
 
 ## Section 10 — Revision History
 
-Revision: 1
-Effective Date: 2026-04-09
+Revision: 1  
+Effective Date: 2026-04-09  
 Approved By: President/CEO
 
-Change Summary:
+Change Summary:  
 Rev 1 – Initial release

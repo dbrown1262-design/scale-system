@@ -90,7 +90,7 @@ After weighing a bag, you can print a label for the bag:
 
 If a Metric Tag has already been recorded, the system will display a warning:
 
-> **Tag In Use**  
+> **Tag In Use**
 > Metric tag [number] already has data. Update weight to [new weight] g?
 
 - **Yes** — Update the existing bag record with the new weight.
@@ -104,7 +104,7 @@ If a Metric Tag has already been recorded, the system will display a warning:
 
 If a Metric Tag has been used for a different crop or strain, the system will display an error:
 
-> **Tag Mismatch**  
+> **Tag Mismatch**
 > Metric tag [number] belongs to a different strain/crop. Cannot use this tag.
 
 - Click **OK** and use a different Metric Tag.
@@ -191,9 +191,9 @@ If new crops or strains have been added to the database:
 
 ## Section 10 — Revision History
 
-Revision: 1
-Effective Date: 2026-04-09
+Revision: 1  
+Effective Date: 2026-04-09  
 Approved By: President/CEO
 
-Change Summary:
+Change Summary:  
 Rev 1 – Initial release

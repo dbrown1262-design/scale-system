@@ -88,6 +88,7 @@ def show_busy_overlay(parent):
 
 SCRIPTS = {
     "Harvest": [
+        ("Edit Crops", os.path.join("Harvest", "EditCrops.py")),
         ("Print Plant Tags", os.path.join("Harvest", "PrintPlantTags.py")),
         ("Weigh Plants", os.path.join("Harvest", "WeighHarvest.py")),
         ("Print Tote Labels", os.path.join("Harvest", "PrintToteLabel.py")),

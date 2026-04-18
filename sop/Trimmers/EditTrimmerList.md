@@ -232,9 +232,9 @@ The main table displays three columns:
 
 ## Section 10 — Revision History
 
-Revision: 1
-Effective Date: 2026-04-09
+Revision: 1  
+Effective Date: 2026-04-09  
 Approved By: President/CEO
 
-Change Summary:
+Change Summary:  
 Rev 1 – Initial release

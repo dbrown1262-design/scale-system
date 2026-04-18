@@ -194,7 +194,7 @@ The application will display color-coded status messages:
 
 **Scale Setup:**
 - Power on scale- display should show USb.dEU in the power on sequence.  If not, check that the white interface cable is connected
-- The scale must be set continuous print.  The keys are multi-function.  For example, the Tare key is also the Menu Key.  To access the menu, press and hold the Tare key until the menu appears.  Once in the menu, the "No" keys is used to scroll through menu options, and the "Yes" key is used to select 
+- The scale must be set continuous print.  The keys are multi-function.  For example, the Tare key is also the Menu Key.  To access the menu, press and hold the Tare key until the menu appears.  Once in the menu, the "No" keys is used to scroll through menu options, and the "Yes" key is used to select
 - Hold Menu Key until "Menu" appears
 - Press "No" until "Print" appears
 - Press "Yes"
@@ -245,9 +245,9 @@ The application will display color-coded status messages:
 
 ## Section 10 — Revision History
 
-Revision: 1
-Effective Date: 2026-04-09
+Revision: 1  
+Effective Date: 2026-04-09  
 Approved By: President/CEO
 
-Change Summary:
+Change Summary:  
 Rev 1 – Initial release

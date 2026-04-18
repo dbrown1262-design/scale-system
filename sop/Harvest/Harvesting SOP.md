@@ -1,383 +1,248 @@
 # Harvesting SOP
 
-## Section 1: Harvesting Plants
+## Section 1 — Purpose
 
-### 1. Purpose
+To define the standardized process for harvesting cannabis plants, recording plant weights, drying, bucking, weighing, and performing machine pre-trimming of bulk flower under a batch-controlled inventory system.
 
-To outline the standardized procedure for removing plants from the grow room, handling trellis and soil bags, weighing plants, and preparing the grow room for sanitation.
+This SOP ensures:
 
-### 2. Procedure
+* Product identity, traceability, and batch integrity
+* Prevention of cross-strain contamination
+* Accurate weight tracking and METRC compliance
+* Continuous mass balance control
+* Alignment with Good Manufacturing Practices (GMP)
 
-#### 2.1 Harvesting Plants
+## Section 2 — Scope
 
-**Clean the Drying Room**
+This SOP applies to all personnel involved in:
 
-1. Remove any totes from previous harvests
-2. Remove any rolling shelves containing product.
-3. Wash walls, sweep and mop floor.
-4. Sanidate the room using the compressor and foaming machine
+* Harvesting plants
+* Weighing wet and dry plants
+* Drying harvested plants
+* Bucking dried plants
+* Weighing and packaging bulk flower
+* Machine pre-trimming
 
-**Remove trellis from plants:**
+This SOP covers activities from **plant removal through machine pre-trimmed bulk flower stored prior to manual trimming**.
 
-1. Use scissors to remove as much trellis as possible.
-2. Leave enough trellis attached to keep plants upright until they are harvested.
-3. Bag used trellis and set aside for disposal.
+## Section 3 — Inventory Control Model
 
-**Remove fertigation lines:**
+### 3.1 Batch-Level Package Control
 
-1. Remove fertigation tubes from the soil bags prior to cutting plants.
+* A single METRC package may represent multiple liner bags (totes) of the same strain and harvest batch.
+* These totes are treated as **sub-units of a single controlled inventory package**.
 
-**Cut the plant at the base:**
+### 3.2 Internal Tote Tracking
 
-1. Use lopper shears to cut the plant at the stem base.
-2. Verify the plant tag is still attached.
-3. Transport the plant to the weighing station (see Section 1.2 below).
-4. Remove remaining trellis once the plant is at the weighing station.
+Each tote must have:
 
-**Manage soil bags during harvest:**
+* A unique **Tote ID**
+* A recorded weight
 
-1. Move harvested soil bags to the end of the grow table.
-2. Remove small fertigation tubes as each plant is processed to keep the work area clear.
+The internal system must maintain:
 
-#### 2.1.1 When All Plants in Grow Room Are Harvested
+* Individual tote weights
+* Total combined package weight
 
-1. Remove all remaining trellis from the tables and walkways.
-2. Transport used soil bags to the designated storage area.
-3. Separate soil from plastic:
-    - Empty the soil from the plastic grow bags.
-    - Place soil into the dump trailer for transport to the compost pile.
+### 3.3 Mass Balance Requirement
 
-**Clean the grow tables:**
+At all times, the facility must be able to produce:
 
-1. Use the shop vac to remove loose debris.
-2. Use the pressure washer to clean surfaces thoroughly.
+* Original package weight
+* Total processed weight
+* Remaining unprocessed weight
 
-**Sanitize the grow room:**
+This information is maintained in the internal tracking system.
 
-1. Set up the compressor and Sanidate sprayer.
-2. Spray tables, walls, and floors.
+### 3.4 Control Restrictions
 
----
+* All totes within a package must:
 
-#### 1.2 Weighing Plants
+  * Remain co-located
+  * Remain under the same strain and batch identity
+  * Not be handled as independent inventory
 
-#### 1.2.1 Set Up the Scale (If Necessary)
+* Any independent handling requires a METRC package split prior to processing.
 
-1. Place the Ohaus Ranger scale on the rack above the drying room door.
-2. Screw the bottom hook into the scale.
-3. Hang one stainless steel "S" hook on the bottom hook.
-4. Tare the scale to zero.
+## Section 4 — Responsibilities
 
-#### 1.2.2 Operating the Weighing Application
+**Harvest Technicians**
 
-1. Select "Weigh Plants" from the Harvest menu.
-2. Confirm Plant Type = "Wet".
-3. Since each plant has a unique ID, no crop or strain selection is required.
+* Execute all steps in this SOP
+* Maintain strain separation
+* Record all weights accurately
+* Ensure proper tote identification
 
-**Hang the plant:**
+**Harvest Manager**
 
-1. Place an S hook on a lower branch.
-2. Hang the plant upside down from the scale.
-3. Verify the weight appears in the Weight box on screen.
-4. Use the handheld QR reader to scan the plant tag.
+* Verify batch completeness
+* Review weights and records
+* Ensure compliance with this SOP
 
-The system will:
+**Quality Assurance (QA)**
 
-- Record the weight
-- Add a line to the Log box
-- Associate the weight with the correct plant ID automatically
+* Verify sanitation and line clearance
+* Review documentation
+* Verify mass balance capability
 
-#### 1.2.3 If a QR Code Does Not Scan
+## Section 5 — Materials and Equipment
 
-1. Hang the plant on the scale and verify the weight is displayed.
-2. Type the Plant ID manually.
-3. Click Process Current Plant.
+* Ohaus Ranger hanging scale
+* Stainless steel hooks
+* Handheld scanner
+* 27-gallon totes with liners
+* Tote ID labels
+* METRC package tags
+* Trimming machine
+* Sorting screens
+* Scissors / loppers
+* Cleaning supplies
+* PPE
 
-#### 1.2.4 Duplicate Weighing Warning
+## Section 6 — GMP Controls
 
-If the plant has already been weighed:
+### 6.1 Line Clearance
 
-- The system will display a warning message with options:
-    - Cancel
-    - Replace the Existing Weight
-- This situation is common when weighing dry plants while the application is still set to Wet mode.
+* Remove all prior material and tags
+* Clean and sanitize all surfaces and equipment
+* Verify no cross-strain contamination
+* Supervisor or QA verification required
 
-#### 1.2.5 After Weighing
+### 6.2 Strain Control
 
-1. Hang the plant in the drying room.
-2. Ensure the plant tag remains attached so it can be identified and weighed again after drying.
+* Only one strain may be processed at a time
+* Mixing of strains is strictly prohibited
 
----
+### 6.3 Documentation
 
-#### 1.3 Create Harvest Batch in Metrc
+* All weights must be recorded at time of activity
+* Internal records must match physical material
+* METRC records must match total package weight
 
-1. After all plants from a grow room have been harvested and moved to the drying room, log into Metrc.
-2. Navigate to: **Grow → Harvests → Create Harvest Batch**.
-3. Select all harvested plant tag UIDs for the room and strain.
-4. Enter:
-    - Harvest Date
-    - Room Name
-    - Strain
-    - Total Wet Weight
-5. Save the harvest batch.
+### 6.4 Deviations
 
-**Compliance Check**
+Report and document:
 
-- All plant tags must be included in exactly one harvest batch.
-- No plant tag may remain active after harvest.
+* Missing or incorrect data
+* Weight discrepancies
+* Equipment failure
+* Loss of traceability
 
----
+## Section 7 — Harvesting Plants
 
-## Section 2: Bucking Plants
+### 7.1 Prepare Drying Room
 
-### 1. Purpose
+* Clean and sanitize
+* Remove prior materials
+* Verify environmental readiness
 
-The bucking process removes flowers from stems following drying. This reduces material volume, prevents moisture retention, and prepares the flowers for trimming. Proper bucking supports product quality, reduces mold risk, and maintains strain separation and traceability.
+### 7.2 Remove Plants
 
----
+* Cut plant at base
+* Verify plant tag
+* Transport to weighing
 
-### 2. Bucking Procedure
+### 7.3 Weigh Wet Plants
 
-#### 2.1 Remove Plants From Drying Room
+* Record weight per plant
+* Ensure accurate identification
 
-1. Remove plants from the drying room **one strain at a time**.
-2. Weigh each plant before bucking (see **Section 3 – Weigh Plants**).
+### 7.4 Drying
 
-#### 2.2 Prepare Branches for Bucking
+* Hang plants
+* Maintain tag visibility
+* Ensure proper spacing
 
-1. Cut branches off the main stem to make them more manageable.
-2. Place branches with flowers on the work table.
-3. Place bare stems (no flowers) into a tote for later transport to the compost pile.
+### 7.5 Create Harvest Batch
 
-#### 2.3 Remove Flowers From Branches
+* Create batch in METRC
+* Verify all plants included
 
-1. Using scissors, cut each flower from the branches.
-2. Place flowers into trays.
-3. Discard stems once flowers are removed.
+## Section 8 — Bucking Plants
 
-#### 2.4 Collecting Bucked Flower
+### 8.1 Pre-Bucking
 
-1. Line a 27-gallon tote with a **food-grade liner**.
-2. As trays are filled, gently place flowers into the lined tote.
-3. **Do not compress or pack material.**
-4. **Maximum fill depth: 8 inches (10 inches absolute max).**
-5. Keep liner **loosely folded (do not seal airtight)**.
-6. Place lid on tote when not actively working.
+* Plants must be fully dried
+* Record dry weights
 
-#### 2.5 Weighing Bucked Flower
+### 8.2 Bucking
 
-1. Seal each liner bag with a zip tie.
-2. Weigh each bag (see **Section 2.4 – Weigh Bucked Flower**).
-3. Place weighed bags back into the tote and secure the lid.
-4. When space permits, return totes to the drying room.
+* Process one strain at a time
+* Remove flower from stems
 
-#### 2.6 Machine Pre-Trim & Smalls Separation
+### 8.3 Tote Collection
 
-**Purpose:** Reduce trim labor, improve tote performance, and separate preroll material early.
+* Place flower into lined totes
+* Label each tote with Strain, Harvest Date, type (Bucked Flower) (Use Print Tote Labels from the Menu to create the label)
+* Do not compress
 
-#### 2.6.1 Timing
+### 8.4 Machine Trimming
 
-1. Perform immediately after bucking (within 24 hours).
-2. Do not delay beyond 5 days.
+* Separate flower/smalls into different totes
+* Put trim in separate tote
 
-#### 2.6.2 Machine Operation
+### 8.5 Weighing
 
-1. Feed small batches into machine.
-2. Use:
-   - Spacer to lift the brushes
-   - Short duration
-3. Run one pass only.
+* Weigh each tote individually using the Weigh Bucked Tote function from the menu will assign each tote a **Tote ID** and print a label with the Strain, Harvest Date, Type (Flower, Smalls, Trim), and Tote Number
+* The internal system will Record weight, Tote Type for the strain
 
-**Do not fully trim buds using the machine.**
+### 8.6 METRC Package Creation
 
-#### 2.6.3 Smalls Separation
+* Create one METRC package for the batch
+* Package weight = sum of all tote weights
 
-1. Transfer batch from trimmer to steel tray
-2. Remove large flowers and place them in a lined tote
-2. Use the plastic sorter tray to separate smalls:
-   - Hold the sorter tray over the smalls steel tray
-   - Place a handful of flower in the sorter tray
-   - Agitate the sorter to tray to allow smalls to fall in the smalls steel tray
-   - Empty the large flowers remaining in the sorter tray into a lined tote
+## Section 9 — Machine Pre-Trimming
 
-#### 2.6.4 Handling
+### 9.1 Processing
 
-- Store smalls in labeled preroll containers.
-- Return large buds to totes (see Section 2.4).
+* Totes may be processed individually over time
+* Maintain strain separation
 
-#### 2.6.5 Quality Control
+### 9.2 Smalls Handling
 
-- Maintain natural bud structure.
-- Avoid over-processing or rounding buds.
+* Smalls may be separated during trimming
+* Smalls remain part of the original package unless removed for independent processing
 
-#### 2.7 Sanitation Between Strains
+### 9.3 Processing Records
 
-1. Wash scissors with isopropyl alcohol.
-2. Clean trays and tables before starting the next strain.
+For each trimming event, record:
 
-#### 2.8 End-of-Harvest Cleanup
+* Date
+* Strain
+* Tote ID or input weight
+* Output weights:
 
-1. Wash all stainless steel “S” hooks in an alcohol bath and store them.
-2. Sweep the drying room floor.
+  * Flower
+  * Smalls
+  * Trim
 
+### 9.4 METRC Control
 
-#### 2.9 Tote Storage & Handling
+* METRC package remains unchanged during internal processing
+* A METRC split is required before:
 
-**Purpose:** Preserve quality during staging prior to trimming.
+  * Independent movement
+  * Extraction
+  * Separate storage
 
-#### 2.9.1 Storage Limits
+## Section 10 — Bulk Storage
 
-- Target trim time: **3–5 days**
-- Maximum: **7 days**
-- Do not store for multiple weeks
+* Totes must remain grouped
+* Maintain environmental conditions
+* Prevent independent handling
 
-#### 2.9.2 Daily Handling
+## Section 11 — Records
 
-1. Lightly rotate totes every 1–2 days.
-2. Do not shake or compress material.
+* Tote weights
+* Trimmer reports
+* Harvest Summary Report reconciles inputs and outputs per package
+* Reconciliation is performed at completion of trimming
+* METRC package record
 
-#### 2.9.3 Environmental Conditions
-
-- Temperature: **60–65°F**
-- Humidity: **58–62% RH**
-
-#### 2.9.4 Key Rules
-
-- Do not overfill totes
-- Do not seal liners
-- Minimize handling
-
-#### 2.10 Create Bulk Bucked Flower Packages in Metrc
-
-1. After each tote liner bag is weighed and sealed, affix one unused **3 × 4 inch Metrc Package Tag UID** to the outside of the tote lid.
-2. Log into Metrc and navigate to: **Processing → Packages → Create Package**.
-3. For each tote:
-    1. Set **Source** to the Harvest Batch.
-    2. Set **Item** to *[Strain Name] – Bulk Flower*.
-    3. Enter the exact tote weight as **Quantity**.
-    4. Set **Count** to `1`.
-    5. Enter the **Package Tag UID** from the tag affixed to the tote.
-4. Save the package.
-
----
-
-## Section 3: Weighing Plants
-
-### 3. Weighing Plants
-
-#### 3.1 Set Up Scale (If Necessary)
-
-1. Place the **Ohaus Ranger scale** on the rack above the drying room door.
-2. Install the bottom hook.
-3. Hang a stainless steel **"S" hook**.
-4. **Tare** the scale.
-
-#### 3.2 Configure Software
-
-1. Select **Weigh Plants** from the Harvest menu.
-2. Set plant type to **Wet** or **Dry**.
-3. No crop or strain selection is required since each plant ID is unique.
-
-#### 3.3 Weighing Plants
-
-1. Hang the plant upside down using the attached S-hook.
-2. Confirm the weight appears in the **Weight** box.
-3. Scan the QR code on the plant tag.
-4. The system records the weight and logs the entry.
-
-#### 3.4 If a QR Code Does Not Scan
-
-1. Hang the plant and verify weight is displayed.
-2. Enter the Plant ID manually.
-3. Click **Process Current Plant**.
-
-#### 3.5 Duplicate Weight Warning
-
-If the plant was previously weighed, the system displays a warning with:
-
-- **Cancel**
-- **Replace Existing Weight**
-
-This may occur if the software was previously set to **Wet** mode and you are weighing a dry plant.
-
-#### 3.6 Post-Weigh Actions
-
-1. Remove the S-hook.
-2. Remove the plant tag.
-3. Remove any remaining pieces of plastic trellis.
-
----
-
-### 4. Weighing Bucked Flower
-
-#### 4.1 Scale Setup
-
-1. Place the Ohaus Ranger scale on the rack above the drying room door.
-2. Install the bottom hook.
-3. Hang a stainless steel S-hook.
-4. **Tare** the scale.
-
-#### 4.2 Prepare Label Printer
-
-1. Ensure the **4BARCODE** printer is selected as the default.
-2. Set label stock to **3 × 2 inch** labels.
-3. Load label stock into the printer.
-
-#### 4.3 Configure Software for Bucked Flower
-
-1. Select **Weigh Bucked Totes** from the Harvest menu.
-
-**Printer Test**
-
-1. Select:
-    - Crop: **1**
-    - Strain: **Test Strain**
-    - Tote: **1**
-2. Click **Print Label** to confirm printing works.
-
-#### 4.4 Weighing Bucked Flower Per Bag
-
-For each strain:
-
-1. Select the **Crop Number**.
-2. Select the **Strain**.
-3. For each bag of bucked flower:
-    1. Remove the bag from the tote.
-    2. Seal with a zip tie.
-    3. Hang the bag from the scale.
-    4. Confirm the weight appears in the **Tote Weight** box.
-    5. Click **New Tote** to generate the next tote number.
-    6. Click **Save Tote Weight** to print the tote label.
-    7. Return the bag to the tote, affix the label, and cover the tote.
-
----
-
-## Section 5 — Lab Sampling & Test Status in Metrc
-
-### 5.1 Create Lab Sample
-
-1. When all bulk bucked flower totes for a strain are complete, log into Metrc.
-2. Navigate to: **Lab Testing → Create Sample**.
-3. Select all bulk bucked flower package UIDs for the strain.
-4. Generate the lab sample manifest for the licensed laboratory.
-
-### 5.2 Record Test Results
-
-1. After receiving a passing COA, log into Metrc.
-2. Navigate to: **Lab Testing → Record Test Results**.
-3. Upload the COA.
-4. Mark all associated bulk packages as **Tested – Passed**.
-
-**Compliance Check**
-
-- No bulk flower package may be packaged into retail units until marked **Tested – Passed**.
-
----
-
-## Section 10 — Revision History
+## Section 12 — Revision History
 
 Revision: 1
-Effective Date: 2026-04-09
+Effective Date: [4/12/26]
 Approved By: President/CEO
 
 Change Summary:

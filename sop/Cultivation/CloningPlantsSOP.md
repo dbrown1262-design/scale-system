@@ -1,193 +1,319 @@
-# Cloning Plants SOP
+# Cloning and Clone Care SOP
 
-### 1. Purpose
-To standardize the process for taking, rooting, and caring for cannabis clones to ensure high survival rates, consistent plant quality, and clean, repeatable propagation practices.
+## Section 1 — Purpose
 
-### 2. Scope
-Applies to all propagation activities from selecting donor (mother) plants through transplanting rooted clones into veg containers.
-
-### 3. Responsibilities
-- **Propagation Technician:** Executes cloning steps, documents counts and outcomes, maintains sanitation.
-- **Head Grower / Cultivation Lead:** Confirms mother selection standards, approves inputs/ratios, reviews rooting success metrics.
-
-### 4. Safety & Compliance
-- Wear **nitrile gloves** and **eye protection** when handling disinfectants, rooting products, or nutrient solutions.
-- Follow facility sanitation and chemical handling requirements (labeling, storage, SDS access).
-- Keep propagation areas restricted and clean to prevent pest/disease transfer.
-
-### 5. Materials & Equipment
-**Propagation & Handling**
-- Sterile scalpels/razor blades and/or pruning snips
-- Clean tray(s) and humidity dome(s)
-- Rooting media (choose one standard):
-  - Root cubes (rockwool, peat-based, or foam plugs), **or**
-  - Aeroponic cloner/collar system
-- Plant labels (strain, mother ID, date, batch ID)
-
-**Solutions**
-- Clean water (RO or facility standard)
-- Mild disinfectant for surfaces/tools (per facility standard)
-- Rooting product (gel/powder/liquid per facility standard)
-- Optional: light foliar or clone-safe anti-stress product (per facility standard)
-
-**Environmental**
-- Propagation lighting (LED/T5)
-- Thermometer/hygrometer (and controller if available)
-- Heat mat (optional, if room temps are low)
-
-### 6. Definitions
-- **Mother plant:** Donor plant used to take cuttings.
-- **Clone batch:** Group of cuttings taken at the same time, labeled and tracked together.
-- **Rooted clone:** Cutting with visible, healthy root development suitable for transplant.
-
-### 7. Procedure
-
-#### 7.1 Pre-Start Checks (Before Cutting)
-1. **Confirm mother plant readiness**
-   - Healthy growth, no visible pests/disease, strong turgor.
-   - Avoid taking cuttings from stressed plants (heat stress, nutrient burn/deficiency, recent heavy spraying).
-2. **Prepare propagation area**
-   - Clear bench, remove debris, sanitize work surface.
-   - Wash hands and put on fresh gloves.
-3. **Prepare tools**
-   - Disinfect blades/snips and keep a disinfectant cup/wipe station available.
-4. **Prepare media**
-   - If using cubes/plugs:
-     - Pre-moisten media evenly (damp, not dripping).
-     - Stage cubes in tray.
-   - If using aeroponic cloner:
-     - Fill reservoir with clean water and approved additive(s) per facility standard.
-     - Confirm sprayers/pump function.
-5. **Prepare labels**
-   - Batch ID, strain, mother ID, date/time, count planned.
-
-#### 7.2 Select and Take Cuttings
-1. Select **vigorous side branches** with healthy new growth.
-2. Target cutting size (facility standard; common practice):
-   - **3–6 in** length with **2–4 nodes**.
-3. Make the initial cut from the mother using disinfected snips.
-4. **Immediately place cuttings** on a clean tray (or in clean water if your facility uses a “hold cup” step).
-
-**Quality checks (reject any cutting that is):**
-- Damaged, wilted, overly woody, hollow, or pest/lesion suspected
-- Extremely thin or excessively soft growth
-
-#### 7.3 Prepare Each Cutting for Rooting
-Perform the following steps one cutting at a time to prevent drying:
-1. With a sterile blade, re-cut the stem end at a **clean angle**.
-2. Remove lower leaves that would sit below the media line.
-3. If leaves are large, **trim leaf tips** to reduce transpiration (facility standard).
-4. Optional (only if your facility uses it): light stem scrape/score per standard practice.
-5. Apply rooting product to the stem end per label directions (do not contaminate the container).
-
-#### 7.4 Insert Cuttings into Media
-**Cubes/Plugs**
-1. Create a pilot hole if needed (avoid stripping rooting gel off when inserting).
-2. Insert cutting to the appropriate depth so it stands upright.
-3. Gently firm media around the stem (do not crush).
-
-**Aeroponic Cloner**
-1. Place cutting stem through collar so the stem hangs in the mist zone.
-2. Ensure collars are seated and cuttings are not pinched.
-
-#### 7.5 Initial Watering and Dome Setup
-1. Lightly mist the inside of the dome (if used) per facility standard.
-2. Water media lightly if needed (avoid saturation).
-3. Place dome and vents in the **closed** or “high humidity” position for day 0–1 (facility standard).
-4. Confirm labels are visible and correct.
-
-### 8. Environmental Setpoints (Propagation)
-> Use your facility’s standard if different; consistency matters.
-
-- **Air temperature:** 72–78 °F
-- **Media/root zone temperature:** 75–80 °F (if using heat mat)
-- **Relative humidity:** 80–95% initially, then taper down over the cycle
-- **Light intensity:** low to moderate (avoid high PPFD early)
-- **Photoperiod:** typically 18/6 or facility standard
-- **Air movement:** gentle; avoid direct fan blast on clones
-
-### 9. Daily Care (Days 1–14, Typical)
-
-#### 9.1 Daily Checklist
-1. Inspect for wilting, discoloration, mold, or pest signs.
-2. Record **temperature/RH** and any adjustments.
-3. Check media moisture:
-   - Keep evenly moist; do not allow standing water in tray.
-4. Dome management (if used):
-   - **Days 0–2:** vents mostly closed; brief daily air exchange.
-   - **Days 3–7:** gradually open vents to harden.
-   - **Days 7+:** remove dome once clones hold turgor without it (facility standard).
-5. Remove any dead or collapsing cuttings promptly.
-6. Sanitize hands/tools when moving between areas.
-
-#### 9.2 Watering Guidance (General)
-- Water lightly and evenly as needed.
-- Avoid overwatering (slow rooting, stem rot) and underwatering (wilting).
-- If using additives (clone nutrient, microbe product), follow facility recipe and keep it consistent.
-
-### 10. Root Check and Transplanting
-
-#### 10.1 Root Check
-1. Begin checking for roots at the facility’s expected timing (often **day 7–14**, cultivar dependent).
-2. Criteria for “ready to transplant”:
-   - Visible white roots protruding from media OR strong root mass in cloner
-   - Cutting stays turgid without dome
-   - No slime, rot, or foul smell
-
-#### 10.2 Transplant Procedure
-1. Prepare veg containers/media and label pots (strain, date, batch ID).
-2. Pre-moisten veg media (not soaked).
-3. Transplant carefully:
-   - Handle by the cube/collar, not the stem.
-   - Plant to appropriate depth and gently firm media.
-4. Water-in per facility standard.
-5. Move to veg area under **gentle** light for the first 24–48 hours, then ramp.
-
-### 11. Sanitation (Post-Task)
-1. Discard plant waste in designated waste stream.
-2. Clean and disinfect:
-   - Trays, domes, benches, tools
-3. Replace/refresh any reusable items per facility policy.
-4. Wash hands and reset the area for the next batch.
-
-### 12. Records & Data Capture
-Record the following for each clone batch:
-- Date/time taken
-- Strain / cultivar
-- Mother plant ID
-- Number of cuttings taken
-- Media type and rooting product used
-- Environmental readings (min/max or daily)
-- Daily losses (count and suspected cause)
-- Rooting success count and date ready for transplant
-- Notes (issues, corrective actions)
-
-### 13. Troubleshooting Guide
-
-**Wilting on Day 0–2**
-- Likely low humidity, too much light, or cuttings dried during handling
-- Action: reduce light intensity, increase humidity, work faster one-cutting-at-a-time
-
-**Slow or uneven rooting**
-- Mother health, temp too low, inconsistent moisture, overfeeding
-- Action: stabilize temps, keep media evenly moist, avoid strong nutrients early
-
-**Stem rot / damping off**
-- Overwatering, poor sanitation, stagnant air, contaminated media
-- Action: reduce saturation, increase gentle airflow, improve sanitation, remove affected clones
-
-**Mold on media**
-- Excess humidity + stagnant air
-- Action: increase venting/air exchange, reduce standing water, sanitize trays
+To define standardized procedures for preparing, taking, rooting, and caring for cannabis clones to ensure consistent plant quality, high rooting success rates, and compliance with Good Manufacturing Practices (GMP) and New York State Office of Cannabis Management requirements.
 
 ---
 
-## Section 10 — Revision History
+## Section 2 — Scope
 
-Revision: 1
-Effective Date: 2026-04-09
+This SOP applies to all personnel involved in cloning and clone care activities within the nursery and covers preparation, cutting, rooting, environmental control, and transplant readiness.
+
+---
+
+## Section 3 — Responsibilities
+
+- Cultivation staff are responsible for executing cloning procedures as written
+- Management is responsible for training, oversight, and compliance
+- Only trained and authorized personnel may perform cloning activities
+- Staff must document all required records at the time activities are performed
+
+---
+
+## Section 4 — Materials and Equipment
+
+- Clonex Clone Solution
+- Clonex Rooting Gel
+- Clonex Mist Concentrate
+- Root Riot plugs
+- Propagation trays and domes
+- Red solo cups
+- Measuring cups (10–20 ml)
+- Scalpels or cloning scissors
+- Buckets (5 gallon)
+- Labels and marker
+- Bleach
+- Isopropyl alcohol
+
+---
+
+## Section 5 — Cloning Preparation
+
+### 5.1 — Clonex Solution Barrel
+
+1. Fill barrel with 30 gallons of water
+2. Add 900 ml Clonex Clone Solution
+3. Adjust EC to 1.7–1.8
+4. Adjust pH to 5.9–6.0
+5. Record EC and pH in log
+
+### 5.2 — Clonex Mist
+
+1. Mix 1 part concentrate to 3 parts water
+2. Label container with:
+   - Contents
+   - Date prepared
+3. Discard and remake if contamination is suspected
+
+### 5.3 — Rooting Medium
+
+1. Fill two 5-gallon buckets with Clonex solution
+2. Add Root Riot plugs and soak 10–15 minutes
+3. Ensure:
+   - EC: 1.7–1.8
+   - pH: 5.8–6.0
+4. Record EC and pH
+
+### 5.4 — Sanitation Solutions
+
+1. Prepare clean water pitcher
+2. Prepare 1:9 bleach solution
+3. Label sanitation solution with date/time prepared
+4. Discard at end of shift
+
+### 5.5 — Equipment Preparation
+
+1. Sanitize trays and domes prior to use
+2. Sanitize all tools and containers before and after use
+3. Sanitize work surface with isopropyl alcohol
+4. Verify sanitation visually before starting work
+5. Document sanitation completion
+
+---
+
+## Section 6 — Propagation Tray Setup
+
+1. Remove plugs and gently squeeze excess water
+2. Place plugs in checkerboard pattern
+3. Label trays with:
+   - Strain name
+   - Cloning date
+4. Ensure labels are legible and permanent
+
+---
+
+## Section 7 — Clone Cutting Procedure
+
+### 7.1 — Preparation
+
+1. Label red solo cups with strain
+2. Fill cups halfway with Clonex solution
+3. Sanitize cutting tools prior to use
+
+### 7.2 — Taking Cuts
+
+1. Cut clones approximately 6 inches long above a node
+2. Place immediately into solution
+3. Track number of cuts per strain
+4. Target:
+   - 80 cuts = half table
+   - 150 cuts = full table
+5. Take additional cuts to account for losses
+6. Maintain traceability to mother plants where applicable
+
+---
+
+## Section 8 — Trimming and Plugging
+
+### 8.1 — Clone Preparation
+
+1. Trim clones to 3–6 inches
+2. Maintain 2–4 nodes
+3. Remove lower leaves and nodes
+4. Retain apical meristem and 1–2 nodes
+
+### 8.2 — Leaf Reduction
+
+1. Trim remaining leaves in half to reduce transpiration
+
+### 8.3 — Stem Preparation
+
+1. Lightly score stem surface without damaging epidermis
+
+### 8.4 — Rooting
+
+1. Dip stem in rooting gel for 10 seconds
+2. Insert firmly into plug
+
+### 8.5 — Tray Completion
+
+1. Fill entire tray
+2. Spray canopy with Clonex mist
+3. Place dome on tray
+4. Close vents fully
+5. Move to clone rack
+6. Record tray completion
+
+---
+
+## Section 9 — Environmental Conditions
+
+- **PPFD:** 50–200 µmol/m²/s
+- **Temperature:** 74–81°F
+- **Lighting:** 18 hours ON / 6 hours OFF
+- **Relative Humidity:**
+  - Days 1–3: 85–95%
+  - Days 4–10: 70–80%
+  - Day 10+: 60–70%
+
+**Important:**
+- Environmental conditions must be monitored and recorded daily
+- Deviations must be documented and reported
+
+---
+
+## Section 10 — Clone Care Schedule
+
+### Days 1–2
+
+- Do not remove dome
+- Keep vents closed
+- Visually inspect without disturbing
+
+### Day 3
+
+1. Remove dome and drain condensation
+2. Water if plugs are dry
+3. Feed:
+   - EC: 1.7–1.9
+   - pH: 5.8–6.0
+4. Record EC and pH
+5. Spray mist
+6. Replace dome
+7. Open vents 25%
+
+### Day 4
+
+- No action required
+- Perform visual inspection
+
+### Day 5
+
+1. Repeat Day 3 procedure
+2. Maintain vents at 25%
+
+### Day 6
+
+- No action required
+- Perform visual inspection
+
+### Day 7
+
+1. Water and mist as needed
+2. Open vents 50%
+
+### Day 8
+
+1. Water if needed
+2. Begin hardening:
+   - Remove dome 1–2 hours
+   - Monitor hourly
+   - If wilting occurs, mist and replace dome
+3. Document hardening start
+
+### Day 9
+
+1. Remove dome and drain
+2. Water if needed
+3. Continue hardening 1–2 hours
+4. Open vents 100%
+
+### Day 10
+
+1. Water if needed
+2. Hardening: 1–3 hours
+
+### Day 11
+
+1. Remove dome and drain
+2. Water if needed
+3. Hardening: up to 5 hours
+4. Vents remain fully open
+
+### Day 12
+
+1. Water if needed
+2. Hardening: up to 7 hours
+
+### Day 13
+
+1. Remove dome and drain
+2. Water if needed
+3. Hardening:
+   - Up to 8 hours or overnight
+   - Vents remain fully open
+
+### Day 14 — Transplant
+
+1. Transplant clones
+2. Leave domes off overnight prior to transplant
+3. **Note:** rooting time may vary by strain
+4. Record transplant date
+
+---
+
+## Section 11 — Records and Documentation
+
+The following records must be maintained:
+
+- Cloning date and strain (tray labels)
+- Number of cuts taken per strain
+- EC and pH measurements
+- Environmental conditions (temperature, humidity, light)
+- Watering and feeding events
+- Rooting success rate
+- Transplant dates
+
+**All records must be:**
+
+- Accurate and legible
+- Completed at time of activity
+- Stored in accordance with record retention policies
+
+---
+
+## Section 12 — Deviations and Corrective Actions
+
+Any deviation from this SOP must be documented.
+
+**Examples include:**
+- EC/pH out of range
+- Environmental excursions
+- Poor rooting performance
+
+**Deviations must include:**
+- Description of issue
+- Date and time
+- Corrective action taken
+
+Significant deviations must be reported to management.
+
+---
+
+## Section 13 — Training
+
+- All personnel must be trained on this SOP prior to performing cloning activities
+- Training must be documented and retained
+- Refresher training required when SOP is revised
+
+---
+
+## Section 14 — Sanitation and Contamination Control
+
+- All tools and surfaces must be sanitized before and after use
+- Cross-contamination between strains must be avoided
+- Gloves must be worn and changed as needed
+- Any signs of contamination (mold, pests, disease) must be reported immediately
+
+---
+
+## Section 15 — Revision History
+
+Revision: 2  
+Effective Date: 2026-04-10  
 Approved By: President/CEO
 
-Change Summary:
+Change Summary:  
+Rev 2 – Updated with detailed procedures from operational documentation including specific measurements, daily care schedule, and expanded preparation and environmental control sections  
 Rev 1 – Initial release
-

@@ -1,150 +1,381 @@
 # Trimming SOP
 
-## Section 1 — Trimming Bucked Flower
+## Section 1 — Purpose
+To define the controlled process for trimming cannabis flower, ensuring product quality, prevention of contamination, full traceability from source METRC package to finished material, accurate recordkeeping, and compliance with NY OCM and GMP requirements.
 
-### 1. Purpose
+## Section 2 — Scope
+This SOP applies to all trimming activities performed on bucked flower, all personnel working in the trim room, and all related systems including METRC and internal scale applications.
 
-To define the standardized procedure for trimming bucked flower, separating usable flower from smalls, maintaining sanitation, and preparing trimmed flower for weighing, Metrc tracking, and downstream packaging.
+## Section 3 — Responsibilities
 
-### 2. Responsibilities
+**Trimming Technician**
+- Perform trimming in accordance with this SOP
+- Maintain strain and lot segregation at all times
+- Record weights accurately and contemporaneously
+- Follow sanitation and PPE requirements
 
-- **Trimming Technician:** Perform trimming and maintain sanitation.
-- **Administrator (Trimmer Menu):** Verify crop, strain, and trimmer data entry for compensation calculations.
-- **Compliance Manager:** Ensure all Metrc package transfers are completed correctly.
+**Trim Lead / Supervisor**
+- Verify line clearance and setup
+- Ensure labeling and identification compliance
+- Review entries, reconciliation, and deviations
+- Approve corrections and rework
 
----
+**Compliance Manager**
+- Ensure METRC accuracy and package integrity
+- Review reconciliation discrepancies and deviations
+- Maintain audit readiness and records
 
-### 3. Trimming Procedure
-
-#### 3.1 Remove Flower From Bucked Totes
-
-1. Remove one bucked flower tote from storage at a time.
-2. Verify the tote has a readable **Metrc Package Tag UID** affixed to the lid.
-3. Remove flower from the tote and place it in the trimming tray.
-
-#### 3.2 Separate Bigs and Smalls
-
-1. Place:
-    - Large flowers (“Bigs”) into the trimming tray.
-    - Small flowers (“Smalls”) into the designated smalls tray for preroll processing.
-2. Only **Bigs** are trimmed during this process.
-
-#### 3.3 Trim Flower
-
-1. Trim leaves and visible stems from each flower using scissors.
-2. Use scissor cleaner periodically to remove oil buildup.
-3. Place trimmed flower into a clean stainless steel tray.
-
-#### 3.4 Sanitation
-
-1. Clean scissors with isopropyl alcohol between strains.
-2. Wipe trays and tables between strain changes.
+**Administrator**
+- Maintain system functionality and data integrity
+- Ensure audit trails are active and preserved
 
 ---
 
-## Section 2 — Weighing Trim for Trimmer Compensation
+## Section 4 — Required Equipment & Materials
 
-### 1. Purpose
-
-Trimmed flower is weighed at lunch, end of day, and when switching strains. These weights are recorded in the local system to calculate trimmer compensation.
-
----
-
-### 2. Procedure
-
-#### 2.1 Launch Weighing Application
-
-1. Select **Enter Daily Trim** from the Trimmer menu.
-
-#### 2.2 Weighing Trim by Trimmer
-
-For each trimmer:
-
-1. Place an empty tray on the scale and **tare**.
-2. Load the tray with trimmed flower from a single trimmer.
-3. Select:
-    - Trimmer Name
-    - Crop Number
-    - Strain
-    - Type = Flower
-    - AM / PM = Morning or Afternoon
-4. Select Start and End Time for the trimmer.
-5. Click **Save Entry**.
-6. Bag the weighed flower.
+- Trim scissors
+- Stainless steel trays
+- Food-grade containers with liners
+- Trim bins (labeled)
+- Ohaus Scout or Ranger scale
+- Certified check weights
+- QR scanner (if applicable)
+- METRC package tags (Processing license)
+- Label printer
+- Isopropyl alcohol (IPA) for sanitation
+- PPE:
+  - Nitrile gloves (single-use)
+  - Hair covering
+  - Beard covering (if applicable)
+  - Clean clothing or lab coat
 
 ---
 
-## Section 3 — Creating Trimmed Flower Containers
+## Section 5 — Environmental Conditions
 
-### 1. Purpose
-
-Trimmed flower must be transferred from bucked totes into trimmed flower containers while maintaining Metrc traceability.
-
----
-
-### 2. Procedure
-
-#### 3.1 Prepare Trimmed Flower Bucket
-
-1. Line a clean container with a breathable liner.
-2. Affix one unused **3 × 4 inch Metrc Package Tag UID (Processing License)** to the container lid.
-3. This container is now the **Trimmed Flower Bucket**.
-
-#### 3.2 Transfer Flower From Bucked Tote to Trimmed Bucket (Metrc)
-
-1. Log into Metrc under the **Processing license**.
-2. Navigate to: **Processing → Packages → Create Package**.
-3. For the trimmed flower bucket:
-    - **Source Package:** Select the bucked flower tote UID.
-    - **Item:** *[Strain Name] – Trimmed Flower*.
-    - **Quantity:** Enter the trimmed flower weight being added.
-    - **Count:** `1`.
-    - **Package Tag UID:** Enter the UID affixed to the trimmed flower bucket.
-4. Save the package.
-
-**Important Rule**
-
-- A trimmed flower bucket may receive material from **only one bucked tote UID**.
-- If a bucked tote is finished and the trimmed bucket is not full, **do not add flower from a different tote.**
-- Close the bucket, create the Metrc package, and start a new trimmed flower bucket with a new UID for the next tote.
+- Trim room must be maintained at:
+  - Temperature: 60–70°F
+  - Relative Humidity: 45–55%
+- Conditions must be monitored and recorded per facility logs
+- Deviations must be documented and reviewed
 
 ---
 
-## Section 4 — Weighing and Closing Trimmed Flower Buckets
+## Section 6 — Pre-Operation Checks (Line Clearance)
 
-### 1. Purpose
+1. Remove all material from previous strain or batch
+2. Clean and sanitize all surfaces, trays, and tools
+3. Verify no loose product remains
+4. Confirm source bucked tote METRC UID and strain
+5. Verify all labels are legible and accurate
+6. Prepare containers for:
+   - Trimmed flower
+   - Smalls
+   - Trim
+7. Affix appropriate identification labels:
+   - “Trimmed Flower – In Process”
+8. Open Trim Weight Entry system and verify correct crop/strain
 
-Trimmed flower buckets must be weighed, sealed, and recorded in Metrc before storage or packaging.
-
----
-
-### 2. Procedure
-
-#### 4.1 Seal Trimmed Flower Bucket
-
-1. When the bucket is full or the source tote is finished:
-    - Seal the liner with a zip tie.
-    - Hang the bag using an “S” hook and weigh on the scale.
-
-#### 4.2 Record Final Weight in Metrc
-
-1. Log into Metrc → **Processing → Packages**.
-2. Edit the trimmed flower bucket package UID.
-3. Update the final weight.
-4. Save changes.
-
-**Compliance Check**
-
-- Each trimmed flower bucket must trace back to exactly one bucked tote UID.
-- Mixed-source buckets are prohibited.
+**Supervisor must verify and document line clearance before start**
 
 ---
 
-## Section 10 — Revision History
+## Section 7 — Scale Verification
 
-Revision: 1
-Effective Date: 2026-04-09
-Approved By: President/CEO
+1. At start of shift:
+   - Verify scale is level and clean
+   - Perform check using certified weight
+2. Acceptable tolerance:
+   - Scout scale: ±0.1 g
+   - Ranger scale: ±0.5 g
+3. If scale is out of tolerance:
+   - Remove from service
+   - Notify supervisor
+   - Document issue
+
+---
+
+## Section 8 — Trimming Procedure
+
+### 8.1 Material Handling
+
+1. Trimming is performed on material from a single active source batch at a time.
+
+2. A source batch may be stored in multiple totes or containers:
+   - These containers may share the same METRC package
+   - Individual totes do not require separate METRC tags
+
+3. All totes and containers must:
+   - Contain only material from the same strain and batch
+   - Remain clearly identified with internal labels (strain and crop)
+
+4. Material from different batches or strains must never be mixed.
+
+5. Traceability is maintained through:
+   - Batch (METRC package) identification
+   - Controlled processing
+   - Final reconciliation of all outputs to the source batch
+
+### 8.2 Separation
+Material must be separated into:
+- Flower (bigs)
+- Smalls
+- Trim
+
+Separation must be maintained at all times.
+
+### 8.3 Trimming
+1. Remove excess leaf and visible stems
+2. Place trimmed material into tray
+3. Maintain product quality standards
+
+### 8.4 Tray Accumulation
+- Material may be accumulated in trays during trimming
+- Continuous weighing is not required
+- Material must remain segregated by:
+  - Trimmer
+  - Strain
+  - Type
+
+### 8.5 Sanitation
+- Clean scissors and tools between strains and as needed
+- Wipe surfaces between strains
+- Prevent cross-strain contamination
+
+---
+
+## Section 9 — In-Process Identification
+
+- Source material must be identifiable to a single METRC package (batch)
+
+- Internal containers (totes, trays, buckets) must be labeled with:
+  - Strain
+  - Crop or batch identifier
+  - Material type (Flower, Smalls, Trim)
+  - Date
+
+- Internal containers (totes, trays, and buckets) are considered handling units and do not represent separate inventory units in METRC.
+- METRC tags are applied at the package level, not to each internal container
+
+- All containers holding the same batch must remain segregated from other batches
+
+Product status must be clearly indicated:
+- In Process
+- Hold
+- Released
+
+Unlabeled material must be immediately isolated and investigated
+---
+
+## Section 10 — Weighing (Production & Payroll)
+
+Weighing is performed at:
+- Lunch
+- End of shift
+- Strain change
+
+### Procedure:
+1. Tare empty container or tray
+2. Add material from a single trimmer and type
+3. Record:
+   - Trimmer
+   - Crop
+   - Strain
+   - Type
+   - Start time
+   - End time
+   - Weight
+4. Save entry immediately in system
+
+All entries must be accurate, attributable, and contemporaneous.
+
+---
+
+## Section 11 — Trim Bag Weighing & Labeling
+
+1. Tare empty bag
+2. Fill with material
+3. Record weight
+4. Assign and scan METRC tag
+5. Print and apply label
+
+Label must include:
+- Strain
+- Type
+- Harvest date
+- METRC tag UID
+- Weight
+
+Labels must be verified before application.
+
+Incorrect labels must be removed and destroyed.
+
+---
+
+## Section 12 — METRC Package Creation
+
+1. Log into METRC (Processing license)
+2. Create package:
+   - Source: bucked tote UID
+   - Item: “[Strain] – Trimmed Flower”
+   - Quantity: recorded weight
+   - Tag UID: container tag
+
+**Rule:**
+- One container may only contain material from one source tote
+
+---
+
+## Section 13 — Final Weighing & Container Closure
+
+1. Seal liner
+2. Weigh final container
+3. Update final weight in METRC
+4. Assign final status as appropriate (e.g., Hold pending testing)
+
+---
+
+## Section 14 — Reconciliation
+
+For each source tote:
+
+Calculate:
+- Starting weight
+- Total flower
+- Total smalls
+- Total trim
+- Waste
+
+### Acceptance Criteria:
+- Reconciliation variance must be within ±2% of starting weight
+
+### If variance exceeds limit:
+- Stop processing
+- Investigate immediately
+- Document deviation
+- Obtain supervisor approval before continuation
+
+---
+
+## Section 15 — Foreign Material & Contamination Control
+
+- Product dropped on floor must be:
+  - Discarded, or
+  - Segregated as waste
+- Any foreign material contamination:
+  - Product must be isolated
+  - QA review required prior to release
+
+---
+
+## Section 16 — Rework
+
+- Re-trimming or rework is not permitted without:
+  - Supervisor approval
+  - Documentation of reason and action taken
+
+---
+
+## Section 17 — Data Integrity & Record Corrections
+
+- All records must be:
+  - Attributable
+  - Legible
+  - Contemporaneous
+  - Original
+  - Accurate
+
+- Edits require:
+  - Reason for change
+  - User identification
+  - Timestamp
+
+- Original data must be retained
+
+Supervisor must review all corrections.
+
+---
+
+## Section 18 — Deviations
+
+Deviations must be recorded for:
+- Mixed material
+- Missing or incorrect labels
+- Data entry errors
+- Reconciliation discrepancies
+- Equipment failures
+
+Each deviation must include:
+- Description
+- Root cause
+- Corrective action
+- Approval
+
+---
+
+## Section 19 — End-of-Day Procedures
+
+1. Ensure all material is weighed, labeled, and recorded
+2. Complete reconciliation
+3. Clean and sanitize all tools and surfaces
+4. Verify no loose product remains
+5. Verify all data entries are complete
+
+---
+
+## Section 20 — Records
+
+- Trim weight entries
+- METRC package records
+- Trim bag records
+- Labels
+- Reconciliation records
+- Deviation reports
+- Calibration logs
+- Environmental logs
+- Summary reports
+
+---
+
+## Section 21 — Training
+
+Training must include:
+- SOP review
+- Hands-on demonstration
+- Competency verification
+
+Training records must include:
+- Employee name
+- Trainer
+- Date
+- Signature
+
+Retraining is required after SOP revisions.
+
+---
+
+## Section 22 — Document Control
+
+- SOP Owner: Compliance Manager
+- Approved by: President / CEO
+- Effective Date: [ENTER DATE]
+- Revision: 3
+
+- Obsolete versions must be archived and retrievable
+
+---
+
+## Section 23 — Revision History
+
+Revision: 3
+Effective Date: [ENTER DATE]
+Approved By: President / CEO
 
 Change Summary:
-Rev 1 – Initial release
+Rev 3 – Full GMP alignment:
+- Added defined variance limits
+- Added scale verification requirements
+- Added environmental controls
+- Defined PPE requirements
+- Added contamination and rework controls
+- Strengthened data integrity and labeling controls

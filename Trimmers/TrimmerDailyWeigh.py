@@ -144,7 +144,7 @@ class WeighApp(ctk.CTk):
 
         # Type combo
         ctk.CTkLabel(Container, text="Type", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(0, 10), pady=8)
-        self.CmbType = ctk.CTkComboBox(Container, values=["Select", "Flower", "Smalls"], font=DEFAULT_FONT, width=260)
+        self.CmbType = ctk.CTkComboBox(Container, values=["Select", "Flower", "Smalls", "Trim"], font=DEFAULT_FONT, width=260)
         self.CmbType.grid(row=3, column=1, sticky="w", pady=8)
 
         # AM/PM combo
