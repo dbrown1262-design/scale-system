@@ -3,15 +3,23 @@ import os
 import smtplib
 import ssl
 import subprocess
+import time
 from email.message import EmailMessage
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
+from supabase import create_client, Client
+
+supabase_url = "https://figubkupxgxcrxtvsoji.supabase.co"
+supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpZ3Via3VweGd4Y3J4dHZzb2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNjk4NTksImV4cCI6MjAzNTg0NTg1OX0.049XyTPGjxGqliuBWnk1HWEBypP_J76h73qfLwCQxpw"
+supabase: Client = create_client(supabase_url, supabase_key)
 
 NAS_HOST = "192.168.1.153"   # <-- your NAS IP
 #DSM_URL = "https://192.168.1.153:5001"
 DSM_URL = "https://serviceadkhempco.us6.quickconnect.to/webman/3rdparty/SurveillanceStation/"
 
 FAILS_REQUIRED = 3
+CHECK_INTERVAL = 60  # seconds between checks
+HEARTBEAT_INTERVAL = 86400  # seconds between heartbeats (24 hours)
 STATE_FILE = r"C:\nas_monitor\state.json"
 
 # Gmail settings
@@ -25,14 +33,22 @@ SMTP_PORT = 465
 SMTP_USER = "dbrown1262@verizon.net"
 SMTP_PASS = "metf eixc laeg yvir"
 
-ALERT_TO = "service@adkhempco.com"
+#ALERT_TO = "service@adkhempco.com"
+ALERT_TO = "dbrown1262@verizon.net"
+
+
+def log_to_supabase(status, logdesc):
+    try:
+        supabase.schema("scale").table("naslog").insert({"status": status, "logdesc": logdesc}).execute()
+    except Exception as e:
+        print(f"Supabase log error: {e}")
 
 
 def load_state():
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE, "r") as f:
             return json.load(f)
-    return {"fail_count": 0, "is_down": False}
+    return {"fail_count": 0, "is_down": False, "last_heartbeat": 0}
 
 
 def save_state(state):
@@ -40,6 +56,11 @@ def save_state(state):
     os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
     with open(STATE_FILE, "w") as f:
         json.dump(state, f)
+    try:
+        status = "down" if state["is_down"] else "ok"
+        supabase.schema("scale").table("nasstat").update({"statdate": "now()", "status": status}).eq("id", 1).execute()
+    except Exception as e:
+        print(f"Supabase nasstat update error: {e}")
 
 
 def send_email(subject, body):
@@ -54,8 +75,6 @@ def send_email(subject, body):
     with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as smtp:
         smtp.login(SMTP_USER, SMTP_PASS)
         smtp.send_message(msg)
-
-#send_email("NAS Monitor Started", f"Monitoring started for {NAS_HOST}. Initial state: {load_state()}")
 
 def ping_host(host):
     result = subprocess.run(
@@ -87,6 +106,7 @@ def main():
                 "AdkHempCo NAS BACK ONLINE",
                 f"{NAS_HOST} is responding again."
             )
+            log_to_supabase("up", f"NAS is responding again.")
         state["fail_count"] = 0
         state["is_down"] = False
     else:
@@ -96,10 +116,21 @@ def main():
                 "ALERT: AdkHempCo NAS DOWN",
                 f"{NAS_HOST} failed {state['fail_count']} checks."
             )
+            log_to_supabase("down", f"NAS failed {state['fail_count']} checks.")
             state["is_down"] = True
 
     save_state(state)
 
 
 if __name__ == "__main__":
-    main()
+    send_email("NAS Monitor Started", f"Monitoring started for camera storage unit (NAS). Initial state: {load_state()}")
+    log_to_supabase("info", f"Monitoring started for camera storage unit (NAS). Initial state: {load_state()}")
+    while True:
+        main()
+        state = load_state()
+        if time.time() - state.get("last_heartbeat", 0) >= HEARTBEAT_INTERVAL:
+            send_email("NAS Monitor Heartbeat", f"NAS monitor is running. Current state: {state}")
+            log_to_supabase("heartbeat", f"NAS monitor is running. Current state: {state}")
+            state["last_heartbeat"] = time.time()
+            save_state(state)
+        time.sleep(CHECK_INTERVAL)
