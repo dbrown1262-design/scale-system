@@ -27,6 +27,7 @@ This SOP applies to all UbiBot WS1 sensors deployed in cultivation, drying, curi
 ### 5.1 Account Setup
 1. Access https://console.ubibot.com or install the UbiBot mobile app.
 2. Create a UbiBot account using company email credentials.
+3. Record login credentials in the facility password management system.
 
 ### 5.2 Device Power-Up
 1. Connect the WS1 sensor to power using the USB cable.
@@ -74,7 +75,7 @@ This SOP applies to all UbiBot WS1 sensors deployed in cultivation, drying, curi
 3. Assign alert recipients (Owner, Facility Manager).
 
 ### 5.8 Data Logging and Retention
-1. Confirm data logging interval (recommended: 5–15 minutes).
+1. Confirm data logging interval (10 minutes).
 2. Verify data is stored in UbiBot cloud.
 3. Export data as required for compliance or internal records.
 
@@ -104,7 +105,7 @@ Record the following:
 
 ## 7. Deviations and Corrective Actions
 - If device goes offline:
-- Check power supply
+- Check batteries
 - Verify WiFi connectivity
 - Restart device
 - If alerts fail:
@@ -112,13 +113,3 @@ Record the following:
 - Confirm contact information
 - Document all deviations and corrective actions
 
-## 8. Records
-- Sensor Installation Log
-- Alert Configuration Record
-- Daily Verification Log (if required)
-- Data Export Files (if retained locally)
-
-## 9. Compliance Notes
-- Sensor data supports environmental monitoring records
-- System does not replace required manual verification unless approved
-- Staff must verify system operation prior to critical activities (e.g., sampling, drying)
