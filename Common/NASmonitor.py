@@ -8,6 +8,7 @@ from email.message import EmailMessage
 from urllib.request import urlopen, Request
 from urllib.error import URLError, HTTPError
 from supabase import create_client, Client
+from datetime import datetime
 
 supabase_url = "https://figubkupxgxcrxtvsoji.supabase.co"
 supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpZ3Via3VweGd4Y3J4dHZzb2ppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAyNjk4NTksImV4cCI6MjAzNTg0NTg1OX0.049XyTPGjxGqliuBWnk1HWEBypP_J76h73qfLwCQxpw"
@@ -136,9 +137,11 @@ if __name__ == "__main__":
     while True:
         main()
         state = load_state()
+        print(f"Current state: {state}", flush=True)
         if time.time() - state.get("last_heartbeat", 0) >= HEARTBEAT_INTERVAL:
             send_email("NAS Monitor Heartbeat", f"NAS monitor is running. Current state: {state}")
             log_to_supabase("heartbeat", f"NAS monitor is running. Current state: {state}")
             state["last_heartbeat"] = time.time()
+            state["last_heartbeat_str"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             save_state(state)
         time.sleep(CHECK_INTERVAL)
