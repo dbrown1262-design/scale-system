@@ -44,8 +44,8 @@ def PrintToteLabel(Strain, LabelType,HarvestDate):
     c.drawCentredString(115, 5, "Adirondack Hemp Company")
     c.showPage()
     c.save()
-    os.startfile("C:\\labels\\label.pdf", "print")
+#    os.startfile("C:\\labels\\label.pdf", "print")
 
 #    command = "{} {}".format('c:\\labels\\PDFtoPrinter.exe','C:\\labels\\label.pdf')
 #    subprocess.call(command,shell=True)
-PrintToteLabel("Chocolate Dipped Bananas","Bucked Flower","2024-06-15")
+#PrintToteLabel("Chocolate Dipped Bananas","Bucked Flower","2024-06-15")

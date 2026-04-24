@@ -231,12 +231,15 @@ def CheckTag(TagNo):
         return True
     else:
         return True
-def GetOneTag(TagNo):
+def GetOneTag(crop_no, selStrain, toteType, toteNo):
     result = (
         sb.schema("scale")
         .table("scalebuck")
         .select("Weight")
-        .eq("TagNo", TagNo)
+        .eq("CropNo", crop_no)
+        .eq("Strain", selStrain)
+        .eq("ToteType", toteType)
+        .eq("ToteNo", toteNo)
         .execute()
     )
     if result.data:

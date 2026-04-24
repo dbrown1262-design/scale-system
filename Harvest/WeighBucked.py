@@ -425,7 +425,7 @@ class WeighBuckedApp(ctk.CTk):
 
         # retrieve weight (if any)
         try:
-            weight = SubSupa.GetOneTag(crop_no, selStrain, toteNo)
+            weight = SubSupa.GetOneTag(crop_no, selStrain, toteType, toteNo)
             weight_val = int(weight) if weight else 0
         except Exception as e:
             self.setStatus(f"GetOneTag failed: {e}")
