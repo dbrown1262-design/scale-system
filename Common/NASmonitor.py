@@ -65,19 +65,24 @@ def save_state(state):
     except Exception as e:
         print(f"Supabase nasstat update error: {e}")
 
-
 def send_email(subject, body):
-    print(f"Sending email: {subject}\n{body}")
-    msg = EmailMessage()
-    msg["From"] = SMTP_USER
-    msg["To"] = ALERT_TO
-    msg["Subject"] = subject
-    msg.set_content(body)
+    try:
+        print(f"Sending email: {subject}\n{body}", flush=True)
 
-    context = ssl.create_default_context()
-    with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as smtp:
-        smtp.login(SMTP_USER, SMTP_PASS)
-        smtp.send_message(msg)
+        msg = EmailMessage()
+        msg["From"] = SMTP_USER
+        msg["To"] = ALERT_TO
+        msg["Subject"] = subject
+        msg.set_content(body)
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context, timeout=15) as smtp:
+            smtp.login(SMTP_USER, SMTP_PASS)
+            smtp.send_message(msg)
+
+    except Exception as e:
+        print(f"Email error: {e}", flush=True)
+        log_to_supabase("email_error", f"Email failed: {e}")
 
 def ping_host(host):
     result = subprocess.run(
