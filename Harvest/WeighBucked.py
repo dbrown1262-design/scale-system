@@ -378,13 +378,13 @@ class WeighBuckedApp(ctk.CTk):
                 self.setStatus(f"InsertNewTag failed: {e}")
                 return
         
-#        PrintOneLabel(selStrain, toteType, selCrop, "Tote", str(toteNo), int(currentWeight))
+        PrintOneLabel(selStrain, toteType, selCrop, "Tote", str(toteNo), int(currentWeight))
         
         # Reload totes and set to New Tote for next bag
         try:
             totes = SubSupa.LoadTotes(crop_no, selStrain, toteType)
             self.ToteNoCombo.configure(values=totes)
-            self.ToteNoCombo.set("New Tote")
+            self.ToteNoCombo.set("Select")
         except Exception as e:
             self.setStatus(f"Reload totes failed: {e}")
         
