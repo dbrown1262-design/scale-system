@@ -15,8 +15,9 @@ supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 supabase: Client = create_client(supabase_url, supabase_key)
 
 NAS_HOST = "192.168.1.153"   # <-- your NAS IP
+DSM_URL = "https://192.168.1.153:5001/webman/3rdparty/SurveillanceStation/"
 #DSM_URL = "https://192.168.1.153:5001"
-DSM_URL = "https://serviceadkhempco.us6.quickconnect.to/webman/3rdparty/SurveillanceStation/"
+#DSM_URL = "https://serviceadkhempco.us6.quickconnect.to/webman/3rdparty/SurveillanceStation/"
 
 FAILS_REQUIRED = 3
 CHECK_INTERVAL = 60  # seconds between checks
