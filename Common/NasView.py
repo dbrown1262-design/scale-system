@@ -37,7 +37,7 @@ class NasViewApp(ctk.CTk):
         ctk.set_default_color_theme("dark-blue")
 
         self.title(APP_TITLE)
-        self.geometry("800x600")
+        self.geometry("900x600")
 
         style = ttk.Style()
         style.theme_use('clam')
@@ -103,9 +103,9 @@ class NasViewApp(ctk.CTk):
         self.Tree.heading("Status", text="Status")
         self.Tree.heading("Description", text="Description")
 
-        self.Tree.column("Timestamp", width=200, anchor="w")
-        self.Tree.column("Status", width=100, anchor="center")
-        self.Tree.column("Description", width=460, anchor="w")
+        self.Tree.column("Timestamp", width=150, anchor="w")
+        self.Tree.column("Status", width=60, anchor="center")
+        self.Tree.column("Description", width=660, anchor="w")
 
         scrollbar = ttk.Scrollbar(tree_frame, orient="vertical", command=self.Tree.yview)
         self.Tree.configure(yscrollcommand=scrollbar.set)
