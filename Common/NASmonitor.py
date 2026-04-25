@@ -96,11 +96,15 @@ def ping_host(host):
 
 def check_dsm(url):
     try:
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
         req = Request(url, headers={"User-Agent": "NASMonitor"})
-        with urlopen(req, timeout=5) as response:
-#            print(f"DSM check response code: {response.status}")
+        with urlopen(req, timeout=5, context=ctx) as response:
+            print(f"DSM check OK: {response.status}", flush=True)
             return True
-    except:
+    except Exception as e:
+        print(f"DSM check failed: {e}", flush=True)
         return False
 
 
