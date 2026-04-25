@@ -8,6 +8,7 @@ import customtkinter as ctk
 from tkinter import ttk
 from tkcalendar import DateEntry
 from datetime import datetime, date, timedelta
+import pytz
 import os
 import sys
 import subprocess
@@ -125,13 +126,18 @@ class NasViewApp(ctk.CTk):
                 row = res.data[0]
                 status = row.get("status", "")
                 statdate = row.get("statdate", "")
+                print(f"Loaded NAS status: {status} as of {statdate}")
                 color = "#44cc44" if status == "ok" else "#cc4444"
                 self.StatusLabel.configure(text=status.upper(), text_color=color)
                 if statdate:
                     try:
                         dt = datetime.fromisoformat(statdate)
+                        if dt.tzinfo is None:
+                            dt = pytz.utc.localize(dt)
+                        dt = dt.astimezone(pytz.timezone("America/New_York"))
                         self.StatDateLabel.configure(text=dt.strftime("%Y-%m-%d %H:%M:%S"))
-                    except Exception:
+                    except Exception as e:
+                        print(f"statdate conversion error: {e}")
                         self.StatDateLabel.configure(text=statdate)
             else:
                 self.StatusLabel.configure(text="No data", text_color="#aaaaaa")
@@ -156,6 +162,9 @@ class NasViewApp(ctk.CTk):
                 created_at = row.get("created_at", "")
                 try:
                     dt = datetime.fromisoformat(created_at)
+                    if dt.tzinfo is None:
+                        dt = pytz.utc.localize(dt)
+                    dt = dt.astimezone(pytz.timezone("America/New_York"))
                     ts = dt.strftime("%Y-%m-%d %H:%M:%S")
                 except Exception:
                     ts = created_at

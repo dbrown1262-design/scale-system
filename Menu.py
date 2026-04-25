@@ -108,13 +108,16 @@ SCRIPTS = {
         ("Enter Hash Run", os.path.join("Processing", "EnterHashRun.py")),
         ("Enter Rosin Run", os.path.join("Processing", "EnterRosinRun.py")),
     ],
-    "Admin": [
+    "General": [
         ("View/Print SOPs", os.path.join("SopScripts", "SopView.py")),
+        ("Scanner Setup", os.path.join("Common", "ScannerSetup.py")),
+        ("NAS Monitor", os.path.join("Common", "NasView.py")),
+    ],
+    "Admin": [
         ("Edit Daily Trim", os.path.join("Trimmers", "EditDailyTrim.py")),
         ("Edit Trimmer List", os.path.join("Trimmers", "EditTrimmerList.py")),
         ("Edit Trim Rates", os.path.join("Trimmers", "EditTrimRates.py")),
         ("Edit Package Types", os.path.join("Packaging", "EditPackageTypes.py")),
-        ("Scanner Setup", os.path.join("Common", "ScannerSetup.py")),
         ("Edit SOP Index", os.path.join("SopScripts", "EditSopIndex.py")),
     ],
     "Supplies": [
@@ -124,8 +127,7 @@ SCRIPTS = {
     ],
 }
 
-
-def open_script(rel_path: str, status_label: ctk.CTkLabel, parent: ctk.CTk):
+def open_script(rel_path: str, status_label: ctk.CTkLabel, parent: ctk.CTk, is_admin=False):
     """Launch the given script path (relative to ROOT_DIR) in a new process."""
     full = os.path.join(ROOT_DIR, rel_path)
     if not os.path.exists(full):
@@ -134,6 +136,9 @@ def open_script(rel_path: str, status_label: ctk.CTkLabel, parent: ctk.CTk):
         return
 
     try:
+        # Change cursor to waiting (watch is the hourglass/waiting cursor on Windows)
+
+
         # Change cursor to waiting (watch is the hourglass/waiting cursor on Windows)
 #        parent.configure(cursor="wait")
 #        parent.update()
@@ -161,10 +166,10 @@ def open_script(rel_path: str, status_label: ctk.CTkLabel, parent: ctk.CTk):
         messagebox.showerror("Launch Failed", f"Failed to launch {rel_path}: {e}")
         status_label.configure(text=f"Launch failed: {e}")
 
-
 class MenuApp(ctk.CTk):
-    def __init__(self):
+    def __init__(self, is_admin=False):
         super().__init__()
+        self.is_admin = is_admin
         self.title("Scale Menu")
         self.geometry("1200x680")
         self.resizable(False, False)
@@ -189,11 +194,14 @@ class MenuApp(ctk.CTk):
             "Packaging": (2, 0),
             "Trimmer": (1, 1),
             "Processing": (2, 1),
+            "General": (1, 2),
             "Admin": (1, 2),
             "Supplies": (2, 2),
         }
-        
+
         for section, items in SCRIPTS.items():
+            if section == "Admin" and not self.is_admin:
+                continue        
             row, col = row_col_map.get(section, (0, 0))
             # Create a frame with a label for the section
             section_frame = ctk.CTkFrame(main)
@@ -212,7 +220,7 @@ class MenuApp(ctk.CTk):
             for idx, (label, rel) in enumerate(items):
                 # Main button
                 btn = ctk.CTkButton(button_frame, text=label, width=220, font=DEFAULT_FONT, 
-                                   command=lambda r=rel: open_script(r, self.status, self))
+                                   command=lambda r=rel: open_script(r, self.status, self, self.is_admin))
                 btn.grid(row=idx, column=0, pady=6, padx=(6, 2))
                 
                 # SOP button (small)
@@ -225,9 +233,12 @@ class MenuApp(ctk.CTk):
         exit_btn = ctk.CTkButton(main, text="Exit", command=self.destroy, font=DEFAULT_FONT)
         exit_btn.grid(row=100, column=2, sticky="e", pady=12)
 
-
 def main():
-    app = MenuApp()
+    import sys
+    is_admin = "--admin" in sys.argv
+    print("ADMIN MODE:", is_admin)  # debug
+
+    app = MenuApp(is_admin=is_admin)
     app.mainloop()
 
 
