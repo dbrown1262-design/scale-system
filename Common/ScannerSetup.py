@@ -51,8 +51,8 @@ class ScannerSetupApp(ctk.CTk):
         # Instructions
         instructions = ctk.CTkLabel(
             frame, 
-            text="This utility will detect your Bluetooth QR scanner.\n"
-                 "1. Make sure your scanner is paired via Bluetooth\n"
+            text="This utility will detect your Bluetooth or USB QR scanner.\n"
+                 "1. Make sure your scanner is paired via Bluetooth or connected via USB\n"
                  "2. Click 'Scan for Ports' to detect available ports\n"
                  "3. Select a port and click 'Test Scanner'\n"
                  "4. Scan a QR code when prompted\n"
@@ -63,7 +63,7 @@ class ScannerSetupApp(ctk.CTk):
         instructions.pack(pady=(0, 20))
         
         # Ports listbox area
-        ports_label = ctk.CTkLabel(frame, text="Available Bluetooth Ports:", font=DEFAULT_FONT)
+        ports_label = ctk.CTkLabel(frame, text="Available Scanner Ports:", font=DEFAULT_FONT)
         ports_label.pack(anchor="w", pady=(10, 5))
         
         # Scrollable frame for ports
@@ -124,8 +124,8 @@ class ScannerSetupApp(ctk.CTk):
             self.log(f"Error loading config: {e}")
     
     def scan_for_ports(self):
-        """Scan for available Bluetooth serial ports"""
-        self.log("Scanning for Bluetooth ports...")
+        """Scan for available Bluetooth and USB serial ports"""
+        self.log("Scanning for scanner ports...")
         
         # Clear existing radio buttons
         for radio in self.port_radios:
@@ -134,22 +134,26 @@ class ScannerSetupApp(ctk.CTk):
         
         ports = list(serial.tools.list_ports.comports())
         bt_ports = []
+        usb_ports = []
         
         for p in ports:
             desc = (p.description or "").lower()
             hwid = (p.hwid or "").lower()
-            
+            print(f"DEBUG: Port found: {p.device} - {p.description} - {p.hwid}")
+            if "usb_cdc" in hwid:
+                usb_ports.append((p.device, p.description))
+                self.log(f"Found USB port: {p.device} - {p.description}")
             if "bluetooth" in desc or "standard serial over bluetooth" in desc or "bthenum" in hwid:
                 bt_ports.append((p.device, p.description))
-#                self.log(f"Found: {p.device} - {p.description}")
+                self.log(f"Found Bluetooth port: {p.device} - {p.description}")
         
-        if not bt_ports:
-            self.log("ERROR: No Bluetooth SPP ports found.")
-            messagebox.showwarning("No Ports Found", "No Bluetooth serial ports detected.\nMake sure your scanner is paired via Bluetooth.")
+        if not bt_ports and not usb_ports:
+            self.log("ERROR: No scanner ports found.")
+            messagebox.showwarning("No Ports Found", "No serial ports detected.\nMake sure your scanner is paired via Bluetooth or connected via USB.")
             return
         
         # Create radio buttons for each port
-        for port, desc in bt_ports:
+        for port, desc in bt_ports+usb_ports:
             radio = ctk.CTkRadioButton(
                 self.ports_frame,
                 text=f"{port} - {desc}",
@@ -159,7 +163,8 @@ class ScannerSetupApp(ctk.CTk):
             )
             radio.pack(anchor="w", pady=2)
             self.port_radios.append(radio)
-        
+
+
         # Select first port by default
         if bt_ports:
             self.selected_port.set(bt_ports[0][0])
@@ -193,6 +198,7 @@ class ScannerSetupApp(ctk.CTk):
     def run_scan_test(self, port):
         """Run the scanner test in a background thread"""
         success = False
+        scanned_data = None
         try:
 #            self.log(f"Opening {port}...")
             with serial.Serial(port, baudrate=115200, timeout=0.5) as s:
@@ -205,6 +211,7 @@ class ScannerSetupApp(ctk.CTk):
                         if data:
                             self.log(f"SUCCESS: Received data: {data}")
                             success = True
+                            scanned_data = data
                             break
                     time.sleep(0.1)
                 
@@ -214,9 +221,9 @@ class ScannerSetupApp(ctk.CTk):
             self.log(f"ERROR: Could not open {port}: {e}")
         
         # Re-enable buttons on main thread
-        self.after(0, lambda: self.scan_complete(success))
+        self.after(0, lambda: self.scan_complete(success, scanned_data if success else None))
     
-    def scan_complete(self, success):
+    def scan_complete(self, success, scanned_data=None):
         """Called when scan test completes"""
         self.scanning = False
         self.btn_test.configure(state="normal")
@@ -224,7 +231,7 @@ class ScannerSetupApp(ctk.CTk):
         
         if success:
             self.btn_save.configure(state="normal")
-            messagebox.showinfo("Success", "Scanner detected successfully!\nClick 'Save Configuration' to save this port.")
+            messagebox.showinfo("Success", f"Scanner detected successfully!\nData: {scanned_data}\nClick 'Save Configuration' to save this port.")
         else:
             messagebox.showerror("Test Failed", "No data received from scanner.\nMake sure the scanner is on and try again.")
     

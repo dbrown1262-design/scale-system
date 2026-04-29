@@ -8,24 +8,16 @@ To define the standardized procedure for detecting, testing, and configuring Blu
 
 ## 2. Inputs
 
-- Bluetooth QR scanner device (paired with workstation)
-- Windows Bluetooth serial port (SPP)
+- Bluetooth or USB QR scanner device
 - config.json configuration file
 - Serial port detection utilities
 
 ---
 
-## 3. Responsibilities
 
-- **IT Administrator:** Pair Bluetooth scanner with workstation and verify device connectivity.
-- **Harvest/Packaging Technician:** Perform scanner setup and validation testing.
-- **System Administrator (Admin Menu):** Monitor scanner configuration and troubleshoot communication issues.
+## 3. Procedure
 
----
-
-## 4. Procedure
-
-### 4.1 Launch the Scanner Setup Application
+### 3.1 Launch the Scanner Setup Application
 
 1. From the main menu, navigate to Common → Scanner Setup.
 2. The Scanner Setup window will open.
@@ -33,7 +25,7 @@ To define the standardized procedure for detecting, testing, and configuring Blu
 
 ---
 
-### 4.2 Prepare the Scanner
+### 3.2 Prepare the Scanner
 
 **Bluetooth Pairing**
 
@@ -43,34 +35,41 @@ To define the standardized procedure for detecting, testing, and configuring Blu
 	- Confirm the scanner appears in the paired devices list.
 3. If not paired, complete the Bluetooth pairing process before proceeding.
 
+**USB Scanner Setup**
+
+The full manual for the FS2208 scanner is stored in the adknet folder.  The USB setup is on page 98.  The file DS2208 scanner setup.pdf contains only page 98.
+
+1. Connect the scanner to a USB port
+2. Open "DS2208 scanner setup.pdf" in adknet folder.
+3. Scan the USB CDC Host barcode
 ---
 
-### 4.3 Scan for Available Ports
+### 3.3 Scan for Available Ports
 
-**Detect Bluetooth Serial Ports**
+**Detect Scanner Serial Ports**
 
 1. Click the **Scan for Ports** button.
-2. The application will scan for all available Bluetooth serial ports (SPP).
-3. Detected ports will be displayed in the "Available Bluetooth Ports" list.
+2. The application will scan for all available Scanner serial ports (SPP).
+3. Detected ports will be displayed in the "Available Scanner Ports" list.
 	- Each port shows the COM port number and device description.
 	- Example: "COM5 - Standard Serial over Bluetooth link"
 
 **No Ports Found**
 
-If no Bluetooth ports are detected:
+If no scanner ports are detected:
 
-1. Verify the scanner is paired via Bluetooth.
+1. Verify the scanner is paired via Bluetooth or USB.
 2. Restart the scanner device.
-3. Restart the Bluetooth service on the workstation.
+3. If using bluetooth, restart the Bluetooth service on the workstation.
 4. Click **Scan for Ports** again.
 
 ---
 
-### 4.4 Test the Scanner
+### 3.4 Test the Scanner
 
 **Select a Port**
 
-1. In the "Available Bluetooth Ports" list, select the appropriate port by clicking the radio button.
+1. In the "Available Scanner Ports" list, select the appropriate port by clicking the radio button.
 	- The first detected port is selected by default.
 
 **Run Scanner Test**
@@ -91,7 +90,7 @@ If no Bluetooth ports are detected:
 
 ---
 
-### 4.5 Save Configuration
+### 3.5 Save Configuration
 
 **Finalize Setup**
 
@@ -105,36 +104,20 @@ The configuration is now saved and will be used by all weighing and tracking app
 
 ---
 
-### 4.6 Close the Application
+### 3.6 Close the Application
 
 1. Review the status log to confirm successful configuration.
 2. Click the **Close** button to exit the Scanner Setup application.
 
 ---
 
-## 5. Quality & Compliance Checks
 
-- The scanner must be successfully paired via Bluetooth before running the setup.
-- Test scans must return data within the 10-second timeout window.
-- The saved COM port in config.json must match the port where the scanner was successfully detected.
-- If the scanner stops working after configuration, re-run the setup process to detect port changes.
-- Bluetooth serial port assignments may change if devices are unpaired and re-paired.
+## Section 4 — Revision History
 
----
+Revision: 2
+- Effective Date: 2026-04-29
+- Approved By: President/CEO
 
-## 6. Records
-
-- Common/config.json file containing scanner_com_port value
-- Status log showing detected ports and test results
-- Bluetooth device pairing records in Windows settings
-
----
-
-## Section 10 — Revision History
-
-Revision: 1  
-Effective Date: 2026-04-09  
-Approved By: President/CEO
-
-Change Summary:  
-Rev 1 – Initial release
+Change Summary:
+- Rev 1 – Initial release
+- Rev 2 - Add USB Barcode Scanner

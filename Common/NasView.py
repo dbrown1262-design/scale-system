@@ -37,7 +37,7 @@ class NasViewApp(ctk.CTk):
         ctk.set_default_color_theme("dark-blue")
 
         self.title(APP_TITLE)
-        self.geometry("900x600")
+        self.geometry("1200x600")
 
         style = ttk.Style()
         style.theme_use('clam')
