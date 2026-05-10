@@ -100,7 +100,9 @@ SCRIPTS = {
     ],
     "Trimmer": [
         ("Enter Daily Trim", os.path.join("Trimmers", "TrimmerDailyWeigh.py")),
+        ("Print Tare Tags", os.path.join("Common", "PrintTareTag.py")),
         ("Weigh Trim Bags", os.path.join("Trimmers", "WeighTrim.py")),
+        ("Trim Bags Summary", os.path.join("Trimmers", "TrimBagSummary.py")),
         ("Weekly Trimmer Summary", os.path.join("Trimmers", "TrimmerSummary.py")),
         ("Trimmer Strain Summary", os.path.join("Trimmers", "TrimmerStrainSummary.py")),
     ],

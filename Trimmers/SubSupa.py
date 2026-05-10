@@ -291,7 +291,7 @@ def GetTrimBags(CropNo, Strain, Type):
     return ["Select", "New"] + metrc_ids
 
 
-def CheckTrimBag(CropNo: int, Strain: str, MetrcId: str):
+def CheckTrimBag(CropNo: int, Strain: str, BagNo: str):
     """Load existing ToteNos for crop and strain."""
     res = (
         sb.schema("scale")
@@ -299,7 +299,7 @@ def CheckTrimBag(CropNo: int, Strain: str, MetrcId: str):
         .select("MetrcId")
         .eq("CropNo", CropNo)
         .eq("Strain", Strain)
-        .eq("MetrcId", MetrcId)
+        .eq("MetrcId", BagNo)
         .order("MetrcId", desc=True)
         .execute()
     )
@@ -308,30 +308,73 @@ def CheckTrimBag(CropNo: int, Strain: str, MetrcId: str):
         id = row.get("MetrcId")
         crop_no = row.get("CropNo")
         strain = row.get("Strain")  
-        if CropNo == crop_no and Strain == strain and MetrcId == id:
+        if CropNo == crop_no and Strain == strain and BagNo == id:
             ReturnVal = "InUse"
         else:
             ReturnVal = "Error"
 
-def GetBagWeight(MetrcId: str):
+def GetBagWeight(CropNo: int, Strain: str, BagNo: str):
     res = (
         sb.schema("scale")
         .table("scaletrim")
         .select("Weight")
-        .eq("MetrcId", MetrcId)
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("MetrcId", BagNo)
         .execute()  
     )
     if res.data and len(res.data) > 0:
         return res.data[0].get("Weight", 0)
     return 0
 
-def InsertTrimBag(CropNo: int, Strain: str, Type: str, MetrcId: str, Weight, TrimDate):
-    """Insert a new TagNo for crop and strain."""
+def GetBagSummary(CropNo: int, Strain: str, Type: str):
+    res = (
+        sb.schema("scale")
+        .table("scaletrim")
+        .select("MetrcId,Weight,TrimDate")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .eq("Type", Type)
+        .order("MetrcId")
+        .execute()  
+    )
+    summary = []
+    for row in res.data or []:
+        summary.append({
+            "MetrcId": row.get("MetrcId"),
+            "Weight": row.get("Weight"),
+            "TrimDate": row.get("TrimDate"),
+        })
+    return summary
+
+def GetNewBagNo(CropNo: int, Strain: str):
+    res = (
+        sb.schema("scale")
+        .table("scaletrim")
+        .select("MetrcId")
+        .eq("CropNo", CropNo)
+        .eq("Strain", Strain)
+        .order("MetrcId", desc=True)
+        .execute()
+    )
+    max_no = 0
+    for row in res.data or []:
+        id = row.get("MetrcId", "")
+        try:
+            num = int(id)
+            if num > max_no:
+                max_no = num
+        except ValueError:
+            pass
+    return max_no + 1
+
+def InsertTrimBag(CropNo: int, Strain: str, Type: str, BagNo: str, Weight, TrimDate):
+    """Insert a new BagNo for crop and strain."""
     data = {
         "CropNo": int(CropNo),
         "Strain": Strain,
         "Type": Type,
-        "MetrcId": MetrcId,
+        "MetrcId": BagNo,
         "Weight": int(Weight),
         "TrimDate": TrimDate
     }
