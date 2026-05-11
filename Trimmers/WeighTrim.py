@@ -142,6 +142,10 @@ class WeighTrimApp(ctk.CTk):
         self.EntWeight = ctk.CTkEntry(container, width=160, font=DEFAULT_FONT, state=initial_weight_state)
         self.EntWeight.grid(row=7, column=1, sticky="w", pady=6)
 
+        ctk.CTkLabel(container, text="Net Weight (g)", font=DEFAULT_FONT).grid(row=8, column=0, sticky="e", padx=(0,10))
+        self.NetWeightLabel = ctk.CTkLabel(container, text="--", font=("Arial", 16, "bold"), text_color="#44cc44")
+        self.NetWeightLabel.grid(row=8, column=1, sticky="w", pady=6)
+
         btn_frame = ctk.CTkFrame(container, fg_color="transparent")
         btn_frame.grid(row=9, column=0, columnspan=3, pady=(18,0))
 
@@ -484,6 +488,15 @@ class WeighTrimApp(ctk.CTk):
                 self.EntWeight.configure(state='disabled')
             except Exception:
                 pass
+
+        # Update net weight display
+        try:
+            tare_val = float(self.EntTare.get() or 0)
+            scale_val = float(WStr or 0)
+            net = scale_val - tare_val
+            self.NetWeightLabel.configure(text=f"{net:,.0f}")
+        except Exception:
+            self.NetWeightLabel.configure(text="--")
 
         # Check QR reader for tare tag (only if scanner is connected)
         if ScannerConnected:

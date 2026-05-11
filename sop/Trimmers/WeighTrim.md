@@ -4,16 +4,11 @@
 
 To standardize the process for accurately weighing trimmed cannabis flower, smalls, and trim bags using the Ohaus Scout or Ranger scale and the Weigh Trim Bags application.
 
----
-
 ## 2. Required Equipment
 
 - Ohaus Scout scale (platform scale) or Ohaus Ranger scale (hanging scale)
 - Handheld QR code scanner
-- Metric tags (QR-coded labels for bags)
 - Weigh Trim Bags application (Trimmers menu)
-
----
 
 ## 3. Set Up the Scale (If Necessary)
 
@@ -22,11 +17,9 @@ To standardize the process for accurately weighing trimmed cannabis flower, smal
 3. Tare the scale to zero before beginning.
 4. Verify the USB cable is connected to the computer.
 
----
-
 ## 4. Operating the Weighing Application
 
-1. Open the Trimmers menu.
+1. Open the Menu.
 2. Select **Weigh Trim Bags**.
 3. Check the status indicators in the upper right:
 	- **Scale: Connected** (green) — scale is ready.
@@ -40,8 +33,6 @@ To standardize the process for accurately weighing trimmed cannabis flower, smal
 	- **Smalls** — small buds separated during trimming.
 	- **Trim** — leaf material removed during trimming.
 
----
-
 ## 5. Weighing a Trim Bag
 
 1. Place the empty bag on the scale.
@@ -54,15 +45,11 @@ To standardize the process for accurately weighing trimmed cannabis flower, smal
 	- The system will save the crop, strain, type, metric tag, weight, and date.
 7. The Metric Tag field will clear automatically for the next bag.
 
----
-
 ## 6. If a QR Code Does Not Scan
 
 1. Manually type the Metric Tag number into the **Metric Tag** field.
 2. Verify the weight is displayed.
 3. Click **Save Weight**.
-
----
 
 ## 7. Printing a Label
 
@@ -84,7 +71,6 @@ After weighing a bag, you can print a label for the bag:
 	- Weight in grams
 	- Company name
 
----
 
 ## 8. Duplicate Tag Warning
 
@@ -98,8 +84,6 @@ If a Metric Tag has already been recorded, the system will display a warning:
 
 > **Note:** This is useful for correcting weights or re-weighing bags.
 
----
-
 ## 9. Tag Mismatch Error
 
 If a Metric Tag has been used for a different crop or strain, the system will display an error:
@@ -109,8 +93,6 @@ If a Metric Tag has been used for a different crop or strain, the system will di
 
 - Click **OK** and use a different Metric Tag.
 - Each tag can only be used for one specific crop/strain combination.
-
----
 
 ## 10. Clearing the Form
 
@@ -126,8 +108,6 @@ To start fresh or correct a mistake:
 
 > **Note:** The weight display will continue to show the current scale reading.
 
----
-
 ## 11. Refreshing Lists
 
 If new crops or strains have been added to the database:
@@ -135,8 +115,6 @@ If new crops or strains have been added to the database:
 1. Click **Refresh Lists**.
 2. The Crop dropdown will reload with the latest data.
 3. The Strain dropdown will reset to "Select".
-
----
 
 ## 12. Troubleshooting
 
@@ -176,8 +154,6 @@ If new crops or strains have been added to the database:
 - Verify the harvest date exists for the selected crop.
 - Check the C:\labels\ folder exists and is accessible.
 
----
-
 ## 13. Best Practices
 
 - Always tare the scale with the empty bag before filling.
@@ -187,13 +163,11 @@ If new crops or strains have been added to the database:
 - Keep Metric Tags organized and ensure they match the bags.
 - Clear the form between bags to avoid mixing data.
 
----
-
 ## Section 10 — Revision History
 
-Revision: 1  
-Effective Date: 2026-04-09  
+Revision: 1
+Effective Date: 2026-04-09
 Approved By: President/CEO
 
-Change Summary:  
+Change Summary:
 Rev 1 – Initial release
