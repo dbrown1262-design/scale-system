@@ -21,6 +21,8 @@ import subprocess
 import SubSupa
 import SubPrintLabels
 
+Testing = False
+
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(CURRENT_DIR)  # this is the "scale" folder
 if ROOT_DIR not in sys.path:
@@ -378,6 +380,10 @@ class WeighTrimApp(ctk.CTk):
         tare = (self.EntTare.get() or "").strip()
         wstr = (self.EntWeight.get() or "").strip()
 
+        if Testing:
+            wstr = "2500"
+            tare = "200"    
+
         if not crop_display or crop_display.lower().startswith("select"):
             messagebox.showwarning("Select Crop", "Please select a crop")
             return
@@ -386,6 +392,9 @@ class WeighTrimApp(ctk.CTk):
             return
         if not trim_type:
             messagebox.showwarning("Select Type", "Please select a type")
+            return
+        if not bag_no or bag_no.lower().startswith("select"):
+            messagebox.showwarning("Select Bag", "Please select a bag")
             return
         if not tare:
             messagebox.showwarning("Tare Missing", "Please scan a tare tag")
@@ -420,6 +429,7 @@ class WeighTrimApp(ctk.CTk):
             try:
                 new_num = SubSupa.GetNewBagNo(crop_no, strain)
                 bag_no = f"{new_num}"
+                print(f"Generated new bag number: {bag_no}")
             except Exception as e:
                 self.SetStatus(f"GetNewBagNo failed: {e}")
                 return
@@ -452,6 +462,14 @@ class WeighTrimApp(ctk.CTk):
         except Exception as e:
             self.SetStatus(f"CheckTrimBag failed: {e}")
             return
+
+        # Print label
+        harvest_date = SubSupa.GetHarvestDate(crop_no)
+        try:
+            SubPrintLabels.PrintOneLabel(strain, trim_type, harvest_date, bag_no, net_weight)
+            self.SetStatus(f"Label printed for {strain} - {trim_type} ({net_weight:.0f} g)")
+        except Exception as e:
+            self.SetStatus(f"Print failed: {e}")
 
         # Clear metric tag for next bag
         self.EntTare.delete(0, 'end')

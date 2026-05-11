@@ -33,8 +33,8 @@ def PrintOneLabel(Weight):
 
     c.showPage()
     c.save()
-    os.startfile("C:\\labels\\label.pdf", "print")
+#    os.startfile("C:\\labels\\label.pdf", "print")
 
 #    command = "{} {}".format('c:\\labels\\PDFtoPrinter.exe','C:\\labels\\label.pdf')
 #    subprocess.call(command,shell=True)
-#PrintOneLabel(2500)
+PrintOneLabel(2500)
