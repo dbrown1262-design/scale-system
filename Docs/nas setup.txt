@@ -1,0 +1,16 @@
+synology.com:
+NAS:
+Name adkhempco
+User: AdkAdmin
+Password: Adk1891?
+
+Web Application:
+User: service@adkhempco.com	
+Password: Adk1891?
+
+ecoflow battery backup
+
+Account:	dbrown1262@verizon
+Password:	Adirondack1891?
+
+

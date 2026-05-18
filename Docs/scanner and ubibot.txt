@@ -1,0 +1,31 @@
+ubibot monitor
+
+We installed 5 UbiBot ws1a monitors in the following locations:
+
+Processing
+Drying/Storage
+Grow Room 1
+Grow Room 2
+Mom Room
+
+The units record Temperature, Humidity, Illumination (Lux) and Voltage (important because they run on alkaline batteries that need to be replaced periodically)
+
+All data are uploaded via wifi to the UbiBot server and accessed with their smartphone app and a web based console.
+Each unit is allocated 200MB of storage and can download 1GB per month
+
+in 11 days, the processing unit uploaded 1.6MB, monthly download traffic was 643Kb, 
+
+Zebra ds2208 setup
+The full manual is stored in the adknet folder.  The USB setup is on page 98.  The file DS2208 scanner setup.pdf contains only page 98.
+
+open "DS2208 scanner setup.pdf" in adknet folder.
+scan the USB CDC Host barcode
+
+ubibot app
+
+install ubibot connect from app store
+user name AdkHempCo
+password Adk1891
+
+
+
