@@ -53,7 +53,8 @@ def load_state():
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE, "r") as f:
             return json.load(f)
-    return {"fail_count": 0, "is_down": False, "last_heartbeat": 0}
+    return {"fail_count": 0, "is_down": False, "last_heartbeat": 0,
+            "netstat": "up", "internet_down_since": None}
 
 
 def save_state(state):
@@ -94,6 +95,18 @@ def ping_host(host):
     return result.returncode == 0
 
 
+def check_internet():
+    """Check internet by reaching a known external host."""
+    try:
+        ctx = ssl.create_default_context()
+        req = Request("https://www.google.com", headers={"User-Agent": "NASMonitor"})
+        with urlopen(req, timeout=5, context=ctx) as response:
+            return True
+    except Exception as e:
+        print(f"Internet check failed: {e}", flush=True)
+        return False
+
+
 def check_dsm(url):
     try:
         ctx = ssl.create_default_context()
@@ -110,6 +123,27 @@ def check_dsm(url):
 
 def main():
     state = load_state()
+
+    # --- Internet connectivity check ---
+    internet_ok = check_internet()
+    if internet_ok:
+        if state.get("netstat") == "down" and state.get("internet_down_since"):
+            up_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            down_since = state["internet_down_since"]
+            print(f"Internet restored at {up_time} (was down since {down_since})", flush=True)
+            send_email(
+                "AdkHempCo Internet RESTORED",
+                f"Internet connectivity restored at {up_time}.\nWas down since {down_since}."
+            )
+            log_to_supabase("internet_up",
+                f"Internet restored at {up_time}. Was down since {down_since}.")
+            state["internet_down_since"] = None
+        state["netstat"] = "up"
+    else:
+        if not state.get("internet_down_since"):
+            state["internet_down_since"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(f"Internet went down at {state['internet_down_since']}", flush=True)
+        state["netstat"] = "down"
 
 #    ok = ping_host(NAS_HOST) or check_dsm(DSM_URL)
     ok = check_dsm(DSM_URL)
