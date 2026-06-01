@@ -143,10 +143,13 @@ def main():
     else:
         state["internet_fail_count"] = state.get("internet_fail_count", 0) + 1
         print(f"Internet check failed (attempt {state['internet_fail_count']})", flush=True)
+        if state["internet_fail_count"] == 1:
+            log_to_supabase("internet_fail", f"Internet check failed (attempt 1) at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.")
         if state["internet_fail_count"] >= FAILS_REQUIRED and state.get("netstat") != "down":
             state["internet_down_since"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             print(f"Internet marked down at {state['internet_down_since']}", flush=True)
             state["netstat"] = "down"
+            log_to_supabase("internet_down", f"Internet went down at {state['internet_down_since']}.")
 
 #    ok = ping_host(NAS_HOST) or check_dsm(DSM_URL)
     ok = check_dsm(DSM_URL)
