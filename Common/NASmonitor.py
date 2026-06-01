@@ -54,7 +54,7 @@ def load_state():
         with open(STATE_FILE, "r") as f:
             return json.load(f)
     return {"fail_count": 0, "is_down": False, "last_heartbeat": 0,
-            "netstat": "up", "internet_down_since": None}
+            "netstat": "up", "internet_down_since": None, "internet_fail_count": 0}
 
 
 def save_state(state):
@@ -139,11 +139,14 @@ def main():
                 f"Internet restored at {up_time}. Was down since {down_since}.")
             state["internet_down_since"] = None
         state["netstat"] = "up"
+        state["internet_fail_count"] = 0
     else:
-        if not state.get("internet_down_since"):
+        state["internet_fail_count"] = state.get("internet_fail_count", 0) + 1
+        print(f"Internet check failed (attempt {state['internet_fail_count']})", flush=True)
+        if state["internet_fail_count"] >= FAILS_REQUIRED and state.get("netstat") != "down":
             state["internet_down_since"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            print(f"Internet went down at {state['internet_down_since']}", flush=True)
-        state["netstat"] = "down"
+            print(f"Internet marked down at {state['internet_down_since']}", flush=True)
+            state["netstat"] = "down"
 
 #    ok = ping_host(NAS_HOST) or check_dsm(DSM_URL)
     ok = check_dsm(DSM_URL)
