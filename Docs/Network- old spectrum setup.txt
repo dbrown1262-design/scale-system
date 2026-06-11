@@ -1,0 +1,87 @@
+router setup
+spectrum router
+192.168.1.1
+user id admin
+password admin
+
+2g wifi
+MySpectrumWiFi09-2G 
+security: WPA2
+P/W jollyrock947
+
+5g wifi
+MySpectrumWiFi09-5G
+security: WPA2
+P/W jollyrock947
+
+WAN IP 74.79.84.82
+Connection Type: DHCP
+IPv6 Address: 2604:6000:dfc0:3f:2ddc:9d9f:583e:d998
+IPv6 Connection Type: DHCPv6
+
+LAN IP (Subnet Mask): 192.168.1.1(255.255.255.0)
+DHCP: On
+IPv6 Address: 2603:7082:8200:26:a264:8fff:fe30:c20a/64
+IPv6 Prefix: 2603:7082:8200:26::/64
+IPv6 Assign Type: Simultaneous
+
+Users:
+
+Name		IP	MAC	Interface
+
+Processing	192.168.1.187	EC:71:DB:6B:7A:14	LAN
+Front cam	192.168.1.123	EC:71:DB:B5:DC:59	LAN
+Hash cam	192.168.1.123	EC:71:DB:05:1D:16	LAN
+Sampling cam	192.168.1.253	A0:60:32:07:AA:15	LAN
+
+Server		192.168.1.210	5C:60:BA:36:36:39	LAN
+Work-Desktop	192.168.1.81	F4:39:09:24:45:9B	LAN
+adkhempco	192.168.1.153	90:09:D0:88:F9:97	LAN
+raspberrypi	192.168.1.243	D8:3A:DD:D7:09:98	2.4GHz
+DESKTOP-SN55LCO	192.168.1.117	40:A3:CC:21:09:4E	2.4GHz
+
+nas-monitor	192.168.1.125	DC:A6:32:5D:F3:CF	LAN
+
+
+RingDoorbell-2b	192.168.1.51	90:48:6C:13:EA:2B	LAN
+espressif	192.168.1.21	94:A9:90:1A:37:EC	2.4GHz
+ChimePro-22	192.168.1.58	90:48:6C:BE:EA:22	2.4GHz
+AWSxIOTxETHERNE	192.168.1.144	80:1F:12:FB:FC:79	LAN
+		192.168.1.226	80:F3:DA:D3:97:10	2.4GHz
+		192.168.1.142	80:F3:DA:D3:A3:50	2.4GHz
+		192.168.1.161	80:F3:DA:D3:97:CC	2.4GHz
+
+
+hash room	80:f3:da:d3:a3:40
+Drying		80:f3:da:d3:97:10
+Grow 1		80:f3:da:d3:a3:50
+Grow 2		80:f3:da:d3:97:cc
+Mom		80:f3:da:d3:9d:48
+Processing	8c:4f:00:d1:ca:4c
+
+WAN DNS Settings
+Connect to DNS Server	 Yes         
+DNS 1	209.18.47.62
+DNS 2	209.18.47.61
+
+Enable UPnP	 Yes        
+Advertisement Period	30 Seconds
+Advertisement Time To Live 2 hops
+
+NAT Pass Through:
+PPTP Passthrough	Enable
+L2TP Passthrough	Enable
+IPSec Passthrough	Enable
+SSL Passthrough		Enable
+RTSP Passthrough	Enable
+H.323 Passthrough	Enable
+SIP Passthrough		Enable
+Enable PPPoE Relay	DISABLE
+
+Basic
+Enable Firewall	 			Yes        
+Enable DoS Protection			Yes        
+Respond to Ping Request from WAN	Yes        
+Enable IGMP	 			No
+
+

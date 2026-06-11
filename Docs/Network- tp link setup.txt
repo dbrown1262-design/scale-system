@@ -1,0 +1,52 @@
+router setup
+TP Link router ER7206
+
+Router has 4 ethernet ports, no wifi.  
+WAN port connected to spectrum modem
+Switches in Crew Room, Processing and Hash lab connected to ethernet ports
+
+Router login (from chrome):
+address		192.168.1.1
+user id 	admin
+password 	admin?
+DHCP range	100-199
+
+Switches:
+
+Crew Room RLA-PS1 8 Port POE:
+	NAS
+	NAS monitor (pi)
+	Front Door Cam
+	Mike's server
+	Workstation
+	
+Processing RLA-PS1 8 Port POE:
+	Sample Cam
+	Processing Cam
+	TrolMaster Mom Room
+	TrolMaster Grow 1
+	TrolMaster Grow 2
+	NetGear AC750 WiFi access point
+	
+Hash Room:
+	Hash Cam
+	??? Wifi access point
+
+
+Netgear Wireless AC750
+
+Set to access point- will get DHCP from TP-Link ER7206
+
+2g wifi
+MySpectrumWiFi09-2G 
+security: WPA2
+P/W jollyrock947
+
+5g wifi
+MySpectrumWiFi09-5G
+security: WPA2
+P/W jollyrock947
+
+
+
+

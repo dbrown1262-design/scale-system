@@ -1,37 +1,6 @@
 
 
 
-I need a harvest summary report (Harvest/HarvestSummary.py) that contains the following columns:
-
-Strain
-Wet Weight
-Dry Weight
-Dry Percent (Dry / Wet)
-Flower Weight
-Flower Percent (Flower / Dry)
-Smalls Weight
-Smalls Percent (Smalls / Dry)
-Trim Weight
-Trim Percent (Trim / Dry)
-Stems (Dryweight - flower - smalls - trim)
-Stems Percent (Stems / Dry)
-
-Use LoadCrops to populate a Crop combo box
-When a Crop is selected:
-   use SubSupa.GetStrainWeights(CropNo) to retrieve dict with strain, wet and dry weights
-   for each strain returned  use subsupa GetBuckedSummary(CropNo, Strain) to retrieve total weight for Flower, Smalls and Trim
-
-
-
-Our system includes a VEVOR ice maker, a mini OSPREY washer and a water chiller.  We use Harvestrite freeze driers.
-for frozen plant material, we do not add ice unless the water temperature (as measured by portable IR thermometer)
-We currently do 5 10 minute washes starting with 170 RPM, then 185 then three at 200.  For each wash, the hash is put into the trays that came with the freeze dryers.  Plant matter is weighed before washing and hash is weighted after freeze drying
-
-in printbudkedreport:
-SubSupa.LoadToteReport now takes CropNo, Strain parameters.  Change screen- remove start and end dates, get CropNo and Strain instead.  Add TotType column to treeview
-
-
-
 ubibot notes:
 
 UbiBot Account	
@@ -104,8 +73,13 @@ sudo systemctl status nas-monitor.service
 update NasMonitor.py
 from control panel workstation (not ssh to nas-monitor)
 scp "C:\Users\Adk\Documents\scale\Common\NASmonitor.py" adkadmin@192.168.1.126:~
+scp "C:\Users\Adk\Documents\scale\Common\NASmonitor.py" adkadmin@nas-monitor:~
 p/w Adk1891
 
+Now ssh to pi:
+
+ssh adkadmin@nas-monitor
+p/w Adk1891
 sudo systemctl restart nas-monitor.service
 
 journalctl -u nas-monitor.service -f
@@ -132,3 +106,7 @@ We also implemented a log viewer that allows staff to view the current status of
 We tested the system by unplugging both power stations for 8 hours.  The EcoFlow unit had 73% of its battery capacity and estimated that it could run an additional 21 hours at the current discharge rate.  The SOLIX power station was still running and had 19% of its battery capacity.
 
 With regards to the requirement for retaining sampling videos, we do not rely on the NAS: we download the video and store it on a google drive, where it can remain until we delete it.  
+
+
+
+
