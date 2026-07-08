@@ -1,51 +1,68 @@
-router setup
-TP Link router ER7206
+Network Topology
 
-Router has 4 ethernet ports, no wifi.  
-WAN port connected to spectrum modem
-Switches in Crew Room, Processing and Hash lab connected to ethernet ports
+Our network uses Spectrum fiber network to access the internet.  A Spectrum Modem converts fiber cable to ethernet, which connects to a TP Link router WAN port. The router has 4 ethernet ports which connect to switches and the TTLock network interface.  (The TTLock interface is connected to the main router beacuse it has to be in bluetooth range of the lock.)  
 
-Router login (from chrome):
-address		192.168.1.1
-user id 	admin
-password 	admin?
-DHCP range	100-199
+The network includes a NetGear WiFi access point.  Some internal devices connect to the network over WiFi, and employees are allowed access for portable devices because our metal building blocks cellular signals.
 
-Switches:
+The following description lists the devices connected to the internal network.
 
-Crew Room RLA-PS1 8 Port POE:
-	NAS
-	NAS monitor (pi)
-	Front Door Cam
-	Mike's server
-	Workstation
+TP Link router ER7206: 
+   Has 4 ethernet ports, no wifi.
+   Hosts DHCP and ip address reservation list
+   Router login (from chrome):
+      address		192.168.1.1
+      user id 		admin
+      password 		admin?
+   Router settings:
+      Reservation range	2-99
+      DHCP range		100-199
+
+  Connections:
+    WAN port connected to Spectrum modem
+
+    Ethernet connections:
+
+    Crew Room RLA-PS1 8 Port POE:
+	192.168.1.10 NAS
+	192.168.1.14 NAS monitor (pi)
+	192.168.1.22 Front Door Cam
+	192.168.1.12 Mike's server
+	192.168.1.15 Workstation
 	
-Processing RLA-PS1 8 Port POE:
-	Sample Cam
-	Processing Cam
-	TrolMaster Mom Room
-	TrolMaster Grow 1
-	TrolMaster Grow 2
+   Processing RLA-PS1 8 Port POE:
+	192.168.1.20 Sample Cam
+	192.168.1.21 Processing Cam
+	192.168.1.51 TrolMaster Mom Room
+	192.168.1.52 TrolMaster Grow 1
+	192.168.1.53 TrolMaster Grow 2
 	NetGear AC750 WiFi access point
-	
-Hash Room:
-	Hash Cam
+	   Set to access point- will get DHCP from TP-Link ER7206
+
+	   2g wifi:
+	   MySpectrumWiFi09-2G 
+	   security: WPA2
+	   P/W jollyrock947
+
+	   5g wifi:
+	   MySpectrumWiFi09-5G
+	   security: WPA2
+	   P/W jollyrock947
+
+	Reserved Connections:
+	   192.168.1.30 UbiBot Hash Room
+	   192.168.1.31 UbiBot Drying Room
+	   192.168.1.32 UbiBot Grow 1
+	   192.168.1.33 UbiBot Grow 2
+	   192.168.1.34 UbiBot Mom Room
+	   192.168.1.35 UbiBot Pricessing Room
+	   192.168.1.40 Ring Chime
+	   192.168.1.41 Rind Doorbell
+	   192.168.1.
+	   192.168.1.
+   Hash Room:
+	192.168.1. Hash Cam
 	??? Wifi access point
 
-
-Netgear Wireless AC750
-
-Set to access point- will get DHCP from TP-Link ER7206
-
-2g wifi
-MySpectrumWiFi09-2G 
-security: WPA2
-P/W jollyrock947
-
-5g wifi
-MySpectrumWiFi09-5G
-security: WPA2
-P/W jollyrock947
 
 
 

@@ -59,6 +59,8 @@ This procedure applies to all sampling events conducted for laboratory complianc
      **"Synology Surveillance Station - HempHouse"**
 
 2. Sign in using the assigned credentials.
+   - User Id:  AdkAdmin
+   - Password: Adk1891?
 
 3. When the main screen appears:
    - Select the **IP Camera** icon

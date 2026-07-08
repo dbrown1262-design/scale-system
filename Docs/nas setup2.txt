@@ -72,7 +72,7 @@ sudo systemctl status nas-monitor.service
 
 update NasMonitor.py
 from control panel workstation (not ssh to nas-monitor)
-scp "C:\Users\Adk\Documents\scale\Common\NASmonitor.py" adkadmin@192.168.1.126:~
+scp "C:\Users\Adk\Documents\scale\Common\NASmonitor.py" adkadmin@nas-monitor:~
 scp "C:\Users\Adk\Documents\scale\Common\NASmonitor.py" adkadmin@nas-monitor:~
 p/w Adk1891
 

@@ -4,8 +4,6 @@
 
 This SOP defines the procedure to configure a Raspberry Pi to run a Python-based NAS monitoring service that logs all activity to Supabase for audit, alerting, and compliance purposes.
 
----
-
 ## 2. System Overview
 
 The NAS Monitor system:
@@ -22,8 +20,6 @@ Data are stored in Supabase tables in the Cloud:
 * `scale.naslog` → Event history (audit log)
 * `scale.nasstat` → Current status (latest state)
 
----
-
 ## 3. Hardware & Software Requirements
 
 * Raspberry Pi 4
@@ -33,8 +29,6 @@ Data are stored in Supabase tables in the Cloud:
 * Workstation with Raspberry Pi Imager
 * Python 3
 * Supabase project (API + service key)
-
----
 
 ## 4. Flash Operating System
 
@@ -58,8 +52,6 @@ Data are stored in Supabase tables in the Cloud:
 
 4. Flash SD card and insert into Pi.
 
----
-
 ## 5. Initial Boot & Access
 
 ```bash
@@ -67,15 +59,11 @@ ping nas-monitor
 ssh adkadmin@nas-monitor
 ```
 
----
-
 ## 6. System Update
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 ```
-
----
 
 ## 7. Install Python Environment
 
@@ -86,8 +74,6 @@ sudo apt install python3-venv -y
 python3 -m venv ~/nas-env
 source ~/nas-env/bin/activate
 ```
-
----
 
 ## 8. Install Python Packages
 
@@ -108,8 +94,6 @@ Save environment:
 pip freeze > ~/requirements.txt
 ```
 
----
-
 ## 9. Deploy Monitoring Script
 
 ```bash
@@ -121,8 +105,6 @@ Verify:
 ```bash
 ls -l ~
 ```
-
----
 
 ## 10. Supabase Configuration
 
@@ -149,8 +131,6 @@ Recommended structure:
 * stat_date
 * current_status
 
----
-
 ## 11. Test Script Manually
 
 ```bash
@@ -165,8 +145,6 @@ Confirm:
 * Email alerts function
 * Record is written to `scale.naslog`
 * `scale.nasstat` updates correctly
-
----
 
 ## 12. Create System Service
 
@@ -198,8 +176,6 @@ StandardError=append:/home/adkadmin/nas-monitor.log
 WantedBy=multi-user.target
 ```
 
----
-
 ## 13. Enable and Start Service
 
 ```bash
@@ -207,8 +183,6 @@ sudo systemctl daemon-reload
 sudo systemctl enable nas-monitor.service
 sudo systemctl start nas-monitor.service
 ```
-
----
 
 ## 14. Verify Service
 
@@ -222,8 +196,6 @@ Expected:
 Active: active (running)
 ```
 
----
-
 ## 15. Monitor Logs
 
 ```bash
@@ -232,8 +204,6 @@ tail -f ~/nas-monitor.log
 ```
 
 Primary audit log is stored in Supabase (`scale.naslog`).
-
----
 
 ## 16. Reboot Validation
 
@@ -247,8 +217,6 @@ After reboot:
 ssh adkadmin@nas-monitor
 sudo systemctl status nas-monitor.service
 ```
-
----
 
 ## 17. Functional Testing
 
@@ -265,8 +233,6 @@ Perform the following:
   * Recovery logged
   * Status updated
 
----
-
 ## 18. Network Configuration
 
 Assign a stable IP:
@@ -275,15 +241,41 @@ Assign a stable IP:
   **OR**
 * Static IP on Pi
 
----
-
 ## 19. NAS Log View Application
 
 The NAS log can be viewed using the NAS View application, which is accessed through the Administration Menu.  The application displays the current status of the NAS and a list of log entries.  User can enter Start and End date to limit the list to a specific period.
 
----
+## 20. Updating NASmonitor.py
 
-## 20. Revision History
+The NASmonitor.py application can be updated using the Scale PC:
+
+* Run the GitPull application to download the new script.  Confirm that the NASmonitor.py file is downloaded.
+* Open a command prompt window
+* Copy the script to the nas-monitor (raspberry pi):
+
+```bash
+scp "C:\Users\Adk\Documents\scale\Common\NASmonitor.py" adkadmin@nas-monitor:~
+```
+You will be prompted for a password- Adk1891
+
+Now ssh to pi:
+
+```bash
+ssh adkadmin@nas-monitor
+```
+
+Use the same password: Adk1891
+
+You will get a command prompt for the nas-monitor.  Enter the following commands to restart the monitor and check the status. The sudo commands requires a password, use the same password: Adk1891
+
+```bash
+sudo systemctl restart nas-monitor.service
+
+journalctl -u nas-monitor.service -f
+```
+
+
+## 21. Revision History
 
 | Version | Date       | Description                |
 | ------- | ---------- | -------------------------- |
