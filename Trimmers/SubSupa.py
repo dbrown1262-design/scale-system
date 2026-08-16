@@ -331,11 +331,11 @@ def GetBagSummary(CropNo: int, Strain: str, Type: str):
     res = (
         sb.schema("scale")
         .table("scaletrim")
-        .select("MetrcId,Weight,TrimDate")
+        .select("MetrcId,Weight,TrimDate, Type")
         .eq("CropNo", CropNo)
         .eq("Strain", Strain)
-        .eq("Type", Type)
-        .order("MetrcId")
+#        .eq("Type", Type)
+        .order("Type, MetrcId")
         .execute()  
     )
     summary = []
@@ -344,6 +344,7 @@ def GetBagSummary(CropNo: int, Strain: str, Type: str):
             "MetrcId": row.get("MetrcId"),
             "Weight": row.get("Weight"),
             "TrimDate": row.get("TrimDate"),
+            "Type": row.get("Type"),
         })
     return summary
 

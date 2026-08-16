@@ -35,6 +35,7 @@ import Common.SubReadQRCode as SubReadQRCode
 ScannerConnected = SubReadQRCode.ConnectScanner()
 SubScale.ConnectScales()
 ScoutConnected, RangerConnected = SubScale.GetScaleStatus()
+print (f"Scanner connected: {ScannerConnected}, Scout connected: {ScoutConnected}, Ranger connected: {RangerConnected}")
 
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -114,7 +115,7 @@ class WeighTrimApp(ctk.CTk):
         self.CmbStrain.grid(row=2, column=1, columnspan=2, sticky="w", pady=6)
 
         ctk.CTkLabel(container, text="Type", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(0,10))
-        self.CmbType = ctk.CTkComboBox(container, values=["Select", "Flower", "Smalls", "Trim"], width=320, font=DEFAULT_FONT, command=self.OnTypeChanged)
+        self.CmbType = ctk.CTkComboBox(container, values=["Select", "Flower", "Smalls", "PreRolls", "Trim", "Waste"], width=320, font=DEFAULT_FONT, command=self.OnTypeChanged)
         self.CmbType.grid(row=3, column=1, columnspan=2, sticky="w", pady=6)
         self.CmbType.set("Select")
 
@@ -307,7 +308,8 @@ class WeighTrimApp(ctk.CTk):
             self.EntTare.delete(0, 'end')
             self.EntWeight.configure(state='normal')
             self.EntWeight.delete(0, 'end')
-            self.EntWeight.configure(state='disabled')
+            initial_weight_state = "disabled" if (RangerConnected or ScoutConnected) else "normal"
+            self.EntWeight.configure(state=initial_weight_state)
             self.BtnSave.configure(state="normal")
             self.SetStatus("")
         except Exception:
@@ -503,7 +505,8 @@ class WeighTrimApp(ctk.CTk):
                 self.EntWeight.configure(state='normal')
                 self.EntWeight.delete(0, 'end')
                 self.EntWeight.insert(0, WStr)
-                self.EntWeight.configure(state='disabled')
+                initial_weight_state = "disabled" if (RangerConnected or ScoutConnected) else "normal"
+                self.EntWeight.configure(state=initial_weight_state)
             except Exception:
                 pass
 
