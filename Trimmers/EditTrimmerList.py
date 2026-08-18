@@ -46,7 +46,6 @@ class TrimmerMaintApp(ctk.CTk):
         self.selected_id = None
         self.name_var = ctk.StringVar()
         self.stat_var = ctk.StringVar(value="Active")  # default
-        self.search_var = ctk.StringVar()
 
         # Configure treeview style for dark theme
         style = ttk.Style()
@@ -79,11 +78,6 @@ class TrimmerMaintApp(ctk.CTk):
 
         title_lbl = ctk.CTkLabel(header, text="Trimmer Maintenance", font=("Arial", 18, "bold"))
         title_lbl.pack(side="left")
-
-        # optional quick-filter
-        search_entry = ctk.CTkEntry(header, placeholder_text="Filter by name...", textvariable=self.search_var, width=220)
-        search_entry.pack(side="right", padx=(6, 0))
-        search_entry.bind("<KeyRelease>", lambda _e: self.apply_filter())
 
     def _build_table(self):
         table_frame = ctk.CTkFrame(self)
@@ -166,25 +160,6 @@ class TrimmerMaintApp(ctk.CTk):
             stat = row.get("TrimmerStat") or ""
             self.tree.insert("", "end", iid=str(row_id), values=(row_id, name, stat))
 
-        self.apply_filter()
-
-    def apply_filter(self):
-        """Filter visible rows by name substring (case-insensitive)."""
-        filter_text = (self.search_var.get() or "").strip().lower()
-        for iid in self.tree.get_children():
-            values = self.tree.item(iid, "values")
-            name = (values[1] or "").lower()
-            # Treeview doesn't support hide/show; rebuild quickly by simple rule:
-            # We'll delete non-matching and re-insert on demand if filter cleared.
-            # For simplicity here, just gray out non-matching (disabled look).
-            # Alternative: rebuild list from cached rows.
-            tags = ()
-            if filter_text and filter_text not in name:
-                tags = ("dim",)
-            self.tree.item(iid, tags=tags)
-        
-        self.tree.tag_configure("dim", foreground="#666666")
-
     def clear_form(self):
         self.selected_id = None
         self.name_var.set("")
@@ -213,6 +188,12 @@ class TrimmerMaintApp(ctk.CTk):
             return
         if trimmer_stat not in ("Active", "Inactive"):
             messagebox.showwarning("Invalid Status", "Status must be Active or Inactive.")
+            return
+
+        # check for duplicate (case-insensitive)
+        existing = [self.tree.item(iid, "values")[1].lower() for iid in self.tree.get_children()]
+        if trimmer_name.lower() in existing:
+            messagebox.showwarning("Duplicate", f'"{trimmer_name}" is already on file.')
             return
 
         try:

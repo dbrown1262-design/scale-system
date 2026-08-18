@@ -99,12 +99,13 @@ SCRIPTS = {
         ("Add Package", os.path.join("Packaging", "AddPackage.py")),
     ],
     "Trimmer": [
-        ("Enter Daily Trim", os.path.join("Trimmers", "TrimmerDailyWeigh.py")),
+        ("Weigh Daily Trim", os.path.join("Trimmers", "TrimmerDailyWeigh.py")),
         ("Print Tare Tags", os.path.join("Common", "PrintTareTag.py")),
         ("Weigh Trim Bags", os.path.join("Trimmers", "WeighTrim.py")),
         ("Trim Bags Summary", os.path.join("Trimmers", "TrimBagSummary.py")),
         ("Weekly Trimmer Summary", os.path.join("Trimmers", "TrimmerSummary.py")),
         ("Trimmer Strain Summary", os.path.join("Trimmers", "TrimmerStrainSummary.py")),
+        ("Edit Trimmer List", os.path.join("Trimmers", "EditTrimmerList.py")),
     ],
     "Processing": [
         ("Enter Hash Run", os.path.join("Processing", "EnterHashRun.py")),
@@ -117,7 +118,6 @@ SCRIPTS = {
     ],
     "Admin": [
         ("Edit Daily Trim", os.path.join("Trimmers", "EditDailyTrim.py")),
-        ("Edit Trimmer List", os.path.join("Trimmers", "EditTrimmerList.py")),
         ("Edit Trim Rates", os.path.join("Trimmers", "EditTrimRates.py")),
         ("Edit Package Types", os.path.join("Packaging", "EditPackageTypes.py")),
         ("Edit SOP Index", os.path.join("SopScripts", "EditSopIndex.py")),

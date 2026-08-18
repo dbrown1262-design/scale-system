@@ -67,6 +67,53 @@ def SaveTrimmer(trimmer, flower_grams, smalls_grams, crop_no, strain, trimdate, 
             "StartTime": StartTime,
             "EndTime": EndTime, 
         }).execute()
+def SaveDailyWeigh(trimmer, grams, crop_no, strain, trimtype, trimdate, ampm, StartTime, EndTime):
+    res = (sb.schema("scale")
+        .table("dailytrim")
+        .select("FlowerGrams", "SmallsGrams")
+        .eq("TrimmerName", trimmer).eq("TrimDate", trimdate)
+        .eq("CropNo", int(crop_no)).eq("Strain", strain).eq("AmPm", ampm)
+        .execute())
+    smalls_grams = 0.0
+    flower_grams = 0.0
+    if res.data:
+        if res.data[0]:
+           flower_grams = float(res.data[0].get("FlowerGrams") or 0.0)
+           smalls_grams = float(res.data[0].get("SmallsGrams") or 0.0)
+        print("flower ",flower_grams, "smalls ", smalls_grams)
+#        if flower_grams == 0:
+#            flower_grams = existing_flower
+#        if flower_grams == 0:
+#            smalls_grams = existing_smalls
+        if trimtype == "Flower":
+            flower_grams = grams
+        if trimtype == "Smalls":
+            smalls_grams = grams
+        upd = {
+            "FlowerGrams": flower_grams,
+            "SmallsGrams": smalls_grams,
+        }
+        (sb.schema("scale").table("dailytrim").update(upd).eq("TrimmerName", trimmer)
+         .eq("TrimDate", trimdate).eq("AmPm", ampm).execute())
+    else:
+        flower_grams = 0.0
+        smalls_grams = 0.0
+        if trimtype == "Flower":
+            flower_grams = grams
+        if trimtype == "Smalls":
+            smalls_grams = grams
+
+        sb.schema("scale").table("dailytrim").insert({
+            "TrimmerName": trimmer,
+            "TrimDate": trimdate.isoformat(),
+            "CropNo": int(crop_no),
+            "Strain": strain,
+            "FlowerGrams": flower_grams,
+            "SmallsGrams": smalls_grams,
+            "AmPm": ampm,
+            "StartTime": StartTime,
+            "EndTime": EndTime, 
+        }).execute()
 
 
 

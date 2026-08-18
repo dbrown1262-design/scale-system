@@ -32,7 +32,7 @@ import Common.SubScale as SubScale
 
 # Connect to hardware after imports
 SubScale.ConnectScales()
-
+ScoutConnected, RangerConnected = SubScale.GetScaleStatus()
 # BASE_DIR is the folder that contains menu.py
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -144,7 +144,7 @@ class WeighApp(ctk.CTk):
 
         # Type combo
         ctk.CTkLabel(Container, text="Type", font=DEFAULT_FONT).grid(row=3, column=0, sticky="e", padx=(0, 10), pady=8)
-        self.CmbType = ctk.CTkComboBox(Container, values=["Select", "Flower", "Smalls", "Trim"], font=DEFAULT_FONT, width=260)
+        self.CmbType = ctk.CTkComboBox(Container, values=["Select", "Flower", "Smalls"], font=DEFAULT_FONT, width=260)
         self.CmbType.grid(row=3, column=1, sticky="w", pady=8)
 
         # AM/PM combo
@@ -165,7 +165,8 @@ class WeighApp(ctk.CTk):
 
         # Weight display (read-only, populated from scale)
         ctk.CTkLabel(Container, text="Weight (g)", font=DEFAULT_FONT).grid(row=5, column=2, sticky="e", padx=(30, 10), pady=8)
-        self.EntGrams = ctk.CTkEntry(Container, font=DEFAULT_FONT, width=160, state="disabled")
+#        self.EntGrams = ctk.CTkEntry(Container, font=DEFAULT_FONT, width=160, state="disabled")
+        self.EntGrams = ctk.CTkEntry(Container, font=DEFAULT_FONT, width=160, state="normal")
         self.EntGrams.grid(row=5, column=3, sticky="w", pady=8)
 
         # Buttons
@@ -197,7 +198,8 @@ class WeighApp(ctk.CTk):
         self.PrevScaleWeight = None
         self.PrevScoutStatus = None
         self.ScalePollId = None
-        self.StartScalePoll()
+        if ScoutConnected:
+            self.StartScalePoll()
 
         # Ensure polling stops on window close
         try:
@@ -302,10 +304,17 @@ class WeighApp(ctk.CTk):
         try:
             self.CmbStart.configure(values=Vals)
             self.CmbEnd.configure(values=Vals)
-            if self.CmbStart.get() not in Vals:
-                self.CmbStart.set("Select")
-            if self.CmbEnd.get() not in Vals:
-                self.CmbEnd.set("Select")
+            if Val == "Morning":
+                self.CmbStart.set("8:00 AM")
+                self.CmbEnd.set("12:00 PM")
+            elif Val == "Afternoon":
+                self.CmbStart.set("12:30 PM")
+                self.CmbEnd.set("4:00 PM")
+            else:
+                if self.CmbStart.get() not in Vals:
+                    self.CmbStart.set("Select")
+                if self.CmbEnd.get() not in Vals:
+                    self.CmbEnd.set("Select")
         except Exception:
             pass
 
@@ -315,12 +324,13 @@ class WeighApp(ctk.CTk):
             self.EntGrams.delete(0, "end")
         except Exception:
             pass
-        self.CmbAmpm.set("Select")
-        try:
-            self.CmbStart.set("Select")
-            self.CmbEnd.set("Select")
-        except Exception:
-            pass
+        self.CmbType.set("Select")
+#        self.CmbAmpm.set("Select")
+#        try:
+#            self.CmbStart.set("Select")
+#            self.CmbEnd.set("Select")
+#        except Exception:
+#            pass
 
     def OnSave(self):
         Trimmer = self.CmbTrimmer.get().strip()
@@ -394,7 +404,7 @@ class WeighApp(ctk.CTk):
             return
 
         try:
-            SubSupa.SaveTrimmer(trimmer=Trimmer, grams=Grams, crop_no=CropNo, strain=Strain, trimtype=TypeVal, trimdate=TrimDate, ampm=Ampm, StartTime=StartTime, EndTime=EndTime)
+            SubSupa.SaveDailyWeigh(trimmer=Trimmer, grams=Grams, crop_no=CropNo, strain=Strain, trimtype=TypeVal, trimdate=TrimDate, ampm=Ampm, StartTime=StartTime, EndTime=EndTime)
         except Exception as e:
             self.ShowStatus(f"Could not save entry: {e}", kind="error")
             print({e})

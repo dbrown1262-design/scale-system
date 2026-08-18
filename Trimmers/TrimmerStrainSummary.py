@@ -20,7 +20,8 @@ from typing import Optional
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Conversion constant
-GRAMS_TO_LBS = 0.00220462262185
+#GRAMS_TO_LBS = 0.00220462262185
+GRAMS_TO_LBS = 1.0
 
 def restart_menu():
     """Start menu.py again in a new process."""
@@ -120,7 +121,7 @@ class TrimmerStrainSummaryApp(ctk.CTkFrame):
 
         # Tree for strain summary: Date, Trimmer, Flower, Smalls, Hours, Grams/Hour
         self.StrainTree = ttk.Treeview(self, style="Large.Treeview", columns=("Date","Trimmer","Flower","Smalls","Hours","GramsPerHour"), show="headings")
-        headings = {"Date": "Date", "Trimmer": "Trimmer", "Flower": "Flower (lbs)", "Smalls": "Smalls (lbs)", "Hours": "Hours", "GramsPerHour": "Grams/Hour"}
+        headings = {"Date": "Date", "Trimmer": "Trimmer", "Flower": "Flower", "Smalls": "Smalls", "Hours": "Hours", "GramsPerHour": "Grams/Hour"}
         for c in ("Date","Trimmer","Flower","Smalls","Hours","GramsPerHour"):
             self.StrainTree.heading(c, text=headings[c])
             if c == "Trimmer":
