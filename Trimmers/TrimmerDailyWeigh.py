@@ -350,6 +350,9 @@ class WeighApp(ctk.CTk):
         
         Ampm = self.CmbAmpm.get().strip()
 
+        if TypeVal == "Select" or TypeVal == "":
+            self.ShowStatus("Please choose a Type (Flower or Smalls).", kind="warning")
+            return
         if Trimmer == "Select" or Trimmer == "":
             self.ShowStatus("Please choose a Trimmer.", kind="warning")
             return
