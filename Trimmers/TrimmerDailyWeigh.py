@@ -456,8 +456,9 @@ class WeighApp(ctk.CTk):
             WStr = str(W)
         except Exception as e:
             # If reading fails, leave as '0'
+            print(f"Scale read failed: weight is {W}")
             WStr = 'Error'
-            print(f"Scale read failed: {e}")
+            print(f"Scale read failed: weight is {WStr} {e}")
 
         if WStr != getattr(self, 'PrevScaleWeight', None):
             self.PrevScaleWeight = WStr
