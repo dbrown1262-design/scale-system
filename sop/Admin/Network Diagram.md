@@ -133,14 +133,24 @@ Reserved Devices
   192.168.1.36   UbiBot Hash Entry
 ```
 
-## 8. Administration
+## 8. Mom Room
+
+``` text
+  IP    Device
+  ------------   --------------------------------------
+  192.168.1.5    Tplink EAP610 wireless access point
+                    User Id: adkhempco  Password: adk1891?
+```
+
+
+## 9. Administration
 
 1.  Use DHCP reservations for permanent devices.
 2.  Assign new infrastructure devices within the reserved range.
 3.  Document network changes promptly.
 4.  Verify reservations after router replacement or restoration.
 
-## 9. High-Level Topology
+## 10. High-Level Topology
 
 ``` text
 Internet
@@ -162,7 +172,9 @@ TP-Link ER7206 (192.168.1.1)
     │      ├── Sample Camera
     │      ├── Processing Camera
     │      ├── TrolMaster Controllers
-    │      └── NetGear AC750 Access Point
+    │      ├── NetGear AC750 Access Point
+    │      |       └── Wi-Fi Devices
+    │      └── Mom Room Tp-Link EAP610 WiFi access point
     │             └── Wi-Fi Devices
     │
     ├── Hash Room PoE Switch

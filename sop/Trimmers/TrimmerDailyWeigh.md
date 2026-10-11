@@ -65,14 +65,14 @@ Trimmers must weigh and record their production at three specific times each day
 #### 5.4 Select Time Period
 
 1. Select **AM/PM** to indicate the time period:
-	- **Morning** — Restricts time selection to 8:00 AM - 1:00 PM
-	- **Afternoon** — Restricts time selection to 12:00 PM - 5:00 PM
-2. Select **Start Time** from the dropdown.
+	- **Morning** — automatically sets Start Time to 8:00 AM and End Time to  12:00 PM
+	- **Afternoon** — automatically sets Start Time to 12:30 PM and End Time to  4:00 PM
+2. Change **Start Time** from the dropdown if necessary.
 	- Times are displayed in 15-minute intervals
-3. Select **End Time** from the dropdown.
+3. Change **End Time** from the dropdown if necessary.
 	- End time must be equal to or later than start time
 
-> **Important:** Accurate start and end times are required to calculate total hours worked. Trimmers must work at least 6 hours per day to be paid for lunch.
+> **Important:** Accurate start and end times are required for trimmers paid by the pound to calculate total hours worked. Trimmers must work at least 6 hours per day to be paid for lunch.
 
 #### 5.5 Weigh and Record
 
@@ -82,7 +82,7 @@ Trimmers must weigh and record their production at three specific times each day
 4. Click **Save Entry**.
 5. The system will validate all fields and save the entry.
 6. A confirmation message will appear: "Trim weight recorded."
-7. The fields will clear, ready for the next entry.
+7. The Type field will clear, ready for the next entry.
 
 ---
 
@@ -90,8 +90,8 @@ Trimmers must weigh and record their production at three specific times each day
 
 If weighing multiple batches during the same time period:
 
-1. After saving an entry, the Trimmer, Crop, Strain, Type, AM/PM, Start Time, and End Time remain selected.
-    - Change the selections to match the next batch to weigh
+1. After saving an entry, the Trimmer, Crop, Strain, AM/PM, Start Time, and End Time remain selected.
+    - Change the selections to match the next batch to weigh- the Type must be selected
     - For example, if a Trimmer just weighed the bigs for the morning and needs to weigh the smalls, they only have to change the type.
     - When changing to a new Trimmer, verify/change all selections before saving.
 2. Place the next batch on the scale.
@@ -112,6 +112,8 @@ When switching to a different strain:
 ---
 
 ### 8. Time Tracking for Lunch Pay
+
+**Applies to trimmers paid by the pound- Hourly employees may just accept the default start and end times**
 
 The system automatically calculates total hours worked based on start and end times entered throughout the day:
 
@@ -245,9 +247,9 @@ The application will display color-coded status messages:
 
 ## Section 10 — Revision History
 
-Revision: 1  
-Effective Date: 2026-04-09  
+Revision: 1
+Effective Date: 2026-04-09
 Approved By: President/CEO
 
-Change Summary:  
+Change Summary:
 Rev 1 – Initial release
